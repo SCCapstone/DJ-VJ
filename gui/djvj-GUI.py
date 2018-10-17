@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import filedialog, messagebox
 import tkinter as tk
 import time
+import pickle
 
 
 # the splash screen for DJ-VJ
@@ -43,52 +44,76 @@ class IntroScreen(tk.Tk):
         # creates the buttons for create, load, and use default show
         self.create_button = Button(self, text="Create\nShow", highlightbackground='#05F72D', fg="#05F72D",
                                     font=("Courier", 48), height=5, width=10, command=self.create)
-        self.create_button.place(relx=.25, rely=.75, anchor="center")
+        self.create_button.place(relx=.33, rely=.75, anchor="center")
 
         self.load_button = Button(self, text="Load\nShow", highlightbackground='#05F72D', fg="#05F72D",
                                   font=("Courier", 48), height=5, width=10, command=self.load)
-        self.load_button.place(relx=.5, rely=.75, anchor="center")
+        self.load_button.place(relx=.66, rely=.75, anchor="center")
 
-        self.default_button = Button(self, text="Default\nShow", highlightbackground='#05F72D', fg="#05F72D",
-                                     font=("Courier", 48), height=5, width=10, command=self.default)
-        self.default_button.place(relx=.75, rely=.75, anchor="center")
+        ### COMMENTED OUT FOR EASY TESTING ###
 
         # after all the main screen is set up, get rid of it so the splash screen can show
-        self.withdraw()
+        #self.withdraw()
 
-        # display splash screen
-        splash = SplashScreen(self)
-        # for 6 seconds
-        time.sleep(6)
-        # kill splash screen
-        splash.destroy()
-        # show main screen again
-        self.deiconify()
+
+        # # display splash screen
+        # splash = SplashScreen(self)
+        # # for 6 seconds
+        # time.sleep(6)
+        # # kill splash screen
+        # splash.destroy()
+        # # show main screen again
+        # self.deiconify()
 
     # defines what happens when you click on create
-    # right now, just opens a blank screen with some text, later will let you start to create a show
     def create(self):
         newwindow = Toplevel()
         newwindow.config(bg="#212121")
         newwindow.attributes('-fullscreen', True)
         self.label = Label(newwindow, text="Create Your Own Show", bg="#212121", fg="#05F72D", font=("Courier", 72))
         self.label.place(relx=.5, rely=.25, anchor="center")
+        self.newfile(newwindow)
+
+    # creates the new file type, .djvj
+    # right now, just takes in a user-created file name and the text the user wants in the file.
+    # later, will add support for parameters and the like
+    def newfile(self, newwindow):
+        def create_file():
+            # error checking to handle blank submission boxes
+            if(e1.get()=="") or (e2.get() == ""):
+                print("NULL")
+                messagebox.showinfo("Error", "Please fill out the boxes!")
+                return
+            # creates a .djvj file with the user's submitted file name/data
+            pickle.dump(str(e2.get()), open("%s.djvj" % e1.get(), "wb"))
+            messagebox.showinfo("New File", "File " + e1.get() + " created!")
+            e1.delete(0, END)
+            e2.delete(0, END)
+            # closes the window
+            newwindow.destroy()
+
+        # creates entry box
+        self.label = Label(newwindow, text="File Name:", bg="#212121", fg="#05F72D", font=("Courier", 36))\
+            .place(relx=.35, rely=.5, anchor="center")
+        e1 = Entry(newwindow)
+        e1.place(relx=.5, rely=.5, anchor="center")
+
+        self.label = Label(newwindow, text="File Text:", bg="#212121", fg="#05F72D", font=("Courier", 36))\
+            .place(relx=.35, rely=.6, anchor="center")
+        e2 = Entry(newwindow)
+        e2.place(relx=.5, rely=.6, anchor="center")
+
+        self.button = Button(newwindow, text='Create', bg="#212121", fg="#05F72D", font=("Courier", 24),\
+                             command=create_file).place(relx=.5, rely=.75, anchor="center")
+
 
     # defines what happens when you click on load
-    # right now, opens up a file explorer and lets you choose a random file, later will let you choose a show file
+    # right now, only lets you select .djvj files and prints out the data that's in them. will do more later
     def load(self):
         filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
-                                   filetypes=(("jpeg files", "*.jpg"), ("all files", "*.*")))
-        messagebox.showinfo("Load Show", "You selected the " + filename + " show")
-
-    # defines what happens when you click on default
-    # right now, just opens a blank screen with some text, later will show the default show
-    def default(self):
-        newwindow = Toplevel()
-        newwindow.config(bg="#212121")
-        newwindow.attributes('-fullscreen', True)
-        newwindow.label = Label(newwindow, text="This is what the\ndefault show looks like", bg="#212121", fg="#05F72D", font=("Courier", 60))
-        newwindow.label.place(relx=.5, rely=.25, anchor="center")
+                                   filetypes=(("djvj files", "*.djvj"), ("all files", "*.*")))
+        data = pickle.load(open("%s" % filename, "rb"))
+        messagebox.showinfo("Load Show", data)
 
 
 my_gui = IntroScreen()
