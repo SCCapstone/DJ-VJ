@@ -11,7 +11,7 @@ class SplashScreen(tk.Toplevel):
         self.title("DJ-VJ")
         # doesn't need to be full-screen, looks good smaller
         self.config(width=800, height=600)
-        # this lets me use an image as the background
+        # this lets an image be used as the background
         canvas = Canvas(self, bg="#212121", width=730, height=450)
         canvas.place(x=0, y=0, relwidth=1, relheight=1)
         img = PhotoImage(file="dj-vj.gif")
