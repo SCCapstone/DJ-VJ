@@ -1,11 +1,18 @@
 #! /usr/bin/env python3
-
+"""
+This program takes in a .wav file and analyzes and returns the pitch per sample
+"""
 import sys
 from math import log2, pow
 from aubio import source, pitch
 
+"""
+get_pitch takes in a frequency and returns the musical note representation of
+that frequency
+"""
 
-def getPitch(freq):
+
+def get_pitch(freq):
     # equations and formulas based on musical note mathematical theory
     # example is found here:
     # https://www.johndcook.com/blog/2016/02/10/musical-pitch-notation/
@@ -17,11 +24,11 @@ def getPitch(freq):
     # define note names
     name = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
     # find number of half steps from C0
-    halfSteps = round(12 * log2(freq / C0))
+    half_steps = round(12 * log2(freq / C0))
     # find the correct octave
-    octave = halfSteps // 12
+    octave = half_steps // 12
     # find the index of the note
-    n = halfSteps % 12
+    n = half_steps % 12
     # return note name with correct octave
     return name[n] + str(octave)
 
@@ -62,7 +69,7 @@ if __name__ == '__main__':
         # if sample has a frequency
         if freq > 0:
             # get and print the pitch
-            print(getPitch(freq))
+            print(get_pitch(freq))
         # if not enough samples to read, at end of file
         if read < hop_size:
             break
