@@ -1,5 +1,5 @@
 ## Issue
-Link to issue it closes, follows the format: Closes #<issue number>
+Closes #<issue number>
 
 ## Description
 A few sentences describing the overall goals of the pull request's commits.
@@ -8,10 +8,10 @@ A few sentences describing the overall goals of the pull request's commits.
 Describe how to test the code in your PR
 
 ## Expected Results
-The output that should 
+The output that should be expected
 
 ## Style Score
-Results of running pylint on your code
+<pylint score>/10
 
 ## Bugs
 Only if necessary, things that will need to be fixed in the future
