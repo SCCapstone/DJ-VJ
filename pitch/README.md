@@ -9,9 +9,11 @@ This Python program takes in a .wav file, reads the file, and outputs the primar
 * sys
 * math
 * aubio `pip3 install aubio`
+* pyaudio
+* numpy
 
 ## Run
+### wav file analysis
 `python3 pitch.py filename.wav`
-
-## Test
-`python3 pitch.py test/filename.wav`
+### real time analysis
+`python3 pitch.py`
