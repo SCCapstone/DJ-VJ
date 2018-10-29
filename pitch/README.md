@@ -5,6 +5,7 @@ This Python program takes in a .wav file, reads the file, and outputs the primar
 
 ## Requirements
 * Python3
+* portaudio `brew install portaudio` (macOS)
 #### Python Modules
 * sys
 * math
