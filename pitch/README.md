@@ -1,4 +1,4 @@
-# m3-mattsmith803
+# Pitch Detection
 
 ## Description
 This Python program takes in a .wav file, reads the file, and outputs the primary pitch per sample
