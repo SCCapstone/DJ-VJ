@@ -1,2 +1,0 @@
-*Video Images Playback
-This code "ImagePlay.py" uses opencv to read in videos and play them back frame by frame. In this case I have it reading in a video I had and displaying them frame by frame. As long as the link to the video in in the code at "cap =", then it should play that video back. If it is in the same directory as the video, then the code can just have to video equal to "cap =".
