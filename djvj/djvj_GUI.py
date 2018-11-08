@@ -118,7 +118,7 @@ class CreateScreen(tk.Toplevel):
         # the sound attribute being tracked
         self.attr = StringVar(self)
         self.attr.set("           ")  # default value
-        self.a = OptionMenu(self, self.attr, "pitch", "tempo", "amplitude")
+        self.a = OptionMenu(self, self.attr, "pitch")
         self.a.place(relx=.42, rely=.25, anchor="center")
         # the sign (ie greater than, less than, etc)
         self.sign = StringVar(self)
@@ -158,7 +158,7 @@ class CreateScreen(tk.Toplevel):
         self.attr.set("          ")
         self.sign.set(" ")
 
-    # creates the show file
+    # creates git the show file
     def create_file(self):
         global Params
         # lets user choose name/save location
