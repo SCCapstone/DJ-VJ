@@ -3,6 +3,7 @@ Runs the GUI for the DJ-VJ app.
 Displays a splash screen, then Create and Load Show buttons
 Create Show screen functionality is built out, more to come!
 """
+
 import pickle
 import tkinter as tk
 from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage,\
@@ -13,10 +14,9 @@ import time
 # but for right now it only works up here
 Params = ""
 
-"""
-Displays the splash screen with the DJ-VJ loading screen
-"""
+
 class SplashScreen(tk.Toplevel):
+    """ Displays the splash screen with the DJ-VJ loading screen """
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
         self.title("DJ-VJ")
@@ -35,11 +35,10 @@ class SplashScreen(tk.Toplevel):
         self.update()
 
 
-"""
-The main navigation screen, which has the "Create Screen" and "Load Screen" buttons
-"""
-
 class IntroScreen(tk.Tk):
+    """
+    The main navigation screen, which has the "Create Screen" and "Load Screen" buttons
+    """
     def __init__(self):
         tk.Tk.__init__(self)
         # sets title bar
@@ -83,7 +82,9 @@ class IntroScreen(tk.Tk):
     # defines what happens when you click on load
     # right now, only lets you select .djvj files, prints out the data
     # will do more later
+
     def load(self):
+        """loads the user's chosen file"""
         filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
                                               filetypes=(("djvj files", "*.djvj"),
                                                          ("all files", "*.*")))
@@ -93,15 +94,15 @@ class IntroScreen(tk.Tk):
 
     # calls the CreateScreen class (come back and play around with this later)
     def create(self):
+        """pulls up create screen"""
         CreateScreen(self)
 
 
-"""
-Users can create a .djvj file by adding parameters and setting target values
-They can also specify the file name/file save location when saving
-"""
-
 class CreateScreen(tk.Toplevel):
+    """
+    Users can create a .djvj file by adding parameters and setting target values
+    They can also specify the file name/file save location when saving
+    """
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
         self.title = "Create Screen"
@@ -118,7 +119,7 @@ class CreateScreen(tk.Toplevel):
         # the sound attribute being tracked
         self.attr = StringVar(self)
         self.attr.set("           ")  # default value
-        self.a = OptionMenu(self, self.attr, "pitch", "tempo", "amplitude")
+        self.a = OptionMenu(self, self.attr, "pitch")
         self.a.place(relx=.42, rely=.25, anchor="center")
         # the sign (ie greater than, less than, etc)
         self.sign = StringVar(self)
@@ -145,6 +146,7 @@ class CreateScreen(tk.Toplevel):
         self.display.place(relx=.5, rely=.6, anchor="center")
 
     def addition(self):
+        """lets users add parameters"""
         # basic error checking
         if self.attr.get() == "" or self.sign.get() == "" or self.e1.get() == "":
             messagebox.showinfo("Error", "Please fill out all fields.")
@@ -158,8 +160,8 @@ class CreateScreen(tk.Toplevel):
         self.attr.set("          ")
         self.sign.set(" ")
 
-    # creates the show file
     def create_file(self):
+        """creates the file once users are finished"""
         global Params
         # lets user choose name/save location
         filename = filedialog.asksaveasfilename(initialdir="/home/Documents",
@@ -175,13 +177,13 @@ class CreateScreen(tk.Toplevel):
         time.sleep(1)
         self.destroy()
 
-    # shows running total of params to be added
     def params_added(self):
+        """ shows running total of params to be added """
         global Params
         self.display.configure(text="%s" % Params)
 
-    # will remove last param added
     def remove(self):
+        """ removes last parameter added """
         global Params
         # basic error checking
         if Params == "":
@@ -192,4 +194,6 @@ class CreateScreen(tk.Toplevel):
         self.params_added()
 
 
-IntroScreen().mainloop()
+class starting():
+    """allows this code to be run from main.py"""
+    IntroScreen().mainloop()
