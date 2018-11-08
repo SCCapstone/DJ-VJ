@@ -195,4 +195,5 @@ class CreateScreen(tk.Toplevel):
 
 
 class starting():
+    """allows this code to be run from main.py"""
     IntroScreen().mainloop()
