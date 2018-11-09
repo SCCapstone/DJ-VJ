@@ -136,15 +136,6 @@ class LivePitchDetection:
         self.input.pyaudio_instance.terminate()
 
 
-def get_attr(attr_name):
-    """ called in the GUI, lets audio listener know what attributes to listen for """
-    print("These are the audio attributes that are being listened for: ")
-    for e in attr_name:
-        print(e)  # right now, just prints to console, but can be utilized however
-
-    # after this, would probably be good to start listening for audio
-
-
 # get_pitch takes an integer representing a frequency (in Hz) and
 # returns the musical note representation of that frequency
 def get_pitch(freq):

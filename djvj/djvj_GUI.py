@@ -14,6 +14,8 @@ import djvj.pitch
 # global variable params, not sure where this is actually supposed to go
 # but for right now it only works up here
 Params = ""
+audio_attr = list() # what the audio should listen for
+video_attr = list() # the rest of the parameters for the video queuer
 
 
 class SplashScreen(tk.Toplevel):
@@ -93,8 +95,6 @@ class IntroScreen(tk.Tk):
         data = pickle.load(open("%s" % filename, "rb"))
         mee = data.split("\n")
         mee.pop(0)
-        audio_attr = []  # a list of what attributes the audio listener should look for
-        video_attr = []  # the sign and values for the parameters
         for e in mee:
             li = e.split(" ")
             if li[1] not in audio_attr:
@@ -103,10 +103,6 @@ class IntroScreen(tk.Tk):
             newstr.append(li[2])
             newstr.append(li[3])
             video_attr.append(newstr)  # appended a list of these values for easy computation
-        print("This will be passed to the audio listener: %s" % audio_attr)
-        print("This will be passed to the video instance: %s" % video_attr)
-        djvj.pitch.get_attr(audio_attr)  # passes the list to the audio listener
-        # this is where the pass to the video listener will go once it's made
 
         # right now, just for error checking
         messagebox.showinfo("Load Show", data)
