@@ -6,17 +6,21 @@ Create Show screen functionality is built out, more to come!
 
 import pickle
 import tkinter as tk
-from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage,\
-                    StringVar, OptionMenu, NW, END
+from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage, \
+    StringVar, OptionMenu, NW, END
 import time
+import djvj.pitch
 
 # global variable params, not sure where this is actually supposed to go
 # but for right now it only works up here
 Params = ""
+audio_attr = list() # what the audio should listen for
+video_attr = list() # the rest of the parameters for the video queuer
 
 
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
+
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
         self.title("DJ-VJ")
@@ -25,7 +29,7 @@ class SplashScreen(tk.Toplevel):
         # this lets an image be used as the background
         canvas = Canvas(self, bg="#212121", width=730, height=450)
         canvas.place(x=0, y=0, relwidth=1, relheight=1)
-        img = PhotoImage(file="dj-vj.gif")
+        img = PhotoImage(file="./djvj/dj-vj.gif")
         canvas.create_image(30, 120, anchor=NW, image=img)
         # adds the "loading" label that makes it splash-screenish
         self.label = Label(self, text="Loading....", bg="#212121",
@@ -39,6 +43,7 @@ class IntroScreen(tk.Tk):
     """
     The main navigation screen, which has the "Create Screen" and "Load Screen" buttons
     """
+
     def __init__(self):
         tk.Tk.__init__(self)
         # sets title bar
@@ -57,44 +62,54 @@ class IntroScreen(tk.Tk):
 
         # creates the buttons for create, load, and use default show
         self.create_button = Button(self, text="Create\nShow", bg='#05F72D', fg="#05F72D",
-                                    font=("Courier", 48), height=5, width=10, command=self.create)
+                                    highlightbackground='#05F72D', font=("Courier", 48),
+                                    height=5, width=10, command=self.create)
         self.create_button.place(relx=.33, rely=.75, anchor="center")
 
         self.load_button = Button(self, text="Load\nShow", bg='#05F72D', fg="#05F72D",
-                                  font=("Courier", 48), height=5, width=10, command=self.load)
+                                  highlightbackground='#05F72D', font=("Courier", 48),
+                                  height=5, width=10, command=self.load)
         self.load_button.place(relx=.66, rely=.75, anchor="center")
 
-        ### COMMENTED OUT FOR EASY TESTING ###
-        #
-        # # after all the main screen is set up, get rid of it so the splash screen can show
-        # self.withdraw()
-        #
-        #
-        # # display splash screen
-        # splash = SplashScreen(self)
-        # # for 6 seconds
-        # time.sleep(6)
-        # # kill splash screen
-        # splash.destroy()
-        # # show main screen again
-        # self.deiconify()
+        # after all the main screen is set up, get rid of it so the splash screen can show
+        self.withdraw()
 
-    # defines what happens when you click on load
-    # right now, only lets you select .djvj files, prints out the data
-    # will do more later
+        # display splash screen
+        splash = SplashScreen(self)
+        # for 6 seconds
+        time.sleep(6)
+        # kill splash screen
+        splash.destroy()
+        # show main screen again
+        self.deiconify()
 
     def load(self):
-        """loads the user's chosen file"""
+        """
+        loads the user's chosen file, reads data,
+        makes list of audio attributes to pass to audio listener,
+        passes parameters to the video module for processing
+        """
         filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
                                               filetypes=(("djvj files", "*.djvj"),
                                                          ("all files", "*.*")))
         data = pickle.load(open("%s" % filename, "rb"))
-        messagebox.showinfo("Load Show", data)
-        print(data)
+        mee = data.split("\n")
+        mee.pop(0)
+        for e in mee:
+            li = e.split(" ")
+            if li[1] not in audio_attr:
+                audio_attr.append(li[1])
+            newstr = list()
+            newstr.append(li[2])
+            newstr.append(li[3])
+            video_attr.append(newstr)  # appended a list of these values for easy computation
 
-    # calls the CreateScreen class (come back and play around with this later)
+        # right now, just for error checking
+        messagebox.showinfo("Load Show", data)
+        self.destroy()
+
     def create(self):
-        """pulls up create screen"""
+        """ pulls up create screen """
         CreateScreen(self)
 
 
@@ -103,6 +118,7 @@ class CreateScreen(tk.Toplevel):
     Users can create a .djvj file by adding parameters and setting target values
     They can also specify the file name/file save location when saving
     """
+
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
         self.title = "Create Screen"
@@ -134,11 +150,11 @@ class CreateScreen(tk.Toplevel):
             .place(relx=.65, rely=.25, anchor="center")
 
         # buttons
-        Button(self, text='Add Param', command=self.addition)\
+        Button(self, text='Add Param', command=self.addition) \
             .place(relx=.45, rely=.35, anchor="center")
-        Button(self, text='Remove Param', command=self.remove)\
+        Button(self, text='Remove Param', command=self.remove) \
             .place(relx=.55, rely=.35, anchor="center")
-        Button(self, text='Create File', command=self.create_file)\
+        Button(self, text='Create File', command=self.create_file) \
             .place(relx=.5, rely=.43, anchor="center")
 
         # shows running params
@@ -146,14 +162,15 @@ class CreateScreen(tk.Toplevel):
         self.display.place(relx=.5, rely=.6, anchor="center")
 
     def addition(self):
-        """lets users add parameters"""
+        """ lets users add parameters """
         # basic error checking
         if self.attr.get() == "" or self.sign.get() == "" or self.e1.get() == "":
             messagebox.showinfo("Error", "Please fill out all fields.")
             return
+
         global Params
-        Params = Params + "\n" + "If " + self.attr.get() + \
-                 " " + self.sign.get() + " " + self.e1.get()
+        Params = Params + "\n" + "If " + self.attr.get() \
+                 + " " + self.sign.get() + " " + self.e1.get()
         self.params_added()
         # clears all the fields
         self.e1.delete(0, END)
@@ -161,7 +178,7 @@ class CreateScreen(tk.Toplevel):
         self.sign.set(" ")
 
     def create_file(self):
-        """creates the file once users are finished"""
+        """ creates the file once users are finished """
         global Params
         # lets user choose name/save location
         filename = filedialog.asksaveasfilename(initialdir="/home/Documents",
@@ -170,11 +187,8 @@ class CreateScreen(tk.Toplevel):
                                                            ("all files", "*.*")))
         # adds to file
         pickle.dump(Params, open("%s.djvj" % filename, "wb"))
-        # unnecessary rn, just shows that data stays the same
-        data = pickle.load(open("%s.djvj" % filename, "rb"))
-        print(data)
 
-        time.sleep(1)
+        time.sleep(2)
         self.destroy()
 
     def params_added(self):
@@ -194,6 +208,6 @@ class CreateScreen(tk.Toplevel):
         self.params_added()
 
 
-class starting():
-    """allows this code to be run from main.py"""
+def init():
+    """ allows this code to be run from main.py """
     IntroScreen().mainloop()

@@ -135,10 +135,9 @@ class LivePitchDetection:
         self.input.stream.close()
         self.input.pyaudio_instance.terminate()
 
+
 # get_pitch takes an integer representing a frequency (in Hz) and
 # returns the musical note representation of that frequency
-
-
 def get_pitch(freq):
     # equations and formulas based on musical note mathematical theory
     # example is found here:
