@@ -33,7 +33,7 @@ class Microphone:
 # initalizes aubio source and aubio pitch
 
 
-class PitchDetection:
+class Pitch_Detection:
     def __init__(self, filename):
         # create aubio source instance
         self.input = source(filename)
@@ -82,7 +82,7 @@ class PitchDetection:
 # initalizes aubio source and aubio pitch
 
 
-class LivePitchDetection:
+class Live_Pitch_Detection:
     def __init__(self, microphone):
         # define input
         self.input = microphone
@@ -164,11 +164,11 @@ class Audio_Listener:
         if mode == "wav":
             INPUT = filename
             # create pitch detection instance
-            PITCH_DETECTION = PitchDetection(INPUT)
+            PITCH_DETECTION = Pitch_Detection(INPUT)
         else:
             # create microphone input instance
             INPUT = Microphone()
             # create pitch detection instance
-            PITCH_DETECTION = LivePitchDetection(INPUT)
+            PITCH_DETECTION = Live_Pitch_Detection(INPUT)
         # analyze audio
         PITCH_DETECTION.analyze_pitch()
