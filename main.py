@@ -1,7 +1,7 @@
 """ main run file for the project"""
+import sys
 import djvj.djvj_GUI as gui
 import djvj.pitch as audio_listener
-import sys
 
 # initialize GUI
 gui.init()
@@ -16,8 +16,8 @@ print("This will be passed to the video instance: %s" % gui.video_attr)
 if len(sys.argv) > 1:
     # create .wav file audio listener
     AUDIO_INPUT = sys.argv[1]
-    audio_listener = audio_listener.AudioListener(
+    AUDIO_LISTENER = audio_listener.AudioListener(
         gui.audio_attr, "wav", AUDIO_INPUT)
 else:
     # create live audio listener
-    audio_listener = audio_listener.AudioListener(gui.audio_attr, "live")
+    AUDIO_LISTENER = audio_listener.AudioListener(gui.audio_attr, "live")
