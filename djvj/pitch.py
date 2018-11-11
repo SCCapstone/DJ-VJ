@@ -131,11 +131,13 @@ class LivePitchDetection:  # pylint: disable=too-few-public-methods
                 signal = numpy.frombuffer(audiobuffer, dtype=numpy.float32)
 
                 freq = self.pitch_object(signal)[0]
+                # confidence = self.pitch_object.get_confidence()
 
                 # if sample has a frequency
                 if freq > 0:
                     # get and print the pitch
                     print(get_pitch(freq))
+                    # print(confidence)
 
                 if self.input.outputsink:
                     self.input.outputsink(signal, len(signal))
