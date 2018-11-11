@@ -2,7 +2,6 @@
 """This program takes in a .wav file and analyzes and
 returns the pitch per sample"""
 
-import sys
 from math import log2
 import pyaudio
 import numpy
@@ -36,6 +35,11 @@ class Microphone:
 
 class PitchDetection:
     def __init__(self, filename):
+        # create aubio source instance
+        self.input = source(filename)
+        # get source's sample rate
+        self.samplerate = self.input.samplerate
+
         # define each sample size
         # fft size - basically resolution of samples, in multiples of 1024
         # the higher the resolution, the more computation time needed
@@ -44,11 +48,6 @@ class PitchDetection:
         # hop size - the size of each sample
         # 512 required, otherwise pitch_object returns error
         self.hop_size = 512
-
-        # create aubio source instance
-        self.stream = source(filename)
-        # get source's sample rate
-        self.samplerate = self.stream.samplerate
 
         # create aubio pitch instance
         # default is yinfft algorithm
@@ -67,7 +66,7 @@ class PitchDetection:
         # process file
         while True:
             # get next samples, update read marker from source
-            samples, read = self.stream()
+            samples, read = self.input()
             # get frequency from sample
             freq = self.pitch_object(samples)[0]
             # if sample has a frequency
@@ -111,7 +110,6 @@ class LivePitchDetection:
     # returns the pitch of each sample
 
     def analyze_pitch(self):
-        print("Listening")
         # process input
         while True:
             try:
@@ -160,17 +158,17 @@ def get_pitch(freq):
     return name[name_index] + str(octave)
 
 
-if __name__ == '__main__':
-    # get .wav file argument
-    if len(sys.argv) > 1:
-        INPUT = sys.argv[1]
-        # create pitch detection instance
-        PITCH_DETECTION = PitchDetection(INPUT)
-    else:
-        # create microphone input instance
-        INPUT = Microphone()
-        # create pitch detection instance
-        PITCH_DETECTION = LivePitchDetection(INPUT)
-
-    # analyze audio
-    PITCH_DETECTION.analyze_pitch()
+class Audio_Listener:
+    def __init__(self, listening_params, mode, filename=""):
+        print("Listening for: ", listening_params)
+        if mode == "wav":
+            INPUT = filename
+            # create pitch detection instance
+            PITCH_DETECTION = PitchDetection(INPUT)
+        else:
+            # create microphone input instance
+            INPUT = Microphone()
+            # create pitch detection instance
+            PITCH_DETECTION = LivePitchDetection(INPUT)
+        # analyze audio
+        PITCH_DETECTION.analyze_pitch()
