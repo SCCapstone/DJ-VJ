@@ -15,9 +15,9 @@ print("This will be passed to the video instance: %s" % gui.video_attr)
 # check if have .wav file argument
 if len(sys.argv) > 1:
     # create .wav file audio listener
-    INPUT = sys.argv[1]
-    audio_listener = audio_listener.Audio_Listener(
-        gui.audio_attr, "wav", INPUT)
+    AUDIO_INPUT = sys.argv[1]
+    audio_listener = audio_listener.AudioListener(
+        gui.audio_attr, "wav", AUDIO_INPUT)
 else:
     # create live audio listener
-    audio_listener = audio_listener.Audio_Listener(gui.audio_attr, "live")
+    audio_listener = audio_listener.AudioListener(gui.audio_attr, "live")
