@@ -9,7 +9,6 @@ from math import log2
 import pyaudio
 import numpy
 from aubio import source, pitch
-import djvj.Visual as video
 
 
 class Microphone:  # pylint: disable=too-few-public-methods
@@ -119,7 +118,7 @@ class LivePitchDetection:  # pylint: disable=too-few-public-methods
         # set pitch measurement tolerance
         self.pitch_object.set_tolerance(0.8)
 
-    def analyze_pitch(self):
+    def analyze_pitch(self, visual):
         """
         analyze_pitch listens on an audio stream (microphone) and
         returns the pitch of each sample
@@ -137,9 +136,9 @@ class LivePitchDetection:  # pylint: disable=too-few-public-methods
                 # if sample has a frequency
                 if freq > 0:
                     # get and print the pitch
-                    # print(freq)
+                    print(int(freq))
+                    visual.curr_pitch = int(freq)
                     # print(confidence)
-                    VIDEO_QUEUE = video.Visual(int(freq))
 
                 if self.input.outputsink:
                     self.input.outputsink(signal, len(signal))
@@ -184,16 +183,18 @@ class AudioListener:  # pylint: disable=too-few-public-methods
     Future plan is to use is to use to turn on requested listening parameters
     """
 
-    def __init__(self, listening_params, mode, filename=""):
+    def __init__(self, listening_params, mode, visual, filename=""):
+        self.VISUAL = visual
         print("Listening for: ", listening_params)
         if mode == "wav":
             audio_input = filename
             # create pitch detection instance
-            pitch_detection = PitchDetection(audio_input)
+            self.pitch_detection = PitchDetection(audio_input)
         else:
             # create microphone input instance
             audio_input = Microphone()
             # create pitch detection instance
-            pitch_detection = LivePitchDetection(audio_input)
+            self.pitch_detection = LivePitchDetection(audio_input)
+
         # analyze audio
-        pitch_detection.analyze_pitch()
+        # self.pitch_detection.analyze_pitch(self.VISUAL)
