@@ -18,7 +18,7 @@ class Visual:
 
                 MY_PATH = os.path.abspath(os.path.dirname(__file__))
                 PATH = os.path.join(
-                    MY_PATH, "/Users/matt/USC/CSCE_490/DJ-VJ/test/video1.mp4")
+                    MY_PATH, "../test/video1.mp4")
                 CAP = cv2.VideoCapture(PATH)
                 CAP.release()
 
@@ -31,7 +31,7 @@ class Visual:
 
                 MY_PATH = os.path.abspath(os.path.dirname(__file__))
                 PATH = os.path.join(
-                    MY_PATH, "/Users/matt/USC/CSCE_490/DJ-VJ/test/video2.mp4")
+                    MY_PATH, "../test/video2.mp4")
                 CAP = cv2.VideoCapture(PATH)
                 CAP.release()
 
