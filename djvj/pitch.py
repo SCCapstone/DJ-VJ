@@ -9,6 +9,7 @@ from math import log2
 import pyaudio
 import numpy
 from aubio import source, pitch
+import djvj.Visual as video
 
 
 class Microphone:  # pylint: disable=too-few-public-methods
@@ -136,8 +137,9 @@ class LivePitchDetection:  # pylint: disable=too-few-public-methods
                 # if sample has a frequency
                 if freq > 0:
                     # get and print the pitch
-                    print(get_pitch(freq))
+                    # print(freq)
                     # print(confidence)
+                    VIDEO_QUEUE = video.Visual(int(freq))
 
                 if self.input.outputsink:
                     self.input.outputsink(signal, len(signal))
