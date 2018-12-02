@@ -30,7 +30,7 @@ else:
 
 # initialize threads
 # initialize lock for threads
-lock = threading.Lock()
+lock = threading.RLock()
 # thread for pitch anaylsis: target is method, args is method args
 analyze_pitch_thread = threading.Thread(
     target=AUDIO_LISTENER.pitch_detection.analyze_pitch, args=(AUDIO_LISTENER.VISUAL, lock,))

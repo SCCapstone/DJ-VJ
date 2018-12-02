@@ -11,13 +11,12 @@ class Visual:
     def __init__(self):
         # initalize current pitch
         self.curr_pitch = 0
-        # initialize resource lock
-        self.lock = threading.Lock()
 
     def play_video(self, lock):
         while True:
             lock.acquire()
             if self.curr_pitch < 150:
+                # print("Visual: ", self.curr_pitch)
                 lock.release()
 
                 cv2.destroyAllWindows()
@@ -33,6 +32,7 @@ class Visual:
                 cv2.imshow('frame', FRAME)
 
             elif self.curr_pitch > 150:
+                # print("Visual: ", self.curr_pitch)
                 lock.release()
                 cv2.destroyAllWindows()
 

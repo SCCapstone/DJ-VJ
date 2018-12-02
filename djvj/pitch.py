@@ -140,6 +140,7 @@ class LivePitchDetection:  # pylint: disable=too-few-public-methods
                     print(int(freq))
                     # lock resources
                     lock.acquire()
+                    # update current pitch in Visual
                     visual.curr_pitch = int(freq)
                     # release resources
                     lock.release()
