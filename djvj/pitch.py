@@ -118,11 +118,12 @@ class LivePitchDetection:  # pylint: disable=too-few-public-methods
         # set pitch measurement tolerance
         self.pitch_object.set_tolerance(0.8)
 
-    def analyze_pitch(self, visual):
+    def analyze_pitch(self, visual, lock):
         """
         analyze_pitch listens on an audio stream (microphone) and
         returns the pitch of each sample
         """
+        print("NOW LISTENING")
         # process input
         while True:
             try:
@@ -137,7 +138,11 @@ class LivePitchDetection:  # pylint: disable=too-few-public-methods
                 if freq > 0:
                     # get and print the pitch
                     print(int(freq))
+                    # lock resources
+                    lock.acquire()
                     visual.curr_pitch = int(freq)
+                    # release resources
+                    lock.release()
                     # print(confidence)
 
                 if self.input.outputsink:
