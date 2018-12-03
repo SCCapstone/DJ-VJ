@@ -136,7 +136,7 @@ class LivePitchDetection:  # pylint: disable=too-few-public-methods
                 # confidence = self.pitch_object.get_confidence()
 
                 # if sample has a frequency
-                if freq > 0:
+                if freq > 0 and volume > 200:
                     # get and print the pitch
                     # print(int(freq))
                     print(volume)
