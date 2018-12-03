@@ -13,6 +13,8 @@ class Visual:
     def __init__(self, video_attr):
         """ initialize the class """
         self.curr_pitch = 0
+        self.window_x = 700
+        self.window_y = 900
         self.pitch_threshold = int(video_attr[0][1])    # placeholder for now, but the value from the param file
 
     def play_video(self):
@@ -29,8 +31,13 @@ class Visual:
                     print("break video 1")
                     break
                 ret, frame = cap.read()     # play video
+                (h, w) = frame.shape[:2]
+                center = (w/2, h/2)
                 try:
-                    cv2.imshow('video', frame)
+                    M = cv2.getRotationMatrix2D(center, -90, 1.0)
+                    frame = cv2.warpAffine(frame, M, (w,h)) #rotate video
+                    frame = cv2.resize(frame, (self.window_y, self.window_x)) 
+                    cv2.imshow('video', frame) #play video
                 except:
                     pass
                     cap.release()
@@ -49,8 +56,14 @@ class Visual:
                     print("break video 2")
                     break
                 ret, frame = cap.read()
+                (h, w) = frame.shape[:2]
+                center = (w/2, h/2)
+
                 try:
-                    cv2.imshow('video', frame)      # play video
+                    M = cv2.getRotationMatrix2D(center, -90, 1.0)
+                    frame = cv2.warpAffine(frame, M, (w,h)) #rotate video
+                    frame = cv2.resize(frame, (self.window_y, self.window_x))
+                    cv2.imshow('video', frame) #play video
                 except:
                     pass
                     cap.release()
