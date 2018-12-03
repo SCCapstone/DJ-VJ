@@ -14,7 +14,7 @@ print("This will be passed to the audio listener: %s" % gui.audio_attr)
 print("This will be passed to the video instance: %s" % gui.video_attr)
 
 # initialize Visual
-VISUAL = video.Visual()
+VISUAL = video.Visual(gui.video_attr)
 
 # initialize audio listener
 # check if have .wav file argument
