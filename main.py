@@ -38,4 +38,5 @@ analyze_pitch_thread = threading.Thread(
 # start threads
 analyze_pitch_thread.start()
 
-VISUAL.play_video()
+while 1:
+    VISUAL.play_video()

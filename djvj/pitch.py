@@ -137,7 +137,7 @@ class LivePitchDetection:  # pylint: disable=too-few-public-methods
                 # if sample has a frequency
                 if freq > 0:
                     # get and print the pitch
-                    print(int(freq))
+                    # print(int(freq))
                     # lock resources
                     lock.acquire()
                     # update current pitch in Visual
