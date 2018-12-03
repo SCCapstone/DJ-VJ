@@ -118,11 +118,12 @@ class LivePitchDetection:  # pylint: disable=too-few-public-methods
         # set pitch measurement tolerance
         self.pitch_object.set_tolerance(0.8)
 
-    def analyze_pitch(self):
+    def analyze_pitch(self, visual, lock):
         """
         analyze_pitch listens on an audio stream (microphone) and
         returns the pitch of each sample
         """
+        print("NOW LISTENING")
         # process input
         while True:
             try:
@@ -136,7 +137,14 @@ class LivePitchDetection:  # pylint: disable=too-few-public-methods
                 # if sample has a frequency
                 if freq > 0:
                     # get and print the pitch
-                    print(get_pitch(freq))
+                    # print(int(freq))
+                    # lock resources
+                    lock.acquire()
+                    # update current pitch in Visual
+                    visual.curr_pitch = int(freq)
+                    # release resources
+                    lock.release()
+
                     # print(confidence)
 
                 if self.input.outputsink:
@@ -182,16 +190,18 @@ class AudioListener:  # pylint: disable=too-few-public-methods
     Future plan is to use is to use to turn on requested listening parameters
     """
 
-    def __init__(self, listening_params, mode, filename=""):
+    def __init__(self, listening_params, mode, visual, filename=""):
+        self.VISUAL = visual
         print("Listening for: ", listening_params)
         if mode == "wav":
             audio_input = filename
             # create pitch detection instance
-            pitch_detection = PitchDetection(audio_input)
+            self.pitch_detection = PitchDetection(audio_input)
         else:
             # create microphone input instance
             audio_input = Microphone()
             # create pitch detection instance
-            pitch_detection = LivePitchDetection(audio_input)
+            self.pitch_detection = LivePitchDetection(audio_input)
+
         # analyze audio
-        pitch_detection.analyze_pitch()
+        # self.pitch_detection.analyze_pitch(self.VISUAL)

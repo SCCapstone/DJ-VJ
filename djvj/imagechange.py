@@ -13,6 +13,7 @@ while True:
 
     X = input("Would you like to see a photo ")
     if X == 'yes':
+        cv2.destroyAllWindows()
         Y = int(input("which photo would you like to see (ENTER: 0 OR 1): "))
         FILE = repr(Y)+'.jpg'
         IMG = cv2.imread(FILE)

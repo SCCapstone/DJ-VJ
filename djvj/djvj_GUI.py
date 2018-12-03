@@ -14,8 +14,8 @@ import djvj.pitch
 # global variable params, not sure where this is actually supposed to go
 # but for right now it only works up here
 Params = ""
-audio_attr = list() # what the audio should listen for
-video_attr = list() # the rest of the parameters for the video queuer
+audio_attr = list()  # what the audio should listen for
+video_attr = list()  # the rest of the parameters for the video queuer
 
 
 class SplashScreen(tk.Toplevel):
@@ -102,7 +102,8 @@ class IntroScreen(tk.Tk):
             newstr = list()
             newstr.append(li[2])
             newstr.append(li[3])
-            video_attr.append(newstr)  # appended a list of these values for easy computation
+            # appended a list of these values for easy computation
+            video_attr.append(newstr)
 
         # right now, just for error checking
         messagebox.showinfo("Load Show", data)
@@ -158,7 +159,8 @@ class CreateScreen(tk.Toplevel):
             .place(relx=.5, rely=.43, anchor="center")
 
         # shows running params
-        self.display = Label(self, text="", bg="#212121", fg="#05F72D", font=("Courier", 20))
+        self.display = Label(self, text="", bg="#212121",
+                             fg="#05F72D", font=("Courier", 20))
         self.display.place(relx=.5, rely=.6, anchor="center")
 
     def addition(self):
@@ -170,7 +172,7 @@ class CreateScreen(tk.Toplevel):
 
         global Params
         Params = Params + "\n" + "If " + self.attr.get() \
-                 + " " + self.sign.get() + " " + self.e1.get()
+            + " " + self.sign.get() + " " + self.e1.get()
         self.params_added()
         # clears all the fields
         self.e1.delete(0, END)
