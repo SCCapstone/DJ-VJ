@@ -61,12 +61,12 @@ class IntroScreen(tk.Tk):
         self.label.place(relx=.5, rely=.25, anchor="center")
 
         # creates the buttons for create, load, and use default show
-        self.create_button = Button(self, text="Create\nShow", bg='#05F72D', fg="#05F72D",
+        self.create_button = Button(self, text="Create\nShow", bg='#05F72D', fg="#000000",
                                     highlightbackground='#05F72D', font=("Courier", 48),
                                     height=5, width=10, command=self.create)
         self.create_button.place(relx=.33, rely=.75, anchor="center")
 
-        self.load_button = Button(self, text="Load\nShow", bg='#05F72D', fg="#05F72D",
+        self.load_button = Button(self, text="Load\nShow", bg='#05F72D', fg="#000000",
                                   highlightbackground='#05F72D', font=("Courier", 48),
                                   height=5, width=10, command=self.load)
         self.load_button.place(relx=.66, rely=.75, anchor="center")
