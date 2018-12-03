@@ -132,12 +132,14 @@ class LivePitchDetection:  # pylint: disable=too-few-public-methods
                 signal = numpy.frombuffer(audiobuffer, dtype=numpy.float32)
 
                 freq = self.pitch_object(signal)[0]
+                # volume = int((numpy.sum(signal**2) / len(signal)) * 60000)
                 # confidence = self.pitch_object.get_confidence()
 
                 # if sample has a frequency
                 if freq > 0:
                     # get and print the pitch
                     # print(int(freq))
+                    # print(volume)
                     # lock resources
                     lock.acquire()
                     # update current pitch in Visual
