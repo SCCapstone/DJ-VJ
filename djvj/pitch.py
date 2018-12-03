@@ -144,6 +144,7 @@ class LivePitchDetection:  # pylint: disable=too-few-public-methods
                     visual.curr_pitch = int(freq)
                     # release resources
                     lock.release()
+
                     # print(confidence)
 
                 if self.input.outputsink:

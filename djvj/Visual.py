@@ -12,12 +12,10 @@ class Visual:
         # initalize current pitch
         self.curr_pitch = 0
 
-    def play_video(self, lock):
+    def play_video(self):
         while True:
-            lock.acquire()
-            if self.curr_pitch < 150:
-                # print("Visual: ", self.curr_pitch)
-                lock.release()
+            if self.curr_pitch < 500:
+                # print(self.curr_pitch, "A")
 
                 cv2.destroyAllWindows()
 
@@ -31,9 +29,8 @@ class Visual:
 
                 cv2.imshow('frame', FRAME)
 
-            elif self.curr_pitch > 150:
-                # print("Visual: ", self.curr_pitch)
-                lock.release()
+            elif self.curr_pitch > 500:
+                # print(self.curr_pitch, "B")
                 cv2.destroyAllWindows()
 
                 MY_PATH = os.path.abspath(os.path.dirname(__file__))
