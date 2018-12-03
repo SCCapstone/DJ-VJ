@@ -128,7 +128,7 @@ class LivePitchDetection:  # pylint: disable=too-few-public-methods
         while True:
             try:
                 audiobuffer = self.input.stream.read(
-                    self.input.buffer_size)
+                    self.input.buffer_size, exception_on_overflow=False)
                 signal = numpy.frombuffer(audiobuffer, dtype=numpy.float32)
 
                 freq = self.pitch_object(signal)[0]
