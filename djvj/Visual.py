@@ -1,61 +1,59 @@
-import cv2
-import sys
+"""
+This program displays videos based on the audio input passed
+from the audio listener.
+"""
 import os
+import time
+import cv2
 
 
 class Visual:
-    """docstring for ClassName"""
+    """Main class in the file, creates the video"""
 
-    def __init__(self):
+    def __init__(self, video_attr):
+        """ initialize the class """
         self.curr_pitch = 0
-        # self.curr_pitch = [100, 150, 90, 300, 200, 50]
-        # for x in self.curr_pitch:
-        #     self.play_video(x)
-
-    def trigger(self):
-        print("TRIGGER")
-        self.play_video()
+        self.pitch_threshold = int(video_attr[0][1])    # placeholder for now, but the value from the param file
 
     def play_video(self):
-        print(self.curr_pitch)
-        if self.curr_pitch > 500:
-            cv2.destroyAllWindows()
+        """ plays the video """
+        # if the current pitch is > than threshold (from .djvj file)
+        if self.curr_pitch > self.pitch_threshold:
+            print(self.curr_pitch)
             print("Video 1")
-            MY_PATH = os.path.abspath(os.path.dirname(__file__))
-            PATH = os.path.join(MY_PATH, "../test/video3.MOV")
-            CAP = cv2.VideoCapture(PATH)
-            while CAP.isOpened():
-                if self.curr_pitch < 500:
+            my_path = os.path.abspath(os.path.dirname(__file__))
+            path = os.path.join(my_path, "../test/video1.MOV")
+            cap = cv2.VideoCapture(path)    # open first video
+            while cap.isOpened():
+                if self.curr_pitch < self.pitch_threshold:  # if pitch changes, change video
                     print("break video 1")
                     break
-                RET, frame = CAP.read()
+                ret, frame = cap.read()     # play video
                 try:
                     cv2.imshow('video', frame)
                 except:
                     pass
-                    CAP.release()
-                    cv2.destroyAllWindows()
+                    cap.release()
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     print("BREAK")
                     break
 
-        if self.curr_pitch < 500:
-            cv2.destroyAllWindows()
+        # if the current pitch is < than threshold (from .djvj file)
+        if self.curr_pitch < self.pitch_threshold:
             print("Video 2")
-            MY_PATH = os.path.abspath(os.path.dirname(__file__))
-            PATH = os.path.join(MY_PATH, "../test/VATest.mp4")
-            CAP = cv2.VideoCapture(PATH)
-            while CAP.isOpened():
-                if self.curr_pitch > 500:
+            my_path = os.path.abspath(os.path.dirname(__file__))
+            path = os.path.join(my_path, "../test/video2.mp4")
+            cap = cv2.VideoCapture(path)    # open second video
+            while cap.isOpened():
+                if self.curr_pitch > self.pitch_threshold:  # if pitch changes, change video
                     print("break video 2")
                     break
-                RET, frame = CAP.read()
+                ret, frame = cap.read()
                 try:
-                    cv2.imshow('video', frame)
+                    cv2.imshow('video', frame)      # play video
                 except:
                     pass
-                    CAP.release()
-                    cv2.destroyAllWindows()
+                    cap.release()
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     print("BREAK")
                     break
