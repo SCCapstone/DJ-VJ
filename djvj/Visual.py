@@ -25,7 +25,7 @@ class Visual:
             my_path = os.path.abspath(os.path.dirname(__file__))
             path = os.path.join(my_path, "../test/video1.MOV")
             cap = cv2.VideoCapture(path)    # open first video
-            print("now here")
+            # print("now here")
             while cap.isOpened():
                 if self.curr_pitch < self.pitch_threshold:  # if pitch changes, change video
                     break
@@ -51,7 +51,7 @@ class Visual:
             my_path = os.path.abspath(os.path.dirname(__file__))
             path = os.path.join(my_path, "../test/video2.mp4")
             cap = cv2.VideoCapture(path)    # open second video
-            print("i'm here")
+            # print("i'm here")
             while cap.isOpened():
                 if self.curr_pitch > self.pitch_threshold:  # if pitch changes, change video
                     break
