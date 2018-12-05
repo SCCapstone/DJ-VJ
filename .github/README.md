@@ -3,16 +3,13 @@
 DJ-VJ is an easy to use video jockey software that listens to nearby audio input then displays video clips based on the sound it hears, following a set of parameters laid out by the VJ.
 
 ## Requirements
-Python3
+[Python 3.7](https://www.python.org/downloads/release/python-371/)
+[PortAudio](http://www.portaudio.com/)
+[Pipenv](https://pipenv.readthedocs.io)
 
-##### Python Libraries Needed to Run
-- aubio `pip install aubio`
-- pyaudio `pip install pyaudio` (for Mac OSX `brew install portaudio` then `pip install pyaudio`)
-
-## Testing
-
-To run the program, execute the following command:
-`python3 main.py`
+## Virtual Environment
+`pipenv install`
+`pipenv run python main.py`
 
 ### Style Testing
 This repo follows the [Pylint](https://www.pylint.org/) style guide. To test adherence to the guide, first download Pylint (`pip install pylint`), then navigate to any python file an execute the command:
@@ -21,8 +18,9 @@ This repo follows the [Pylint](https://www.pylint.org/) style guide. To test adh
 ## Built With
 - [Tkinter](https://wiki.python.org/moin/TkInter) - a Python GUI framework
 - [Pickle](https://docs.python.org/3/library/pickle.html) - Python object serialization
-- [aubio](https://aubio.org/) - a library for audio and music analysis 
+- [aubio](https://aubio.org/) - a library for audio and music analysis
 - [PyAudio](https://people.csail.mit.edu/hubert/pyaudio/) - a cross-platform audio I/O library
+- [numpy](https://www.numpy.org/) - package for scientific computing with Python
 
 ## Authors
 - [Abby Holdeman](https://github.com/aholdeman)
