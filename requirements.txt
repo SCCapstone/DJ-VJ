@@ -1,0 +1,5 @@
+-i https://pypi.org/simple
+aubio==0.4.8
+numpy==1.15.4
+opencv-python==3.4.4.19
+pyaudio==0.2.11
