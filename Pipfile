@@ -6,10 +6,10 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-aubio = "*"
-pyaudio = "*"
-numpy = "*"
-opencv-python = "*"
+aubio = "==0.4.8"
+numpy = "==1.15.4"
+opencv-python = "==3.4.4.19"
+PyAudio = "==0.2.11"
 
 [requires]
-python_version = "3.7"
+python_version = "3.5"
