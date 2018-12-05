@@ -3,9 +3,9 @@
 DJ-VJ is an easy to use video jockey software that listens to nearby audio input then displays video clips based on the sound it hears, following a set of parameters laid out by the VJ.
 
 ## Requirements
-[Python 3.7](https://www.python.org/downloads/release/python-371/)
-[PortAudio](http://www.portaudio.com/)
-[Pipenv](https://pipenv.readthedocs.io)
+- [Python 3.7](https://www.python.org/downloads/release/python-371/)
+- [PortAudio](http://www.portaudio.com/)
+- [Pipenv](https://pipenv.readthedocs.io)
 
 ## Virtual Environment
 `pipenv install`
