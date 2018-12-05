@@ -12,4 +12,4 @@ aubio = "*"
 opencv-python = "*"
 
 [requires]
-python_version = "3.5.2"
+python_version = "*"
