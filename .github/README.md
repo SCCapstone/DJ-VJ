@@ -8,8 +8,8 @@ DJ-VJ is an easy to use video jockey software that listens to nearby audio input
 - [Pipenv](https://pipenv.readthedocs.io)
 
 ## Virtual Environment
-`pipenv install` 
-`pipenv run python main.py`
+`pipenv install`  
+`pipenv run python main.py`  
 
 ### Style Testing
 This repo follows the [Pylint](https://www.pylint.org/) style guide. To test adherence to the guide, first download Pylint (`pip install pylint`), then navigate to any python file an execute the command:
