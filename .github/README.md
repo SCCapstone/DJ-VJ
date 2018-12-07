@@ -3,15 +3,21 @@
 DJ-VJ is an easy to use video jockey software that listens to nearby audio input then displays video clips based on the sound it hears, following a set of parameters laid out by the VJ.
 
 ## Requirements
-Python3
+- [Python 3.7](https://www.python.org/downloads/release/python-371/)
+- [PortAudio](http://www.portaudio.com/)
+- [Pipenv](https://pipenv.readthedocs.io)
+- Computer audio input set (i.e built-in microphone, USB microphone, etc)
 
-##### Python Libraries Needed to Run
-- aubio `pip install aubio`
-- pyaudio `pip install pyaudio` (for Mac OSX `brew install portaudio` then `pip install pyaudio`)
+## Virtual Environment
+`pipenv install`  
+`pipenv run python main.py`  
 
-## Testing
-
-To run the program, execute the following command:
+#### Note
+We've been running into issues with the pipenv environment, as it's difficult to hard-install PortAudio, which is necessary for aubio to run. If the pipenv file does not work, you can still run our program by running the following commands:
+`pip install aubio`
+`pip install pyaudio (for Mac OSX brew install portaudio then pip install pyaudio, for Linux sudo apt-get portaudio)`
+`pip install open-cv`
+`pip install numpy`
 `python3 main.py`
 
 ### Style Testing
@@ -21,8 +27,9 @@ This repo follows the [Pylint](https://www.pylint.org/) style guide. To test adh
 ## Built With
 - [Tkinter](https://wiki.python.org/moin/TkInter) - a Python GUI framework
 - [Pickle](https://docs.python.org/3/library/pickle.html) - Python object serialization
-- [aubio](https://aubio.org/) - a library for audio and music analysis 
+- [aubio](https://aubio.org/) - a library for audio and music analysis
 - [PyAudio](https://people.csail.mit.edu/hubert/pyaudio/) - a cross-platform audio I/O library
+- [numpy](https://www.numpy.org/) - package for scientific computing with Python
 
 ## Authors
 - [Abby Holdeman](https://github.com/aholdeman)
