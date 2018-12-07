@@ -14,11 +14,11 @@ DJ-VJ is an easy to use video jockey software that listens to nearby audio input
 
 #### Note
 We've been running into issues with the pipenv environment, as it's difficult to hard-install PortAudio, which is necessary for pyaudio to run. If the pipenv file does not work, you can still run our program by running the following commands:
-`pip install aubio`
-`pip install pyaudio (for Mac OSX brew install portaudio then pip install pyaudio, for Linux sudo apt-get portaudio)`
-`pip install open-cv`
-`pip install numpy`
-`python3 main.py`
+`pip install aubio`  
+`pip install pyaudio (for Mac OSX brew install portaudio then pip install pyaudio, for Linux sudo apt-get portaudio)`  
+`pip install open-cv`  
+`pip install numpy`  
+`python3 main.py`  
 
 ### Style Testing
 This repo follows the [Pylint](https://www.pylint.org/) style guide. To test adherence to the guide, first download Pylint (`pip install pylint`), then navigate to any python file an execute the command:
