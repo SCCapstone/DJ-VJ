@@ -151,11 +151,11 @@ class CreateScreen(tk.Toplevel):
             .place(relx=.65, rely=.25, anchor="center")
 
         # buttons
-        Button(self, text='Add Param', command=self.addition) \
+        Button(self, text='Add Param', fg="#000000", command=self.addition) \
             .place(relx=.45, rely=.35, anchor="center")
-        Button(self, text='Remove Param', command=self.remove) \
+        Button(self, text='Remove Param',fg="#000000", command=self.remove) \
             .place(relx=.55, rely=.35, anchor="center")
-        Button(self, text='Create File', command=self.create_file) \
+        Button(self, text='Create File',fg="#000000", command=self.create_file) \
             .place(relx=.5, rely=.43, anchor="center")
 
         # shows running params
