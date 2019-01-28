@@ -23,7 +23,7 @@ class Visual:
         # if the current pitch is > than threshold (from .djvj file)
         if self.curr_pitch > self.pitch_threshold:
             my_path = os.path.abspath(os.path.dirname(__file__))
-            path = os.path.join(my_path, "../test/video1.MOV")
+            path = os.path.join(my_path, "../test/test_assets/video1.MOV")
             cap = cv2.VideoCapture(path)    # open first video
             # print("now here")
             while cap.isOpened():
@@ -49,7 +49,7 @@ class Visual:
         # if the current pitch is < than threshold (from .djvj file)
         if self.curr_pitch < self.pitch_threshold:
             my_path = os.path.abspath(os.path.dirname(__file__))
-            path = os.path.join(my_path, "../test/video2.mp4")
+            path = os.path.join(my_path, "../test/test_assets/video2.mp4")
             cap = cv2.VideoCapture(path)    # open second video
             # print("i'm here")
             while cap.isOpened():
