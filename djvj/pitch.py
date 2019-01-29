@@ -36,7 +36,7 @@ class Microphone:  # pylint: disable=too-few-public-methods
         self.record_duration = None
 
 
-class PitchDetection:  # pylint: disable=too-few-public-methods
+class FilePitchDetection:  # pylint: disable=too-few-public-methods
 
     """
     PitchDetection sets up an instances from aubio necessary for aubio analysis
@@ -198,7 +198,7 @@ class AudioListener:  # pylint: disable=too-few-public-methods
         if mode == "wav":
             audio_input = filename
             # create pitch detection instance
-            self.pitch_detection = PitchDetection(audio_input)
+            self.pitch_detection = FilePitchDetection(audio_input)
         else:
             # create microphone input instance
             audio_input = Microphone()
