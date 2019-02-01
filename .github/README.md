@@ -20,6 +20,17 @@ We've been running into issues with the pipenv environment, as it's difficult to
 `pip install numpy`  
 `python3 main.py`  
 
+### Testing
+
+To run behavioral test, download pyautogui (for Python
+
+`pip install install pyobjc-core`
+
+`pip install pyobjc`
+
+`pip install pyautogui` )
+
+Navigate to central repository, type `python3 create_screen_behavioral.py` and watch as the "Create Show" screen is loaded automatically, which the user expects it to do.
 ### Style Testing
 This repo follows the [Pylint](https://www.pylint.org/) style guide. To test adherence to the guide, first download Pylint (`pip install pylint`), then navigate to any python file an execute the command:
 `pylint filename.py`, where filename.py is the name of the file you are testing.
