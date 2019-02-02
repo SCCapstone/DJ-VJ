@@ -1,5 +1,8 @@
 #! /usr/bin/env python3
 import djvj.audio_listener as audio
+import djvj.Visual as video
+import threading
+import time
 
 
 class Show:
@@ -11,3 +14,13 @@ class Show:
 
         # self.interpreter = interpreter.Interpreter(show_params)
         self.audio_listener = audio.AudioListener(self.audio_params)
+        self.video_player = video.Visual(self.values[0])
+
+    def start(self):
+        try:
+            audio_thread = threading.Thread(
+                target=self.audio_listener.analyze)
+            audio_thread.start()
+
+        except KeyboardInterrupt:
+            pass
