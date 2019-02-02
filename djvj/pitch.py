@@ -129,16 +129,18 @@ class AudioListener:  # pylint: disable=too-few-public-methods
 =======
         freq = self.pitch_analyzer(sample)[0]
         volume = int((numpy.sum(sample**2) / len(sample)) * 60000)
-        # confidence = self.pitch_analyzer.get_confidence()
 
+        # confidence = self.pitch_analyzer.get_confidence()
         # if sample has a frequency
         if freq > 0 and volume > 20:
             # get and print the pitch
-            print(int(freq))
+            return int(freq)
             # print(volume)
-            # print(confidence)
+            # print(confidence
         if self.input.outputsink:
             self.input.outputsink(sample, len(sample))
+
+        return 0
 
     def get_pitch(freq):
         """

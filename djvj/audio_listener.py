@@ -17,26 +17,28 @@ class AudioListener:
                 self.audio_input, self.window_size, self.hop_size)
 
     def __del__(self):
-        self.input.stream.stop_stream()
-        self.input.stream.close()
-        self.input.pyaudio_instance.terminate()
+        self.audio_input.stream.stop_stream()
+        self.audio_input.stream.close()
+        self.audio_input.pyaudio_instance.terminate()
 
+    def analyze(self):
+        # list of current aubio values: [frequency, tempo]
+        self.curr_audio_values = [0, 0]
+        while True:
+            try:
+                # get next sample
+                audiobuffer = self.audio_input.stream.read(
+                    self.audio_input.buffer_size, exception_on_overflow=False)
+                # convert sample to list
+                sample = numpy.frombuffer(audiobuffer, dtype=numpy.float32)
 
-def analyze(self):
-    # list of current aubio values: [frequency, tempo]
-    self.curr_audio_values = []
-
-    try:
-        # get next sample
-        audiobuffer = self.input.stream.read(
-            self.input.buffer_size, exception_on_overflow=False)
-        # convert sample to list
-        sample = numpy.frombuffer(audiobuffer, dtype=numpy.float32)
-
-        if 'pitch' in self.listen_params:
-            # analyze sample for aubio's pitch (currently in Hz)
-            self.curr_audio_values[0] = self.pitch.analyze_pitch(sample)
-    except KeyboardInterrupt:
+                if 'pitch' in self.listen_params:
+                    # analyze sample for aubio's pitch (currently in Hz)
+                    self.curr_audio_values[0] = self.pitch.analyze_pitch(
+                        sample)
+                print(self.curr_audio_values)
+            except KeyboardInterrupt:
+                break
 
 
 class Microphone:  # pylint: disable=too-few-public-methods

@@ -10,13 +10,13 @@ import cv2
 class Visual:
     """Main class in the file, creates the video"""
 
-    def __init__(self, video_attr):
+    def __init__(self, value):
         """ initialize the class """
         self.curr_pitch = 0
         self.window_x = 700
         self.window_y = 900
         # placeholder for now, but the value from the param file
-        self.pitch_threshold = int(video_attr[0][1])
+        self.pitch_threshold = int(value)
 
     def play_video(self):
         """ plays the video """
