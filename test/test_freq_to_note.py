@@ -13,6 +13,10 @@ class TestFreqToNote(unittest.TestCase):
     This is the test case for the get_pitch function
     """
 
+    @classmethod
+    def setUpClass(self):
+        print("Unit Test: freq_to_note")
+
     def setUp(self):
         # values referenced from here: http://pages.mtu.edu/~suits/notefreqs.html
         self.test_1 = 440  # A4
@@ -31,7 +35,6 @@ class TestFreqToNote(unittest.TestCase):
         """
 
         # test 1
-        print("Unit Test: FreqToNote_test_1")
         self.test_1 = pitch.get_pitch(self.test_1)
         self.assertEqual(self.test_1, "A4")
 
@@ -41,7 +44,6 @@ class TestFreqToNote(unittest.TestCase):
         """
 
         # test 2
-        print("Unit Test: FreqToNote_test_2")
         self.test_2 = pitch.get_pitch(self.test_2)
         self.assertEqual(self.test_2, "C0")
 
@@ -50,7 +52,6 @@ class TestFreqToNote(unittest.TestCase):
         This method calls the get_pitch method on the test_3
         """
         # test 3
-        print("Unit Test: FreqToNote_test_3")
         self.test_3 = pitch.get_pitch(self.test_3)
         self.assertEqual(self.test_3, "D#0")
 
@@ -59,7 +60,6 @@ class TestFreqToNote(unittest.TestCase):
         This method calls the get_pitch method on the test_4
         """
         # test 4
-        print("Unit Test: FreqToNote_test_4")
         self.test_4 = pitch.get_pitch(self.test_4)
         self.assertEqual(self.test_4, "C4")
 
@@ -68,7 +68,6 @@ class TestFreqToNote(unittest.TestCase):
         This method calls the get_pitch method on the test_5
         """
         # test 5
-        print("Unit Test: FreqToNote_test_5")
         self.test_5 = pitch.get_pitch(self.test_5)
         self.assertEqual(self.test_5, "B8")
 
@@ -77,7 +76,6 @@ class TestFreqToNote(unittest.TestCase):
         This method calls the get_pitch method on the test_6
         """
         # test 6
-        print("Unit Test: FreqToNote_test_6")
         self.test_6 = pitch.get_pitch(self.test_6)
         self.assertEqual(self.test_6, "")
 
@@ -86,7 +84,6 @@ class TestFreqToNote(unittest.TestCase):
         This method calls the get_pitch method on the test_7
         """
         # test 7
-        print("Unit Test: FreqToNote_test_7")
         self.test_7 = pitch.get_pitch(self.test_7)
         self.assertEqual(self.test_7, "E2")
 
@@ -95,7 +92,6 @@ class TestFreqToNote(unittest.TestCase):
         This method calls the get_pitch method on the test_8
         """
         # test 8
-        print("Unit Test: FreqToNote_test_8")
         self.test_8 = pitch.get_pitch(self.test_8)
         self.assertEqual(self.test_8, "F2")
 
