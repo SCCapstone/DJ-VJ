@@ -1,8 +1,17 @@
+"""
+This test file tests the get_pitch function found in the Pitch class
+which takes in a frequency in Hz and converts it to its musical
+note representation
+"""
+
 import unittest
 import djvj.pitch as pitch
 
 
 class TestFreqToNote(unittest.TestCase):
+    """
+    This is the test case for the get_pitch function
+    """
 
     def setUp(self):
         # values referenced from here: http://pages.mtu.edu/~suits/notefreqs.html
@@ -17,6 +26,9 @@ class TestFreqToNote(unittest.TestCase):
         self.test_8 = 85  # in between E2 and F2, should round up to F2 , b/c difference is closer
 
     def test_freq_to_note(self):
+        """
+        This method calls the get_pitch method on the test cases
+        """
         print("running tests")
 
         # test 1
