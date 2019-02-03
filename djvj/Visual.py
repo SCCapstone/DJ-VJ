@@ -72,3 +72,10 @@ class Visual:
                     cap.release()
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
+    def validate(self):
+            my_path = os.path.abspath(os.path.dirname(__file__))
+            path_1 = os.path.join(my_path, "../test/test_assets/video1.MOV")
+            path_2 = os.path.join(my_path, "../test/test_assets/video2.mp4")
+            if(path_1 != path_2):
+                return True
+
