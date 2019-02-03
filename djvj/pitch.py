@@ -168,6 +168,9 @@ def get_pitch(freq):
     # example is found here:
     # https://www.johndcook.com/blog/2016/02/10/musical-pitch-notation/
 
+    if freq < 16.35 or freq > 20000:
+        return ""
+
     # define tuning, standard is A4 = 440 Hz
     a_4 = 440
     # find C0 based on tuning
