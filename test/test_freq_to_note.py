@@ -25,7 +25,7 @@ class TestFreqToNote(unittest.TestCase):
         self.test_7 = 84  # in between E2 and F2, should round down to E2 b/c difference is closer
         self.test_8 = 85  # in between E2 and F2, should round up to F2 , b/c difference is closer
 
-    def test_1(self):
+    def test_1(self):  # pylint: disable=E0202
         """
         This method calls the get_pitch method on the test_1
         """
@@ -34,7 +34,7 @@ class TestFreqToNote(unittest.TestCase):
         self.test_1 = pitch.get_pitch(self.test_1)
         self.assertEqual(self.test_1, "A4")
 
-    def test_2(self):
+    def test_2(self):  # pylint: disable=E0202
         """
         This method calls the get_pitch method on the test_2
         """
@@ -43,7 +43,7 @@ class TestFreqToNote(unittest.TestCase):
         self.test_2 = pitch.get_pitch(self.test_2)
         self.assertEqual(self.test_2, "C0")
 
-    def test_3(self):
+    def test_3(self):  # pylint: disable=E0202
         """
         This method calls the get_pitch method on the test_3
         """
@@ -51,7 +51,7 @@ class TestFreqToNote(unittest.TestCase):
         self.test_3 = pitch.get_pitch(self.test_3)
         self.assertEqual(self.test_3, "D#0")
 
-    def test_4(self):
+    def test_4(self):  # pylint: disable=E0202
         """
         This method calls the get_pitch method on the test_4
         """
@@ -59,7 +59,7 @@ class TestFreqToNote(unittest.TestCase):
         self.test_4 = pitch.get_pitch(self.test_4)
         self.assertEqual(self.test_4, "C4")
 
-    def test_5(self):
+    def test_5(self):  # pylint: disable=E0202
         """
         This method calls the get_pitch method on the test_5
         """
@@ -67,7 +67,7 @@ class TestFreqToNote(unittest.TestCase):
         self.test_5 = pitch.get_pitch(self.test_5)
         self.assertEqual(self.test_5, "B8")
 
-    def test_6(self):
+    def test_6(self):  # pylint: disable=E0202
         """
         This method calls the get_pitch method on the test_6
         """
@@ -75,7 +75,7 @@ class TestFreqToNote(unittest.TestCase):
         self.test_6 = pitch.get_pitch(self.test_6)
         self.assertEqual(self.test_6, "")
 
-    def test_7(self):
+    def test_7(self):  # pylint: disable=E0202
         """
         This method calls the get_pitch method on the test_7
         """
@@ -83,7 +83,7 @@ class TestFreqToNote(unittest.TestCase):
         self.test_7 = pitch.get_pitch(self.test_7)
         self.assertEqual(self.test_7, "E2")
 
-    def test_8(self):
+    def test_8(self):  # pylint: disable=E0202
         """
         This method calls the get_pitch method on the test_8
         """
