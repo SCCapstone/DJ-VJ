@@ -25,40 +25,68 @@ class TestFreqToNote(unittest.TestCase):
         self.test_7 = 84  # in between E2 and F2, should round down to E2 b/c difference is closer
         self.test_8 = 85  # in between E2 and F2, should round up to F2 , b/c difference is closer
 
-    def test_freq_to_note(self):
+    def test_1(self):
         """
-        This method calls the get_pitch method on the test cases
+        This method calls the get_pitch method on the test_1
         """
-        print("running tests")
 
         # test 1
         self.test_1 = pitch.get_pitch(self.test_1)
         self.assertEqual(self.test_1, "A4")
 
+    def test_2(self):
+        """
+        This method calls the get_pitch method on the test_2
+        """
+
         # test 2
         self.test_2 = pitch.get_pitch(self.test_2)
         self.assertEqual(self.test_2, "C0")
 
+    def test_3(self):
+        """
+        This method calls the get_pitch method on the test_3
+        """
         # test 3
         self.test_3 = pitch.get_pitch(self.test_3)
         self.assertEqual(self.test_3, "D#0")
 
+    def test_4(self):
+        """
+        This method calls the get_pitch method on the test_4
+        """
         # test 4
         self.test_4 = pitch.get_pitch(self.test_4)
         self.assertEqual(self.test_4, "C4")
 
+    def test_5(self):
+        """
+        This method calls the get_pitch method on the test_5
+        """
         # test 5
         self.test_5 = pitch.get_pitch(self.test_5)
         self.assertEqual(self.test_5, "B8")
 
+    def test_6(self):
+        """
+        This method calls the get_pitch method on the test_6
+        """
         # test 6
         self.test_6 = pitch.get_pitch(self.test_6)
         self.assertEqual(self.test_6, "")
 
+    def test_7(self):
+        """
+        This method calls the get_pitch method on the test_7
+        """
         # test 7
         self.test_7 = pitch.get_pitch(self.test_7)
         self.assertEqual(self.test_7, "E2")
 
+    def test_8(self):
+        """
+        This method calls the get_pitch method on the test_8
+        """
         # test 8
         self.test_8 = pitch.get_pitch(self.test_8)
         self.assertEqual(self.test_8, "F2")
