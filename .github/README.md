@@ -8,17 +8,21 @@ DJ-VJ is an easy to use video jockey software that listens to nearby audio input
 - [Pipenv](https://pipenv.readthedocs.io)
 - Computer audio input set (i.e built-in microphone, USB microphone, etc)
 
-## Virtual Environment
-`pipenv install`  
-`pipenv run python main.py`  
+## Testing
+### Unit Testing
+Our unit testing utilizes the [unittest](https://docs.python.org/3/library/unittest.html#) framework    
+Unit tests are located in `test/`    
 
-#### Note
-We've been running into issues with the pipenv environment, as it's difficult to hard-install PortAudio, which is necessary for pyaudio to run. If the pipenv file does not work, you can still run our program by running the following commands:  
-`pip install aubio`  
-`pip install pyaudio (for Mac OSX brew install portaudio then pip install pyaudio, for Linux sudo apt-get portaudio)`  
-`pip install open-cv`  
-`pip install numpy`  
-`python3 main.py`  
+To perform all unit tests:    
+    `git clone git@github.com:SCCapstone/DJ-VJ.git`    
+    `cd DJ-VJ`    
+    `python3 -m unittest discover`    
+
+To perform individual unit test:    
+    `git clone git@github.com:SCCapstone/DJ-VJ.git`    
+    `cd DJ-VJ`    
+    `python3 -m unittest test.<module_name>`    
+    ie `python3 -m unittest test.test_freq_to_note`    
 
 ### Testing
 
