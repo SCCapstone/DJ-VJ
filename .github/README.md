@@ -11,6 +11,7 @@ DJ-VJ is an easy to use video jockey software that listens to nearby audio input
 ## testing
 ### Unit Testing
 Our unit testing utilizes the [unittest](https://docs.python.org/3/library/unittest.html#) framework
+Unit tests are located in `test/`
 To perform all unit tests:
     `git clone git@github.com:SCCapstone/DJ-VJ.git`
     `cd DJ-VJ`
