@@ -8,6 +8,7 @@ DJ-VJ is an easy to use video jockey software that listens to nearby audio input
 - [Pipenv](https://pipenv.readthedocs.io)
 - Computer audio input set (i.e built-in microphone, USB microphone, etc)
 
+## Tests
 ### Unit Testing
 Our unit testing utilizes the [unittest](https://docs.python.org/3/library/unittest.html#) framework    
 Unit tests are located in `test/`    
@@ -23,7 +24,7 @@ To perform individual unit test:
     `python3 -m unittest test.<module_name>`    
     ie `python3 -m unittest test.test_freq_to_note`    
 
-### Testing
+### Behavioral Testing
 To run behavioral test, navigate to the central repository, type `python3 create_screen_behavioral.py` and watch as the program loads, the splash screen is displayed, and the main screen appears.
 An example of the test running correctly can be found here: [Video Link](https://www.youtube.com/watch?v=n8oJEo63ybw)
 
