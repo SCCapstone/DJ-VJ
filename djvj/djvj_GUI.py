@@ -17,7 +17,6 @@ Params = ""
 audio_attr = list()  # what the audio should listen for
 video_attr = list()  # the rest of the parameters for the video queuer
 
-
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
 
@@ -71,10 +70,11 @@ class IntroScreen(tk.Tk):
                                   height=5, width=10, command=self.load)
         self.load_button.place(relx=.66, rely=.75, anchor="center")
 
-        #Allows for easy exit from Intro Screen
-        self.exit_button = Button(self, text="X", bg='#05F72D', fg="#000000",
-                                  highlightbackground='#05F72D', font=("Courier", 48),
-                                  height=1, width=2, command=self.exit)
+        # Allows for easy exit from Intro Screen
+
+        self.exit_button = Button(self, text="Exit Program", bg='#05F72D', fg="#000000",
+                                  highlightbackground='#05F72D', font=("Courier", 16),
+                                  height=1, width=13, command=self.exit)
         self.exit_button.place(relx=.9, rely=.1, anchor="center")
 
         # after all the main screen is set up, get rid of it so the splash screen can show
@@ -119,7 +119,7 @@ class IntroScreen(tk.Tk):
         """ pulls up create screen """
         CreateScreen(self)
 
-    def exit(self): 
+    def exit(self):
         self.destroy()
 
 
@@ -166,10 +166,11 @@ class CreateScreen(tk.Toplevel):
             .place(relx=.55, rely=.35, anchor="center")
         Button(self, text='Create File',fg="#000000", command=self.create_file) \
             .place(relx=.5, rely=.43, anchor="center")
-        #Allows for easy exit from Create Screen
-        self.exit_button = Button(self, text="X", bg='#05F72D', fg="#000000",
-                                  highlightbackground='#05F72D', font=("Courier", 48),
-                                  height=1, width=2, command=self.exit)
+
+        # Allows for easy exit from Create Screen
+        self.exit_button = Button(self, text="Back", bg='#05F72D', fg="#000000",
+                                  highlightbackground='#05F72D', font=("Courier", 24),
+                                  height=1, width=5, command=self.exit)
         self.exit_button.place(relx=.9, rely=.1, anchor="center")
 
         # shows running params
@@ -223,8 +224,15 @@ class CreateScreen(tk.Toplevel):
             Params = Params[:idx]
         self.params_added()
 
-    def exit(self): 
-        self.destroy()
+    def exit(self):
+        """ Warns user about exiting without saving. """
+        # if user selects "Yes", unsaved = true
+        # else, just close out of the message dialog
+        unsaved = messagebox.askyesno("Unsaved Show", "The current show is unsaved. Would you like to exit?\n"
+                                                      "Select \"Yes\" to exit without saving.\n"
+                                                      "Select \"No\" to return to the show screen and save.")
+        if unsaved:
+            self.destroy()
 
 
 def init():
