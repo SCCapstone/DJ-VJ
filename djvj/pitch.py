@@ -39,6 +39,7 @@ class Pitch:  # pylint: disable=too-few-public-methods
         analyze_pitch analyzes the pitch of a given audio sample
         """
 <<<<<<< HEAD
+<<<<<<< HEAD
         print("NOW LISTENING")
         # process input
         while True:
@@ -127,6 +128,8 @@ class AudioListener:  # pylint: disable=too-few-public-methods
         # analyze audio
         # self.pitch_detection.analyze_pitch(self.VISUAL)
 =======
+=======
+>>>>>>> 40f0df8a4a6dc86aa4424490a8101ea891fe8014
         freq = self.pitch_analyzer(sample)[0]
         volume = int((numpy.sum(sample**2) / len(sample)) * 60000)
 
@@ -166,4 +169,7 @@ class AudioListener:  # pylint: disable=too-few-public-methods
         name_index = half_steps % 12
         # return note name with correct octave
         return name[name_index] + str(octave)
+<<<<<<< HEAD
 >>>>>>> lots of refactoring, new Show and AudioListener class
+=======
+>>>>>>> 40f0df8a4a6dc86aa4424490a8101ea891fe8014
