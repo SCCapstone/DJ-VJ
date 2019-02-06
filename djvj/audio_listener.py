@@ -53,6 +53,9 @@ class AudioListener:
                     # analyze sample for aubio's tempo
                     show.curr_audio_values[1] = self.tempo.analyze_tempo(
                         sample)
+                if 'volume' in self.listen_params:
+                    show.curr_audio_values[2] = int(
+                        (numpy.sum(sample**2) / len(sample)) * 60000)
 
             except KeyboardInterrupt:
                 break

@@ -27,8 +27,8 @@ class Show:
         self.video_player = video.Visual(self, self.values)
 
         # initialize list of current audio values at a given moment of time
-        # [pitch, tempo]
-        self.curr_audio_values = [0, 0]
+        # [pitch, tempo, volume]
+        self.curr_audio_values = [0, 0, 0]
 
     def start(self):
         """
@@ -46,8 +46,8 @@ class Show:
 
         # main show loop
         while True:
-            # if self.curr_audio_values[0] != 0:
-            #     print(self.curr_audio_values)
+            if self.curr_audio_values[0] != 0:
+                print(self.curr_audio_values)
 
             # play video
             self.video_player.play_video()

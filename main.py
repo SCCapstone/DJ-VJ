@@ -12,7 +12,8 @@ gui.init()
 
 # get show params from gui: [[params], [rules], [values], [videos]]
 print(gui.video_attr)
-SHOW_PARAMS = [['pitch', 'tempo'], [''], [gui.video_attr[0][1]], ['']]
+SHOW_PARAMS = [['pitch', 'tempo', 'volume'],
+               [''], [gui.video_attr[0][1]], ['']]
 
 # initialize show
 SHOW = show.Show(SHOW_PARAMS)
