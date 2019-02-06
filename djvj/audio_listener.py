@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 import pyaudio
 import djvj.pitch as pitch
+import djvj.tempo as tempo
 import numpy
 
 
@@ -15,15 +16,16 @@ class AudioListener:
         if 'pitch' in self.listen_params:
             self.pitch = pitch.Pitch(
                 self.audio_input, self.window_size, self.hop_size)
+        if 'tempo' in self.listen_params:
+            self.tempo = tempo.Tempo(
+                self.audio_input, self.window_size, self.hop_size)
 
     def __del__(self):
         self.audio_input.stream.stop_stream()
         self.audio_input.stream.close()
         self.audio_input.pyaudio_instance.terminate()
 
-    def analyze(self):
-        # list of current aubio values: [frequency, tempo]
-        self.curr_audio_values = [0, 0]
+    def analyze(self, show):
         while True:
             try:
                 # get next sample
@@ -34,9 +36,14 @@ class AudioListener:
 
                 if 'pitch' in self.listen_params:
                     # analyze sample for aubio's pitch (currently in Hz)
-                    self.curr_audio_values[0] = self.pitch.analyze_pitch(
+                    show.curr_audio_values[0] = self.pitch.analyze_pitch(
                         sample)
-                print(self.curr_audio_values)
+                if 'tempo' in self.listen_params:
+                    show.curr_audio_values[1] = self.tempo.analyze_tempo(
+                        sample)
+
+                if self.audio_input.outputsink:
+                    self.audio_input.outputsink(sample, len(sample))
             except KeyboardInterrupt:
                 break
 
