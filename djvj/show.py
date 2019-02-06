@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 """
-show is the main driver for the program
+show is the primary driver for the program
 allows for data to be shared between the different components of the program
 """
 
