@@ -6,6 +6,7 @@ allows for data to be shared between the different components of the program
 """
 
 import threading
+import time
 import djvj.audio_listener as audio
 import djvj.Visual as video
 
@@ -27,8 +28,8 @@ class Show:
         self.video_player = video.Visual(self, self.values)
 
         # initialize list of current audio values at a given moment of time
-        # [pitch, tempo, volume]
-        self.curr_param_values = [0, 0, 0]
+        # [pitch, tempo, volume, time]
+        self.curr_param_values = [0, 0, 0, 0]
 
     def start(self):
         """
@@ -44,8 +45,14 @@ class Show:
         except KeyboardInterrupt:
             pass
 
+        # get show start time
+        start_time = time.time()
         # main show loop
         while True:
+            # find elapsed timed
+            elapsed_time = time.time() - start_time
+            self.curr_param_values[3] = elapsed_time
+
             if self.curr_param_values[0] != 0:
                 print(self.curr_param_values)
 
