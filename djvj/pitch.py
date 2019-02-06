@@ -47,32 +47,33 @@ class Pitch:  # pylint: disable=too-few-public-methods
 
         return 0
 
-    def get_pitch(freq):
-        """
-        get_pitch takes an integer representing a frequency (in Hz) and
-        returns the musical note representation of that frequency
-        """
-        # equations and formulas based on musical note mathematical theory
-        # example is found here:
-        # https://www.johndcook.com/blog/2016/02/10/musical-pitch-notation/
 
-        # edge cases
-        # lowest musical notation or highest humans can hear
-        if freq < 16.35 or freq > 20000:
-            return ""
+def get_pitch(freq):
+    """
+    get_pitch takes an integer representing a frequency (in Hz) and
+    returns the musical note representation of that frequency
+    """
+    # equations and formulas based on musical note mathematical theory
+    # example is found here:
+    # https://www.johndcook.com/blog/2016/02/10/musical-pitch-notation/
 
-        # define tuning, standard is A4 = 440 Hz
-        a_4 = 440
-        # find C0 based on tuning
-        c_0 = a_4 * pow(2, -4.75)
-        # define note names
-        name = ["C", "C#", "D", "D#", "E", "F",
-                "F#", "G", "G#", "A", "A#", "B"]
-        # find number of half steps from C0
-        half_steps = round(12 * log2(freq / c_0))
-        # find the correct octave
-        octave = half_steps // 12
-        # find the index of the note
-        name_index = half_steps % 12
-        # return note name with correct octave
-        return name[name_index] + str(octave)
+    # edge cases
+    # lowest musical notation or highest humans can hear
+    if freq < 16.35 or freq > 20000:
+        return ""
+
+    # define tuning, standard is A4 = 440 Hz
+    a_4 = 440
+    # find C0 based on tuning
+    c_0 = a_4 * pow(2, -4.75)
+    # define note names
+    name = ["C", "C#", "D", "D#", "E", "F",
+            "F#", "G", "G#", "A", "A#", "B"]
+    # find number of half steps from C0
+    half_steps = round(12 * log2(freq / c_0))
+    # find the correct octave
+    octave = half_steps // 12
+    # find the index of the note
+    name_index = half_steps % 12
+    # return note name with correct octave
+    return name[name_index] + str(octave)

@@ -1,11 +1,21 @@
 #! /usr/bin/env python3
+
+"""
+show is the main driver for the program
+allows for data to be shared between the different components of the program
+"""
+
+import threading
 import djvj.audio_listener as audio
 import djvj.Visual as video
-import threading
-import time
 
 
 class Show:
+    """
+    Show sets up an instance of a show and initalizes instances of
+    needed functions
+    """
+
     def __init__(self, show_params):
         self.params = show_params[0]
         self.rules = show_params[1]
@@ -16,11 +26,14 @@ class Show:
         self.audio_listener = audio.AudioListener(self.params)
         self.video_player = video.Visual(self, self.values)
 
-    def start(self):
         # initialize list of current audio values at a given moment of time
         # [pitch, tempo]
         self.curr_audio_values = [0, 0]
 
+    def start(self):
+        """
+        start() starts the show
+        """
         #  start audio_listener thread
         # updates self.curr_audio_values
         try:

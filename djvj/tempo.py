@@ -8,6 +8,10 @@ import numpy
 
 
 class Tempo:
+    """
+    Tempo sets up an instance of aubio's tempo analyzer
+    """
+
     def __init__(self, audio_input, window_size, hop_size):
         # define input
         self.input = audio_input
@@ -32,6 +36,9 @@ class Tempo:
         self.curr_tempo = 0
 
     def analyze_tempo(self, sample):
+        """
+        analyze_tempo takes in a sample and analzes the beat of that sample
+        """
         # get beat from sample
         is_beat = self.tempo_analyzer(sample)
 
@@ -45,7 +52,7 @@ class Tempo:
             # if have at least 4 beats, analyze
             if len(self.beats) > 4:
                 # analyze tempo
-                self.curr_tempo = int(Tempo.beats_to_bpm(self.beats))
+                self.curr_tempo = int(beats_to_bpm(self.beats))
 
                 # remove beats that were analyzed
                 del self.beats[0]
@@ -55,7 +62,11 @@ class Tempo:
         # if not enough beats to analyze, return last known value
         return self.curr_tempo
 
-    def beats_to_bpm(beats):
-        # if enough beats are found, convert to periods then to bpm
-        bpms = 60. / numpy.diff(beats)
-        return numpy.median(bpms)
+
+def beats_to_bpm(beats):
+    """
+    beats_to_bpm takes in a list of beats and returns the bpm
+    """
+    # if enough beats are found, convert to periods then to bpm
+    bpms = 60. / numpy.diff(beats)
+    return numpy.median(bpms)

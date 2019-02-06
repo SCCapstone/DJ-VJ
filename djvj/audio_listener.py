@@ -1,11 +1,19 @@
 #! /usr/bin/env python3
+"""
+audio_listner is the main driver for analyzing audio
+"""
+
 import pyaudio
+import numpy
 import djvj.pitch as pitch
 import djvj.tempo as tempo
-import numpy
 
 
 class AudioListener:
+    """
+    sets up instances of audio analyzers
+    """
+
     def __init__(self, audio_params):
         self.audio_input = Microphone()
         self.window_size = 4096
@@ -26,6 +34,9 @@ class AudioListener:
         self.audio_input.pyaudio_instance.terminate()
 
     def analyze(self, show):
+        """
+        analyze() is the main loop for analyzing audio
+        """
         while True:
             try:
                 # get next sample
@@ -39,11 +50,10 @@ class AudioListener:
                     show.curr_audio_values[0] = self.pitch.analyze_pitch(
                         sample)
                 if 'tempo' in self.listen_params:
+                    # analyze sample for aubio's tempo
                     show.curr_audio_values[1] = self.tempo.analyze_tempo(
                         sample)
 
-                if self.audio_input.outputsink:
-                    self.audio_input.outputsink(sample, len(sample))
             except KeyboardInterrupt:
                 break
 
