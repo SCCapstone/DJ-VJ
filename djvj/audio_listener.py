@@ -47,14 +47,14 @@ class AudioListener:
 
                 if 'pitch' in self.listen_params:
                     # analyze sample for aubio's pitch (currently in Hz)
-                    show.curr_audio_values[0] = self.pitch.analyze_pitch(
+                    show.curr_param_values[0] = self.pitch.analyze_pitch(
                         sample)
                 if 'tempo' in self.listen_params:
                     # analyze sample for aubio's tempo
-                    show.curr_audio_values[1] = self.tempo.analyze_tempo(
+                    show.curr_param_values[1] = self.tempo.analyze_tempo(
                         sample)
                 if 'volume' in self.listen_params:
-                    show.curr_audio_values[2] = int(
+                    show.curr_param_values[2] = int(
                         (numpy.sum(sample**2) / len(sample)) * 60000)
 
             except KeyboardInterrupt:
