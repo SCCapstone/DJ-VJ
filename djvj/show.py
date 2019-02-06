@@ -36,7 +36,7 @@ class Show:
         start() starts the show
         """
         #  start audio_listener thread
-        # updates self.curr_audio_values
+        # updates self.curr_param_values
         try:
             audio_thread = threading.Thread(
                 target=self.audio_listener.analyze, args=(self,))
