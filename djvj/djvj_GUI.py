@@ -15,8 +15,7 @@ import djvj.pitch
 # but for right now it only works up here
 Params = ""
 audio_attr = list()  # what the audio should listen for
-video_attr = list()  # the rest of the parameters for the video queuer
-
+video_attr = list()  # the rest of the parameters for the video queue
 
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
@@ -60,6 +59,7 @@ class IntroScreen(tk.Tk):
         # sets it in the middle of the screen, about 1/4 of the way down
         self.label.place(relx=.5, rely=.25, anchor="center")
 
+
         # creates the buttons for create, load, and use default show
         self.create_button = Button(self, text="Create\nShow", bg='#05F72D', fg="#000000",
                                     highlightbackground='#05F72D', font=("Courier", 48),
@@ -78,8 +78,9 @@ class IntroScreen(tk.Tk):
         self.exit_button.place(relx=.9, rely=.1, anchor="center")
 
         # after all the main screen is set up, get rid of it so the splash screen can show
+        """
         self.withdraw()
-
+        
         # display splash screen
         splash = SplashScreen(self)
         # for 6 seconds
@@ -88,7 +89,7 @@ class IntroScreen(tk.Tk):
         splash.destroy()
         # show main screen again
         self.deiconify()
-
+        """
     def load(self):
         """
         loads the user's chosen file, reads data,
@@ -108,6 +109,7 @@ class IntroScreen(tk.Tk):
             newstr = list()
             newstr.append(li[2])
             newstr.append(li[3])
+            newstr.append(li[5])
             # appended a list of these values for easy computation
             video_attr.append(newstr)
 
@@ -128,6 +130,8 @@ class CreateScreen(tk.Toplevel):
     Users can create a .djvj file by adding parameters and setting target values
     They can also specify the file name/file save location when saving
     """
+    video_location = ""
+    video = ""
 
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
@@ -141,23 +145,30 @@ class CreateScreen(tk.Toplevel):
               fg="#05F72D", font=("Courier", 36)).place(relx=.5, rely=.1, anchor="center")
 
         Label(self, text="If", bg="#212121", fg="#05F72D",
-              font=("Courier", 36)).place(relx=.35, rely=.25, anchor="center")
+              font=("Courier", 36)).place(relx=.15, rely=.25, anchor="center")
         # the sound attribute being tracked
         self.attr = StringVar(self)
         self.attr.set("           ")  # default value
-        self.a = OptionMenu(self, self.attr, "pitch")
-        self.a.place(relx=.42, rely=.25, anchor="center")
+        self.a = OptionMenu(self, self.attr, "pitch", "tempo")
+        self.a.place(relx=.22, rely=.25, anchor="center")
         # the sign (ie greater than, less than, etc)
         self.sign = StringVar(self)
         self.sign.set(" ")  # default value
         self.s = OptionMenu(self, self.sign, ">", "<", "=")
-        self.s.place(relx=.5, rely=.25, anchor="center")
+        self.s.place(relx=.3, rely=.25, anchor="center")
         # the target value
         self.e1 = Entry(self)
-        self.e1.place(relx=.6, rely=.25, anchor="center")
+        self.e1.place(relx=.4, rely=.25, anchor="center")
 
-        Label(self, text=":", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
-            .place(relx=.65, rely=.25, anchor="center")
+        Label(self, text=", ", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
+            .place(relx=.45, rely=.25, anchor="center")
+
+        Label(self, text="play ", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
+            .place(relx=.5, rely=.25, anchor="center")
+
+        Button(self, text='Choose Video', fg="#000000", command=self.choose_video) \
+            .place(relx=.57, rely=.25, anchor="center")
+
 
         # buttons
         Button(self, text='Add Param', fg="#000000", command=self.addition) \
@@ -166,7 +177,7 @@ class CreateScreen(tk.Toplevel):
             .place(relx=.55, rely=.35, anchor="center")
         Button(self, text='Create File',fg="#000000", command=self.create_file) \
             .place(relx=.5, rely=.43, anchor="center")
-        #Allows for easy exit from Create Screen
+        # Allows for easy exit from Create Screen
         self.exit_button = Button(self, text="X", bg='#05F72D', fg="#000000",
                                   highlightbackground='#05F72D', font=("Courier", 48),
                                   height=1, width=2, command=self.exit)
@@ -179,14 +190,16 @@ class CreateScreen(tk.Toplevel):
 
     def addition(self):
         """ lets users add parameters """
+        global video
         # basic error checking
-        if self.attr.get() == "" or self.sign.get() == "" or self.e1.get() == "":
+        if self.attr.get() == "" or self.sign.get() == "" or self.e1.get() == "" or video == "":
             messagebox.showinfo("Error", "Please fill out all fields.")
             return
 
         global Params
         Params = Params + "\n" + "If " + self.attr.get() \
-            + " " + self.sign.get() + " " + self.e1.get()
+            + " " + self.sign.get() + " " + self.e1.get() \
+            + ", play " + video_path
         self.params_added()
         # clears all the fields
         self.e1.delete(0, END)
@@ -222,6 +235,20 @@ class CreateScreen(tk.Toplevel):
         if idx >= 0:
             Params = Params[:idx]
         self.params_added()
+
+    def choose_video(self):
+        """allows user to choose a video"""
+        global video, video_path
+        video_path = filedialog.askopenfilename(initialdir="/home/Documents", title="Select file",
+                                                filetypes=(("mov files", "*.MOV"),
+                                                           ("mp4 files", "*.mp4"),
+                                                           ("all files", "*.*")))
+        print(video_path)
+        video_list = video_path.split("/")
+        video = video_list[len(video_list)-1]
+        Label(self, text=video, bg="#212121", fg="#05F72D", font=("Courier", 24)) \
+            .place(relx=.7, rely=.25, anchor="center")
+
 
     def exit(self): 
         self.destroy()
