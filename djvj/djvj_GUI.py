@@ -14,8 +14,11 @@ import djvj.pitch
 # global variable params, not sure where this is actually supposed to go
 # but for right now it only works up here
 Params = ""
+show = list()
 audio_attr = list()  # what the audio should listen for
-video_attr = list()  # the rest of the parameters for the video queue
+rules = list()  # the rest of the parameters for the video queue
+values = list()
+videos = list()
 
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
@@ -106,12 +109,18 @@ class IntroScreen(tk.Tk):
             li = e.split(" ")
             if li[1] not in audio_attr:
                 audio_attr.append(li[1])
-            newstr = list()
-            newstr.append(li[2])
-            newstr.append(li[3])
-            newstr.append(li[5])
+            rules.append(li[2])
+            values.append(li[3])
+            print(li[3])
+            videos.append(li[5])
             # appended a list of these values for easy computation
-            video_attr.append(newstr)
+
+            show.append(audio_attr)
+            show.append(rules)
+            show.append(values)
+            show.append(videos)
+
+            # appended a list of these values for easy computation
 
         # right now, just for error checking
         messagebox.showinfo("Load Show", data)
@@ -199,7 +208,7 @@ class CreateScreen(tk.Toplevel):
         global Params
         Params = Params + "\n" + "If " + self.attr.get() \
             + " " + self.sign.get() + " " + self.e1.get() \
-            + ", play " + video_path
+            + " play " + video_path
         self.params_added()
         # clears all the fields
         self.e1.delete(0, END)

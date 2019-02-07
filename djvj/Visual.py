@@ -16,7 +16,8 @@ class Visual:
         self.window_x = 700
         self.window_y = 900
         # placeholder for now, but the value from the param file
-        self.pitch_threshold = int(values[0])
+        threshold = values[0]
+        self.pitch_threshold = int(threshold[0])
 
     def play_video(self):
         """ plays the video """
