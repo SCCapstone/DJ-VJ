@@ -9,7 +9,6 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage, \
     StringVar, OptionMenu, NW, END
 import time
-import djvj.pitch
 
 # global variable params, not sure where this is actually supposed to go
 # but for right now it only works up here
@@ -18,7 +17,8 @@ show = list()
 audio_attr = list()  # what the audio should listen for
 rules = list()  # the rest of the parameters for the video queue
 values = list()
-videos = list()
+video_loc = list()
+
 
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
@@ -81,7 +81,7 @@ class IntroScreen(tk.Tk):
         self.exit_button.place(relx=.9, rely=.1, anchor="center")
 
         # after all the main screen is set up, get rid of it so the splash screen can show
-        """
+
         self.withdraw()
         
         # display splash screen
@@ -92,7 +92,7 @@ class IntroScreen(tk.Tk):
         splash.destroy()
         # show main screen again
         self.deiconify()
-        """
+
     def load(self):
         """
         loads the user's chosen file, reads data,
@@ -112,13 +112,13 @@ class IntroScreen(tk.Tk):
             rules.append(li[2])
             values.append(li[3])
             print(li[3])
-            videos.append(li[5])
+            video_loc.append(li[5])
             # appended a list of these values for easy computation
 
             show.append(audio_attr)
             show.append(rules)
             show.append(values)
-            show.append(videos)
+            show.append(video_loc)
 
             # appended a list of these values for easy computation
 
@@ -130,7 +130,8 @@ class IntroScreen(tk.Tk):
         """ pulls up create screen """
         CreateScreen(self)
 
-    def exit(self): 
+    def exit(self):
+        """exits from screen"""
         self.destroy()
 
 
@@ -178,13 +179,12 @@ class CreateScreen(tk.Toplevel):
         Button(self, text='Choose Video', fg="#000000", command=self.choose_video) \
             .place(relx=.57, rely=.25, anchor="center")
 
-
         # buttons
         Button(self, text='Add Param', fg="#000000", command=self.addition) \
             .place(relx=.45, rely=.35, anchor="center")
-        Button(self, text='Remove Param',fg="#000000", command=self.remove) \
+        Button(self, text='Remove Param', fg="#000000", command=self.remove) \
             .place(relx=.55, rely=.35, anchor="center")
-        Button(self, text='Create File',fg="#000000", command=self.create_file) \
+        Button(self, text='Create File', fg="#000000", command=self.create_file) \
             .place(relx=.5, rely=.43, anchor="center")
         # Allows for easy exit from Create Screen
         self.exit_button = Button(self, text="X", bg='#05F72D', fg="#000000",
@@ -252,14 +252,13 @@ class CreateScreen(tk.Toplevel):
                                                 filetypes=(("mov files", "*.MOV"),
                                                            ("mp4 files", "*.mp4"),
                                                            ("all files", "*.*")))
-        print(video_path)
         video_list = video_path.split("/")
         video = video_list[len(video_list)-1]
         Label(self, text=video, bg="#212121", fg="#05F72D", font=("Courier", 24)) \
             .place(relx=.7, rely=.25, anchor="center")
 
-
-    def exit(self): 
+    def exit(self):
+        """exits from screen"""
         self.destroy()
 
 
