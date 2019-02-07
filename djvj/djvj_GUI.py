@@ -64,12 +64,19 @@ class IntroScreen(tk.Tk):
         self.create_button = Button(self, text="Create\nShow", bg='#05F72D', fg="#000000",
                                     highlightbackground='#05F72D', font=("Courier", 48),
                                     height=5, width=10, command=self.create)
-        self.create_button.place(relx=.33, rely=.75, anchor="center")
+        self.create_button.place(relx=.2, rely=.75, anchor="center")
+
+        # creates the buttons for create, edit, load, and use default show
+        self.edit_button = Button(self, text="Edit\nShow", bg='#05F72D', fg="#000000",
+                                    highlightbackground='#05F72D', font=("Courier", 48),
+                                    height=5, width=10, command=self.edit)
+        self.edit_button.place(relx=.5, rely=.75, anchor="center")
+
 
         self.load_button = Button(self, text="Load\nShow", bg='#05F72D', fg="#000000",
                                   highlightbackground='#05F72D', font=("Courier", 48),
                                   height=5, width=10, command=self.load)
-        self.load_button.place(relx=.66, rely=.75, anchor="center")
+        self.load_button.place(relx=.8, rely=.75, anchor="center")
 
         #Allows for easy exit from Intro Screen
         self.exit_button = Button(self, text="X", bg='#05F72D', fg="#000000",
@@ -114,6 +121,11 @@ class IntroScreen(tk.Tk):
         # right now, just for error checking
         messagebox.showinfo("Load Show", data)
         self.destroy()
+
+    def edit(self):
+        filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
+                                      filetypes=(("djvj files", "*.djvj"),
+                                                 ("all files", "*.*")))
 
     def create(self):
         """ pulls up create screen """
