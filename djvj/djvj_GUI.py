@@ -9,6 +9,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage, \
     StringVar, OptionMenu, NW, END
 import time
+import djvj.pitch
 
 # global variable params, not sure where this is actually supposed to go
 # but for right now it only works up here
@@ -81,7 +82,6 @@ class IntroScreen(tk.Tk):
         self.exit_button.place(relx=.9, rely=.1, anchor="center")
 
         # after all the main screen is set up, get rid of it so the splash screen can show
-
         self.withdraw()
         
         # display splash screen
@@ -96,8 +96,8 @@ class IntroScreen(tk.Tk):
     def load(self):
         """
         loads the user's chosen file, reads data,
-        makes list of audio attributes to pass to audio listener,
-        passes parameters to the video module for processing
+        parses the data into audio_attr, rules, values, and videos
+        and appends these lists to the show list that is used by main.py
         """
         filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
                                               filetypes=(("djvj files", "*.djvj"),
@@ -107,20 +107,16 @@ class IntroScreen(tk.Tk):
         mee.pop(0)
         for e in mee:
             li = e.split(" ")
-            if li[1] not in audio_attr:
+            if li[1] not in audio_attr: # only put new attributes in
                 audio_attr.append(li[1])
             rules.append(li[2])
             values.append(li[3])
-            print(li[3])
             video_loc.append(li[5])
-            # appended a list of these values for easy computation
-
+            # appends all these lists to a larger list, used in main to send to show.py
             show.append(audio_attr)
             show.append(rules)
             show.append(values)
             show.append(video_loc)
-
-            # appended a list of these values for easy computation
 
         # right now, just for error checking
         messagebox.showinfo("Load Show", data)
@@ -131,7 +127,7 @@ class IntroScreen(tk.Tk):
         CreateScreen(self)
 
     def exit(self):
-        """exits from screen"""
+        """ exits screen """
         self.destroy()
 
 
@@ -140,7 +136,10 @@ class CreateScreen(tk.Toplevel):
     Users can create a .djvj file by adding parameters and setting target values
     They can also specify the file name/file save location when saving
     """
+
+    # the actual video location
     video_location = ""
+    # a shorter representation of the video path
     video = ""
 
     def __init__(self, parent):
@@ -179,13 +178,15 @@ class CreateScreen(tk.Toplevel):
         Button(self, text='Choose Video', fg="#000000", command=self.choose_video) \
             .place(relx=.57, rely=.25, anchor="center")
 
+
         # buttons
         Button(self, text='Add Param', fg="#000000", command=self.addition) \
             .place(relx=.45, rely=.35, anchor="center")
-        Button(self, text='Remove Param', fg="#000000", command=self.remove) \
+        Button(self, text='Remove Param',fg="#000000", command=self.remove) \
             .place(relx=.55, rely=.35, anchor="center")
-        Button(self, text='Create File', fg="#000000", command=self.create_file) \
+        Button(self, text='Create File',fg="#000000", command=self.create_file) \
             .place(relx=.5, rely=.43, anchor="center")
+
         # Allows for easy exit from Create Screen
         self.exit_button = Button(self, text="X", bg='#05F72D', fg="#000000",
                                   highlightbackground='#05F72D', font=("Courier", 48),
@@ -246,19 +247,20 @@ class CreateScreen(tk.Toplevel):
         self.params_added()
 
     def choose_video(self):
-        """allows user to choose a video"""
+        """ allows user to choose a video to play for a given parameter """
         global video, video_path
         video_path = filedialog.askopenfilename(initialdir="/home/Documents", title="Select file",
                                                 filetypes=(("mov files", "*.MOV"),
                                                            ("mp4 files", "*.mp4"),
                                                            ("all files", "*.*")))
+        print(video_path)
         video_list = video_path.split("/")
         video = video_list[len(video_list)-1]
         Label(self, text=video, bg="#212121", fg="#05F72D", font=("Courier", 24)) \
             .place(relx=.7, rely=.25, anchor="center")
 
     def exit(self):
-        """exits from screen"""
+        """ exits create screen """
         self.destroy()
 
 
