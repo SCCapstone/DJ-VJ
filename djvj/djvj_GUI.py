@@ -107,16 +107,15 @@ class IntroScreen(tk.Tk):
         mee.pop(0)
         for e in mee:
             li = e.split(" ")
-            if li[1] not in audio_attr: # only put new attributes in
-                audio_attr.append(li[1])
+            audio_attr.append(li[1])
             rules.append(li[2])
             values.append(li[3])
             video_loc.append(li[5])
             # appends all these lists to a larger list, used in main to send to show.py
-            show.append(audio_attr)
-            show.append(rules)
-            show.append(values)
-            show.append(video_loc)
+        show.append(audio_attr)
+        show.append(rules)
+        show.append(values)
+        show.append(video_loc)
 
         # right now, just for error checking
         messagebox.showinfo("Load Show", data)
@@ -226,7 +225,7 @@ class CreateScreen(tk.Toplevel):
                                                            ("all files", "*.*")))
         # adds to file
         pickle.dump(Params, open("%s.djvj" % filename, "wb"))
-
+        Params = ""
         time.sleep(2)
         self.destroy()
 
