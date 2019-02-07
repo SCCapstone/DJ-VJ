@@ -14,7 +14,7 @@ class TestFreqToNote(unittest.TestCase):
     """
 
     @classmethod
-    def setUpClass(self):
+    def setUpClass(cls):
         print("Unit Test: freq_to_note")
 
     def setUp(self):
