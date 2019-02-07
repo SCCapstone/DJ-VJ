@@ -126,6 +126,8 @@ class IntroScreen(tk.Tk):
         filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
                                       filetypes=(("djvj files", "*.djvj"),
                                                  ("all files", "*.*")))
+        EditScreen(self)
+        
 
     def create(self):
         """ pulls up create screen """
@@ -234,6 +236,112 @@ class CreateScreen(tk.Toplevel):
         if idx >= 0:
             Params = Params[:idx]
         self.params_added()
+
+
+#################################################################################################
+
+class EditScreen(tk.Toplevel):
+    """
+    Users can create a .djvj file by adding parameters and setting target values
+    They can also specify the file name/file save location when saving
+    """
+
+    def __init__(self, parent):
+        tk.Toplevel.__init__(self, parent)
+        self.title = "Edit Screen"
+        # sets background of screen
+        self.config(bg="#212121")
+        # makes fullscreen
+        self.attributes('-fullscreen', True)
+
+        Label(self, text="Edit a Show! Add Parameters: ", bg="#212121",
+              fg="#05F72D", font=("Courier", 36)).place(relx=.5, rely=.1, anchor="center")
+
+        Label(self, text="If", bg="#212121", fg="#05F72D",
+              font=("Courier", 36)).place(relx=.35, rely=.25, anchor="center")
+        # the sound attribute being tracked
+        self.attr = StringVar(self)
+        self.attr.set("           ")  # default value
+        self.a = OptionMenu(self, self.attr, "pitch")
+        self.a.place(relx=.42, rely=.25, anchor="center")
+        # the sign (ie greater than, less than, etc)
+        self.sign = StringVar(self)
+        self.sign.set(" ")  # default value
+        self.s = OptionMenu(self, self.sign, ">", "<", "=")
+        self.s.place(relx=.5, rely=.25, anchor="center")
+        # the target value
+        self.e1 = Entry(self)
+        self.e1.place(relx=.6, rely=.25, anchor="center")
+
+        Label(self, text=":", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
+            .place(relx=.65, rely=.25, anchor="center")
+
+        # buttons
+        Button(self, text='Add Param', fg="#000000", command=self.addition) \
+            .place(relx=.45, rely=.35, anchor="center")
+        Button(self, text='Remove Param',fg="#000000", command=self.remove) \
+            .place(relx=.55, rely=.35, anchor="center")
+        Button(self, text='Create File',fg="#000000", command=self.create_file) \
+            .place(relx=.5, rely=.43, anchor="center")
+        #Allows for easy exit from Create Screen
+        self.exit_button = Button(self, text="X", bg='#05F72D', fg="#000000",
+                                  highlightbackground='#05F72D', font=("Courier", 48),
+                                  height=1, width=2, command=self.exit)
+        self.exit_button.place(relx=.9, rely=.1, anchor="center")
+
+        # shows running params
+        self.display = Label(self, text="", bg="#212121",
+                             fg="#05F72D", font=("Courier", 20))
+        self.display.place(relx=.5, rely=.6, anchor="center")
+
+    def addition(self):
+        """ lets users add parameters """
+        # basic error checking
+        if self.attr.get() == "" or self.sign.get() == "" or self.e1.get() == "":
+            messagebox.showinfo("Error", "Please fill out all fields.")
+            return
+
+        global Params
+        Params = Params + "\n" + "If " + self.attr.get() \
+            + " " + self.sign.get() + " " + self.e1.get()
+        self.params_added()
+        # clears all the fields
+        self.e1.delete(0, END)
+        self.attr.set("          ")
+        self.sign.set(" ")
+
+    def create_file(self):
+        """ creates the file once users are finished """
+        global Params
+        # lets user choose name/save location
+        filename = filedialog.asksaveasfilename(initialdir="/home/Documents",
+                                                title="Save file location",
+                                                filetypes=(("djvj files", "*.djvj"),
+                                                           ("all files", "*.*")))
+        # adds to file
+        pickle.dump(Params, open("%s.djvj" % filename, "wb"))
+
+        time.sleep(2)
+        self.destroy()
+
+    def params_added(self):
+        """ shows running total of params to be added """
+        global Params
+        self.display.configure(text="%s" % Params)
+
+    def remove(self):
+        """ removes last parameter added """
+        global Params
+        # basic error checking
+        if Params == "":
+            messagebox.showinfo("Error", "Parameters are empty!")
+        idx = Params.rfind("\n")
+        if idx >= 0:
+            Params = Params[:idx]
+        self.params_added()
+    
+#################################################################################################
+
 
     def exit(self): 
         self.destroy()
