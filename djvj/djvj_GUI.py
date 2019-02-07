@@ -187,9 +187,9 @@ class CreateScreen(tk.Toplevel):
             .place(relx=.5, rely=.43, anchor="center")
 
         # Allows for easy exit from Create Screen
-        self.exit_button = Button(self, text="X", bg='#05F72D', fg="#000000",
-                                  highlightbackground='#05F72D', font=("Courier", 48),
-                                  height=1, width=2, command=self.exit)
+        self.exit_button = Button(self, text="Back", bg='#05F72D', fg="#000000",
+                                  highlightbackground='#05F72D', font=("Courier", 24),
+                                  height=1, width=5, command=self.exit)
         self.exit_button.place(relx=.9, rely=.1, anchor="center")
 
         # shows running params
@@ -259,8 +259,14 @@ class CreateScreen(tk.Toplevel):
             .place(relx=.7, rely=.25, anchor="center")
 
     def exit(self):
-        """ exits create screen """
-        self.destroy()
+        """ Warns user about exiting without saving. """
+        # if user selects "Yes", unsaved = true
+        # else, just close out of the message dialog
+        unsaved = messagebox.askyesno("Unsaved Show", "The current show is unsaved. Would you like to exit?\n"
+                                                      "Select \"Yes\" to exit without saving.\n"
+                                                      "Select \"No\" to return to the show screen and save.")
+        if unsaved:
+            self.destroy()
 
 
 def init():
