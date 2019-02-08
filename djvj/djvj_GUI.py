@@ -9,13 +9,16 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage, \
     StringVar, OptionMenu, NW, END
 import time
-import djvj.pitch
 
 # global variable params, not sure where this is actually supposed to go
 # but for right now it only works up here
 Params = ""
+show = list()
 audio_attr = list()  # what the audio should listen for
-video_attr = list()  # the rest of the parameters for the video queuer
+rules = list()  # the rest of the parameters for the video queue
+values = list()
+video_loc = list()
+
 
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
@@ -50,7 +53,7 @@ class IntroScreen(tk.Tk):
 
         # sets background of screen
         self.config(bg="#212121")
-        # makes fullscreen
+        # makes full-screen
         self.attributes('-fullscreen', True)
 
         # this creates text and customizes it
@@ -71,15 +74,13 @@ class IntroScreen(tk.Tk):
         self.load_button.place(relx=.66, rely=.75, anchor="center")
 
         # Allows for easy exit from Intro Screen
-
-        self.exit_button = Button(self, text="Exit Program", bg='#05F72D', fg="#000000",
-                                  highlightbackground='#05F72D', font=("Courier", 16),
-                                  height=1, width=13, command=self.exit)
+        self.exit_button = Button(self, text="X", bg='#05F72D', fg="#000000",
+                                  highlightbackground='#05F72D', font=("Courier", 48),
+                                  height=1, width=2, command=self.exit)
         self.exit_button.place(relx=.9, rely=.1, anchor="center")
 
         # after all the main screen is set up, get rid of it so the splash screen can show
         self.withdraw()
-
         # display splash screen
         splash = SplashScreen(self)
         # for 6 seconds
@@ -92,8 +93,8 @@ class IntroScreen(tk.Tk):
     def load(self):
         """
         loads the user's chosen file, reads data,
-        makes list of audio attributes to pass to audio listener,
-        passes parameters to the video module for processing
+        parses the data into audio_attr, rules, values, and videos
+        and appends these lists to the show list that is used by main.py
         """
         filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
                                               filetypes=(("djvj files", "*.djvj"),
@@ -103,13 +104,15 @@ class IntroScreen(tk.Tk):
         mee.pop(0)
         for e in mee:
             li = e.split(" ")
-            if li[1] not in audio_attr:
-                audio_attr.append(li[1])
-            newstr = list()
-            newstr.append(li[2])
-            newstr.append(li[3])
-            # appended a list of these values for easy computation
-            video_attr.append(newstr)
+            audio_attr.append(li[1])
+            rules.append(li[2])
+            values.append(li[3])
+            video_loc.append(li[5])
+            # appends all these lists to a larger list, used in main to send to show.py
+        show.append(audio_attr)
+        show.append(rules)
+        show.append(values)
+        show.append(video_loc)
 
         # right now, just for error checking
         messagebox.showinfo("Load Show", data)
@@ -120,6 +123,7 @@ class IntroScreen(tk.Tk):
         CreateScreen(self)
 
     def exit(self):
+        """ exits screen """
         self.destroy()
 
 
@@ -141,30 +145,40 @@ class CreateScreen(tk.Toplevel):
               fg="#05F72D", font=("Courier", 36)).place(relx=.5, rely=.1, anchor="center")
 
         Label(self, text="If", bg="#212121", fg="#05F72D",
-              font=("Courier", 36)).place(relx=.35, rely=.25, anchor="center")
+              font=("Courier", 36)).place(relx=.15, rely=.25, anchor="center")
         # the sound attribute being tracked
         self.attr = StringVar(self)
         self.attr.set("           ")  # default value
-        self.a = OptionMenu(self, self.attr, "pitch")
-        self.a.place(relx=.42, rely=.25, anchor="center")
+        self.a = OptionMenu(self, self.attr, "pitch", "tempo")
+        self.a.place(relx=.22, rely=.25, anchor="center")
         # the sign (ie greater than, less than, etc)
         self.sign = StringVar(self)
         self.sign.set(" ")  # default value
         self.s = OptionMenu(self, self.sign, ">", "<", "=")
-        self.s.place(relx=.5, rely=.25, anchor="center")
+        self.s.place(relx=.3, rely=.25, anchor="center")
         # the target value
         self.e1 = Entry(self)
-        self.e1.place(relx=.6, rely=.25, anchor="center")
+        self.e1.place(relx=.4, rely=.25, anchor="center")
 
-        Label(self, text=":", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
-            .place(relx=.65, rely=.25, anchor="center")
+        Label(self, text=", ", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
+            .place(relx=.45, rely=.25, anchor="center")
+
+        Label(self, text="play ", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
+            .place(relx=.5, rely=.25, anchor="center")
+
+        Button(self, text='Choose Video', fg="#000000", command=self.choose_video) \
+            .place(relx=.57, rely=.25, anchor="center")
+
+        self.v = StringVar(self)
+        Label(self, textvariable=self.v, bg="#212121", fg="#05F72D", font=("Courier", 24)) \
+            .place(relx=.7, rely=.25, anchor="center")
 
         # buttons
         Button(self, text='Add Param', fg="#000000", command=self.addition) \
             .place(relx=.45, rely=.35, anchor="center")
-        Button(self, text='Remove Param',fg="#000000", command=self.remove) \
+        Button(self, text='Remove Param', fg="#000000", command=self.remove) \
             .place(relx=.55, rely=.35, anchor="center")
-        Button(self, text='Create File',fg="#000000", command=self.create_file) \
+        Button(self, text='Create File', fg="#000000", command=self.create_file) \
             .place(relx=.5, rely=.43, anchor="center")
 
         # Allows for easy exit from Create Screen
@@ -181,18 +195,21 @@ class CreateScreen(tk.Toplevel):
     def addition(self):
         """ lets users add parameters """
         # basic error checking
-        if self.attr.get() == "" or self.sign.get() == "" or self.e1.get() == "":
+        if self.attr.get() == "" or self.sign.get() == "" \
+                or self.e1.get() == "" or self.v.get() == "":
             messagebox.showinfo("Error", "Please fill out all fields.")
             return
 
         global Params
         Params = Params + "\n" + "If " + self.attr.get() \
-            + " " + self.sign.get() + " " + self.e1.get()
+            + " " + self.sign.get() + " " + self.e1.get() \
+            + " play " + video_path
         self.params_added()
         # clears all the fields
         self.e1.delete(0, END)
         self.attr.set("          ")
         self.sign.set(" ")
+        self.v.set("")
 
     def create_file(self):
         """ creates the file once users are finished """
@@ -204,7 +221,7 @@ class CreateScreen(tk.Toplevel):
                                                            ("all files", "*.*")))
         # adds to file
         pickle.dump(Params, open("%s.djvj" % filename, "wb"))
-
+        Params = ""
         time.sleep(2)
         self.destroy()
 
@@ -224,13 +241,26 @@ class CreateScreen(tk.Toplevel):
             Params = Params[:idx]
         self.params_added()
 
+    def choose_video(self):
+        """ allows user to choose a video to play for a given parameter """
+        global video_path
+        video_path = filedialog.askopenfilename(initialdir="/home/Documents", title="Select file",
+                                                filetypes=(("mov files", "*.MOV"),
+                                                           ("mp4 files", "*.mp4"),
+                                                           ("all files", "*.*")))
+        print(video_path)
+        video_list = video_path.split("/")
+        video = video_list[len(video_list)-1]
+        self.v.set(video)
+
     def exit(self):
         """ Warns user about exiting without saving. """
         # if user selects "Yes", unsaved = true
         # else, just close out of the message dialog
-        unsaved = messagebox.askyesno("Unsaved Show", "The current show is unsaved. Would you like to exit?\n"
-                                                      "Select \"Yes\" to exit without saving.\n"
-                                                      "Select \"No\" to return to the show screen and save.")
+        unsaved = messagebox.askyesno("Unsaved Show",
+                                      "The current show is unsaved. Would you like to exit?\n"
+                                      "Select \"Yes\" to exit without saving.\n "
+                                      "Select \"No\" to return to the show screen to save.")
         if unsaved:
             self.destroy()
 

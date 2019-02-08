@@ -11,9 +11,10 @@ gui.init()
 # print("This will be passed to the video instance: %s" % gui.video_attr)
 
 # get show params from gui: [[params], [rules], [values], [videos]]
-print(gui.video_attr)
+print(gui.show)
+
 SHOW_PARAMS = [['pitch', 'tempo', 'volume'],
-               [''], [gui.video_attr[0][1]], ['']]
+               [gui.show[1]], [gui.show[2]], [gui.show[3]]]
 
 # SHOW_PARAMS = [['pitch', 'tempo', 'volume'],
 #                [''], [500], ['']]
