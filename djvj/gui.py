@@ -108,7 +108,7 @@ class IntroScreen(tk.Tk):
             rules.append(li[2])
             values.append(li[3])
             video_loc.append(li[5])
-            # appends all these lists to a larger list, used in main to send to show.py
+        # appends all these lists to a larger list, used in main to send to show.py
         show.append(audio_attr)
         show.append(rules)
         show.append(values)
@@ -138,7 +138,7 @@ class CreateScreen(tk.Toplevel):
         self.title = "Create Screen"
         # sets background of screen
         self.config(bg="#212121")
-        # makes fullscreen
+        # makes full-screen
         self.attributes('-fullscreen', True)
 
         Label(self, text="Create a Show! Add Parameters: ", bg="#212121",
@@ -200,6 +200,13 @@ class CreateScreen(tk.Toplevel):
             messagebox.showinfo("Error", "Please fill out all fields.")
             return
 
+        try:
+            type(int(self.e1.get()))
+        except ValueError:
+            # TODO - fix error message, clear or keep value?
+            messagebox.showinfo("Error", "Please enter an integer.")
+            return
+
         global Params
         Params = Params + "\n" + "If " + self.attr.get() \
             + " " + self.sign.get() + " " + self.e1.get() \
@@ -219,11 +226,12 @@ class CreateScreen(tk.Toplevel):
                                                 title="Save file location",
                                                 filetypes=(("djvj files", "*.djvj"),
                                                            ("all files", "*.*")))
-        # adds to file
-        pickle.dump(Params, open("%s.djvj" % filename, "wb"))
-        Params = ""
-        time.sleep(2)
-        self.destroy()
+        if filename != "":
+            # adds to file
+            pickle.dump(Params, open("%s.djvj" % filename, "wb"))
+            Params = ""
+            time.sleep(2)
+            self.destroy()
 
     def params_added(self):
         """ shows running total of params to be added """

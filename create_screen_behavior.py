@@ -6,7 +6,7 @@ with the options to Create or Load Show available to select.
 """
 
 import time
-import djvj.djvj_GUI as gui
+import djvj.gui as gui
 
 if __name__ == '__main__':
     print("Start Test")

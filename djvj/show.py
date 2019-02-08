@@ -8,7 +8,7 @@ allows for data to be shared between the different components of the program
 import threading
 import time
 import djvj.audio_listener as audio
-import djvj.Visual as video
+import djvj.visual as video
 
 
 class Show:
