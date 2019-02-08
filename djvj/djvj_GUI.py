@@ -9,7 +9,6 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage, \
     StringVar, OptionMenu, NW, END
 import time
-import djvj.pitch
 
 # global variable params, not sure where this is actually supposed to go
 # but for right now it only works up here
@@ -54,7 +53,7 @@ class IntroScreen(tk.Tk):
 
         # sets background of screen
         self.config(bg="#212121")
-        # makes fullscreen
+        # makes full-screen
         self.attributes('-fullscreen', True)
 
         # this creates text and customizes it
@@ -62,7 +61,6 @@ class IntroScreen(tk.Tk):
                            fg="#05F72D", font=("Courier", 72))
         # sets it in the middle of the screen, about 1/4 of the way down
         self.label.place(relx=.5, rely=.25, anchor="center")
-
 
         # creates the buttons for create, load, and use default show
         self.create_button = Button(self, text="Create\nShow", bg='#05F72D', fg="#000000",
@@ -75,7 +73,7 @@ class IntroScreen(tk.Tk):
                                   height=5, width=10, command=self.load)
         self.load_button.place(relx=.66, rely=.75, anchor="center")
 
-        #Allows for easy exit from Intro Screen
+        # Allows for easy exit from Intro Screen
         self.exit_button = Button(self, text="X", bg='#05F72D', fg="#000000",
                                   highlightbackground='#05F72D', font=("Courier", 48),
                                   height=1, width=2, command=self.exit)
@@ -83,7 +81,6 @@ class IntroScreen(tk.Tk):
 
         # after all the main screen is set up, get rid of it so the splash screen can show
         self.withdraw()
-        
         # display splash screen
         splash = SplashScreen(self)
         # for 6 seconds
@@ -136,11 +133,6 @@ class CreateScreen(tk.Toplevel):
     They can also specify the file name/file save location when saving
     """
 
-    # the actual video location
-    video_location = ""
-    # a shorter representation of the video path
-    video = ""
-
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
         self.title = "Create Screen"
@@ -177,13 +169,16 @@ class CreateScreen(tk.Toplevel):
         Button(self, text='Choose Video', fg="#000000", command=self.choose_video) \
             .place(relx=.57, rely=.25, anchor="center")
 
+        self.v = StringVar(self)
+        Label(self, textvariable=self.v, bg="#212121", fg="#05F72D", font=("Courier", 24)) \
+            .place(relx=.7, rely=.25, anchor="center")
 
         # buttons
         Button(self, text='Add Param', fg="#000000", command=self.addition) \
             .place(relx=.45, rely=.35, anchor="center")
-        Button(self, text='Remove Param',fg="#000000", command=self.remove) \
+        Button(self, text='Remove Param', fg="#000000", command=self.remove) \
             .place(relx=.55, rely=.35, anchor="center")
-        Button(self, text='Create File',fg="#000000", command=self.create_file) \
+        Button(self, text='Create File', fg="#000000", command=self.create_file) \
             .place(relx=.5, rely=.43, anchor="center")
 
         # Allows for easy exit from Create Screen
@@ -199,9 +194,9 @@ class CreateScreen(tk.Toplevel):
 
     def addition(self):
         """ lets users add parameters """
-        global video
         # basic error checking
-        if self.attr.get() == "" or self.sign.get() == "" or self.e1.get() == "" or video == "":
+        if self.attr.get() == "" or self.sign.get() == "" \
+                or self.e1.get() == "" or self.v.get() == "":
             messagebox.showinfo("Error", "Please fill out all fields.")
             return
 
@@ -214,6 +209,7 @@ class CreateScreen(tk.Toplevel):
         self.e1.delete(0, END)
         self.attr.set("          ")
         self.sign.set(" ")
+        self.v.set("")
 
     def create_file(self):
         """ creates the file once users are finished """
@@ -247,7 +243,7 @@ class CreateScreen(tk.Toplevel):
 
     def choose_video(self):
         """ allows user to choose a video to play for a given parameter """
-        global video, video_path
+        global video_path
         video_path = filedialog.askopenfilename(initialdir="/home/Documents", title="Select file",
                                                 filetypes=(("mov files", "*.MOV"),
                                                            ("mp4 files", "*.mp4"),
@@ -255,16 +251,16 @@ class CreateScreen(tk.Toplevel):
         print(video_path)
         video_list = video_path.split("/")
         video = video_list[len(video_list)-1]
-        Label(self, text=video, bg="#212121", fg="#05F72D", font=("Courier", 24)) \
-            .place(relx=.7, rely=.25, anchor="center")
+        self.v.set(video)
 
     def exit(self):
         """ Warns user about exiting without saving. """
         # if user selects "Yes", unsaved = true
         # else, just close out of the message dialog
-        unsaved = messagebox.askyesno("Unsaved Show", "The current show is unsaved. Would you like to exit?\n"
-                                                      "Select \"Yes\" to exit without saving.\n"
-                                                      "Select \"No\" to return to the show screen and save.")
+        unsaved = messagebox.askyesno("Unsaved Show",
+                                      "The current show is unsaved. Would you like to exit?\n"
+                                      "Select \"Yes\" to exit without saving.\n "
+                                      "Select \"No\" to return to the show screen to save.")
         if unsaved:
             self.destroy()
 
