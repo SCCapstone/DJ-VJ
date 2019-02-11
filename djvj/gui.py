@@ -204,6 +204,7 @@ class CreateScreen(tk.Toplevel):
             type(int(self.target_value.get()))
         except ValueError:
             messagebox.showinfo("Error", "Please enter an integer.")
+            self.target_value.delete(0, END)
             return
 
         global PARAMS
