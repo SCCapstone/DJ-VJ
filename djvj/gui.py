@@ -10,14 +10,13 @@ from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoI
     StringVar, OptionMenu, NW, END
 import time
 
-# global variable params, not sure where this is actually supposed to go
-# but for right now it only works up here
-Params = ""
+# global variable params
+PARAMS = ""
 show = list()
 audio_attr = list()  # what the audio should listen for
-rules = list()  # the rest of the parameters for the video queue
-values = list()
-video_loc = list()
+rules = list()  # <, >, =
+values = list()  # what threshold the change happens at
+video_loc = list()  # video path
 
 
 class SplashScreen(tk.Toplevel):
@@ -100,15 +99,15 @@ class IntroScreen(tk.Tk):
                                               filetypes=(("djvj files", "*.djvj"),
                                                          ("all files", "*.*")))
         data = pickle.load(open("%s" % filename, "rb"))
-        mee = data.split("\n")
-        mee.pop(0)
-        for e in mee:
-            li = e.split(" ")
-            audio_attr.append(li[1])
-            rules.append(li[2])
-            values.append(li[3])
-            video_loc.append(li[5])
-            # appends all these lists to a larger list, used in main to send to show.py
+        param_list = data.split("\n")
+        param_list.pop(0)
+        for parameter in param_list:
+            attribute = parameter.split(" ")
+            audio_attr.append(attribute[1])
+            rules.append(attribute[2])
+            values.append(attribute[3])
+            video_loc.append(attribute[5])
+        # appends all these lists to a larger list, used in main to send to show.py
         show.append(audio_attr)
         show.append(rules)
         show.append(values)
@@ -132,13 +131,14 @@ class CreateScreen(tk.Toplevel):
     Users can create a .djvj file by adding parameters and setting target values
     They can also specify the file name/file save location when saving
     """
+    VIDEO_PATH = ""
 
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
         self.title = "Create Screen"
         # sets background of screen
         self.config(bg="#212121")
-        # makes fullscreen
+        # makes full-screen
         self.attributes('-fullscreen', True)
 
         Label(self, text="Create a Show! Add Parameters: ", bg="#212121",
@@ -149,16 +149,16 @@ class CreateScreen(tk.Toplevel):
         # the sound attribute being tracked
         self.attr = StringVar(self)
         self.attr.set("           ")  # default value
-        self.a = OptionMenu(self, self.attr, "pitch", "tempo")
-        self.a.place(relx=.22, rely=.25, anchor="center")
+        self.set_attribute = OptionMenu(self, self.attr, "pitch", "tempo")
+        self.set_attribute.place(relx=.22, rely=.25, anchor="center")
         # the sign (ie greater than, less than, etc)
         self.sign = StringVar(self)
         self.sign.set(" ")  # default value
-        self.s = OptionMenu(self, self.sign, ">", "<", "=")
-        self.s.place(relx=.3, rely=.25, anchor="center")
+        self.set_sign = OptionMenu(self, self.sign, ">", "<", "=")
+        self.set_sign.place(relx=.3, rely=.25, anchor="center")
         # the target value
-        self.e1 = Entry(self)
-        self.e1.place(relx=.4, rely=.25, anchor="center")
+        self.target_value = Entry(self)
+        self.target_value.place(relx=.4, rely=.25, anchor="center")
 
         Label(self, text=", ", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
             .place(relx=.45, rely=.25, anchor="center")
@@ -169,9 +169,9 @@ class CreateScreen(tk.Toplevel):
         Button(self, text='Choose Video', fg="#000000", command=self.choose_video) \
             .place(relx=.57, rely=.25, anchor="center")
 
-        self.v = StringVar(self)
-        Label(self, textvariable=self.v, bg="#212121", fg="#05F72D", font=("Courier", 24)) \
-            .place(relx=.7, rely=.25, anchor="center")
+        self.video = StringVar(self)
+        Label(self, textvariable=self.video, bg="#212121", fg="#05F72D", font=("Courier", 24)) \
+            .place(relx=.8, rely=.25, anchor="center")
 
         # buttons
         Button(self, text='Add Param', fg="#000000", command=self.addition) \
@@ -196,62 +196,71 @@ class CreateScreen(tk.Toplevel):
         """ lets users add parameters """
         # basic error checking
         if self.attr.get() == "" or self.sign.get() == "" \
-                or self.e1.get() == "" or self.v.get() == "":
+                or self.target_value.get() == "" or self.video.get() == "":
             messagebox.showinfo("Error", "Please fill out all fields.")
             return
 
-        global Params
-        Params = Params + "\n" + "If " + self.attr.get() \
-            + " " + self.sign.get() + " " + self.e1.get() \
-            + " play " + video_path
+        try:
+            type(int(self.target_value.get()))
+        except ValueError:
+            messagebox.showinfo("Error", "Please enter an integer.")
+            self.target_value.delete(0, END)
+            return
+
+        global PARAMS
+        PARAMS = PARAMS + "\n" + "If " + self.attr.get() \
+            + " " + self.sign.get() + " " + self.target_value.get() \
+            + " play " + VIDEO_PATH
         self.params_added()
         # clears all the fields
-        self.e1.delete(0, END)
+        self.target_value.delete(0, END)
         self.attr.set("          ")
         self.sign.set(" ")
-        self.v.set("")
+        self.video.set("")
 
     def create_file(self):
         """ creates the file once users are finished """
-        global Params
+        global PARAMS
         # lets user choose name/save location
         filename = filedialog.asksaveasfilename(initialdir="/home/Documents",
                                                 title="Save file location",
                                                 filetypes=(("djvj files", "*.djvj"),
                                                            ("all files", "*.*")))
-        # adds to file
-        pickle.dump(Params, open("%s.djvj" % filename, "wb"))
-        Params = ""
-        time.sleep(2)
-        self.destroy()
+        if filename != "":
+            # adds to file
+            pickle.dump(PARAMS, open("%s.djvj" % filename, "wb"))
+            time.sleep(2)
+            self.destroy()
 
     def params_added(self):
         """ shows running total of params to be added """
-        global Params
-        self.display.configure(text="%s" % Params)
+        global PARAMS
+        self.display.configure(text="%s" % PARAMS)
 
     def remove(self):
         """ removes last parameter added """
-        global Params
+        global PARAMS
         # basic error checking
-        if Params == "":
+        if PARAMS == "":
             messagebox.showinfo("Error", "Parameters are empty!")
-        idx = Params.rfind("\n")
+        idx = PARAMS.rfind("\n")
+        # take everything up until the second to last \n, which removes the last param
         if idx >= 0:
-            Params = Params[:idx]
+            PARAMS = PARAMS[:idx]
         self.params_added()
 
     def choose_video(self):
         """ allows user to choose a video to play for a given parameter """
-        global video_path
-        video_path = filedialog.askopenfilename(initialdir="/home/Documents", title="Select file",
+        global VIDEO_PATH
+        VIDEO_PATH = filedialog.askopenfilename(initialdir="/home/Documents", title="Select file",
                                                 filetypes=(("mov files", "*.MOV"),
                                                            ("mp4 files", "*.mp4"),
                                                            ("all files", "*.*")))
-        print(video_path)
-        video_list = video_path.split("/")
-        video = video_list[len(video_list)-1]
-        self.v.set(video)
+        print(VIDEO_PATH)
+        video_list = VIDEO_PATH.split("/")
+        # shortens full path to just the video name
+        shortened_video = video_list[len(video_list)-1]
+        self.video.set(shortened_video)
 
     def exit(self):
         """ Warns user about exiting without saving. """

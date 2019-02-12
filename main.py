@@ -1,5 +1,5 @@
 """ main run file for the project"""
-import djvj.djvj_GUI as gui
+import djvj.gui as gui
 import djvj.show as show
 
 # initialize GUI
