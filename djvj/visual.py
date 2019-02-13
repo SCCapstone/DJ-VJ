@@ -16,19 +16,19 @@ class Visual:
         self.window_y = 900
         # placeholder for now, but the value from the param file
         threshold = values[0]
-        self.pitch_threshold = int(threshold[0])
+        self.pitch_threshold = int(threshold)
 
     def play_video(self):
         """ plays the video """
         # if the current pitch is > than threshold (from .djvj file)
-        if self.show.curr_param_values[0] > self.pitch_threshold:
+        if self.show.curr_param_values['pitch'] > self.pitch_threshold:
             my_path = os.path.abspath(os.path.dirname(__file__))
             path = os.path.join(my_path, "../test/test_assets/video1.MOV")
             cap = cv2.VideoCapture(path)    # open first video
             # print("now here")
             while cap.isOpened():
                 # if pitch changes, change video
-                if self.show.curr_param_values[0] < self.pitch_threshold:
+                if self.show.curr_param_values['pitch'] < self.pitch_threshold:
                     break
                 ret, frame = cap.read()     # play video
                 try:
@@ -48,14 +48,14 @@ class Visual:
                     break
 
         # if the current pitch is < than threshold (from .djvj file)
-        if self.show.curr_param_values[0] < self.pitch_threshold:
+        if self.show.curr_param_values['pitch'] < self.pitch_threshold:
             my_path = os.path.abspath(os.path.dirname(__file__))
             path = os.path.join(my_path, "../test/test_assets/video2.mp4")
             cap = cv2.VideoCapture(path)    # open second video
             # print("i'm here")
             while cap.isOpened():
                 # if pitch changes, change video
-                if self.show.curr_param_values[0] > self.pitch_threshold:
+                if self.show.curr_param_values['pitch'] > self.pitch_threshold:
                     break
                 ret, frame = cap.read()
                 try:

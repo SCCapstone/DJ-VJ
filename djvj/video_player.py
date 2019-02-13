@@ -22,5 +22,7 @@ class VideoPlayer:
         """
         play_video
         - takes in a path to a video
-        - plays that video
+        - determines if continues to play the current video or start playing
+        the newly passed video
+        - continues playing / plays new video
         """
