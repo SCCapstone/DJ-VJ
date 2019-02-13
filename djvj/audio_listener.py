@@ -3,6 +3,7 @@
 audio_listner is the main driver for analyzing audio
 """
 
+import time
 import pyaudio
 import numpy
 import djvj.pitch as pitch
@@ -37,6 +38,9 @@ class AudioListener:
         """
         analyze() is the main loop for analyzing audio
         """
+        # get show start time
+        start_time = time.time()
+
         while True:
             try:
                 # get next sample
@@ -45,17 +49,38 @@ class AudioListener:
                 # convert sample to list
                 sample = numpy.frombuffer(audiobuffer, dtype=numpy.float32)
 
+                """
+                the following code checks to see if a current feature is being
+                listened for, if it is it analyzes and adds to
+                show.curr_param_values
+
+                show.curr_param_values = {
+                    'pitch': <curr_value>,
+                    'tempo': <curr_value>,
+                    'volume': <curr_value>.
+                    'time:' <curr_value>
+                }
+                """
                 if 'pitch' in self.listen_params:
-                    # analyze sample for aubio's pitch (currently in Hz)
-                    show.curr_param_values[0] = self.pitch.analyze_pitch(
+                    # analyze sample for aubio's pitch (currently in Hz) and update current value
+                    show.curr_param_values['pitch'] = self.pitch.analyze_pitch(
                         sample)
+
                 if 'tempo' in self.listen_params:
-                    # analyze sample for aubio's tempo
-                    show.curr_param_values[1] = self.tempo.analyze_tempo(
+                    # analyze sample for aubio's tempo and update current value
+                    show.curr_param_values['tempo'] = self.tempo.analyze_tempo(
                         sample)
+
                 if 'volume' in self.listen_params:
-                    show.curr_param_values[2] = int(
+                    # analyze sample for volume and update current value
+                    show.curr_param_values['volume'] = int(
                         (numpy.sum(sample**2) / len(sample)) * 60000)
+
+                if 'time' in self.listen_params:
+                    # find elapsed timed
+                    elapsed_time = time.time() - start_time
+                    # update current value
+                    show.curr_param_values['time'] = elapsed_time
 
             except KeyboardInterrupt:
                 break
