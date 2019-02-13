@@ -9,6 +9,10 @@ this file will replace the visual.py file or visual.py needs to be updated
 
 
 class VideoPlayer:
+    """
+    VideoPlayer is the class that continues playing the current video or
+    starts playing a new video
+    """
 
     def __init__(self):
         """
