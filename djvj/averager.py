@@ -3,7 +3,10 @@
 """
 averager.py is used to ensure accurate data is found in the audio
 analysis process
+
+used in audio_listener.py
 """
+import numpy
 
 
 class Averager:
@@ -12,9 +15,9 @@ class Averager:
     find the true current average of data
     """
 
-    def __init__(self):
+    def __init__(self, max_samples):
         self.samples = []  # the list containing the sample set
-        self.max_samples = 10  # the number of samples needed to be collected
+        self.max_samples = max_samples  # the number of samples needed to be collected
         self.curr_average = 0  # the current average
 
     def update_average(self, value):

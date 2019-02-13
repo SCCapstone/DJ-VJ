@@ -3,6 +3,8 @@
 """
 interpreter is the main file for deciding which videos to play at given moment
 of time
+
+used in show.py
 """
 
 
@@ -25,23 +27,19 @@ class Interpreter:
         show_dictionary = {
             key: value
         }
-        -key is an identifier (type string)
+        -key is the identifier (type string)
         -value is the video_path (type string)
         """
-        self.show_dictionary = {}
-
-        """
-        curr_video is the path to the current video that is playing as a string
-        """
-        self.curr_video = ""
+        self.show_dictionary = self.create_show_dictionary()
 
     def create_show_dictionary(self):
         """
         create_show_dictionary
-        uses the interpreter's show_params to populate the show_dictionary
+        uses the interpreter's show_params to create identifiers for each video
+        and populate the show_dictionary
         """
 
-        # updates self.show_dictionary, does not need to return
+        return dictionary
 
     def make_decision(self, curr_values):
         """
@@ -55,8 +53,8 @@ class Interpreter:
         }
         - creates an identifier based on those values
         - compares that identifier to the identifiers found in
-        self.show_dictionary, make sure only to check the ones that are being listened for
-        - decides if self.curr_video needs to be updated
+        self.show_dictionary
+        - decides which video needs to be played based on the current values
         """
 
-        # updates self.curr_video, does not need to return
+        return video  # return the path of the video that has been decided
