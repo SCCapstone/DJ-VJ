@@ -8,6 +8,8 @@ allows for data to be shared between the different components of the program
 import threading
 import djvj.audio_listener as audio
 import djvj.visual as video
+# import djvj.interpreter as interpreter
+# import djvj.video_player as video
 
 
 class Show:
@@ -26,21 +28,24 @@ class Show:
         # populated in audio_listener
         self.curr_param_values = {}
 
-        # TODO initialize interpreter
-        # self.interpreter = interpreter.Interpreter(show_params)
-
         # initialze audio listener
         self.audio_listener = audio.AudioListener(self)
 
-        # TODO Update this with new VideoPlayer class
-        # will pass just self.interpreter.curr_video
+        # TODO initialize interpreter
+        # self.interpreter = interpreter.Interpreter(show_params)
+
+        # TODO initialze video_player
+        # Update this with new VideoPlayer class
+        # self.video_player = video.VideoPlayer()
+
+        # only used for current visual.py
         self.video_player = video.Visual(self, self.values)
 
     def start(self):
         """
         start() starts the show
         """
-        #  start audio_listener thread
+        # start audio_listener thread
         # updates self.curr_param_values
         try:
             audio_thread = threading.Thread(
@@ -53,7 +58,11 @@ class Show:
         # main show loop
         while True:
 
-            if self.curr_param_values['pitch'] != 0:
-                print(self.curr_param_values)
+            # TODO
+            # make video decision
+            # video = self.interpreter.make_decision(self.curr_param_values)
+
             # play video
-            self.video_player.play_video()
+            self.video_player.play_video()  # remove or update to next comment
+            # TODO
+            # self.video_player.play_video(video)

@@ -8,6 +8,7 @@ import pyaudio
 import numpy
 import djvj.pitch as pitch
 import djvj.tempo as tempo
+# import djvj.averager as averager
 
 
 class AudioListener:
@@ -17,23 +18,32 @@ class AudioListener:
 
     def __init__(self, show):
         self.audio_input = Microphone()
-        self.window_size = 4096
-        self.hop_size = 512
+        self.window_size = 4096  # needed for pyaudio and aubio
+        self.hop_size = 512  # needed for pyaudio and aubio
 
         self.listen_params = set(show.params)  # gets unique values from list
 
+        # check for listening param and initalize necessary objects
+        # also populate show.curr_param_values dictionary
         if 'pitch' in self.listen_params:
             self.pitch = pitch.Pitch(
                 self.audio_input, self.window_size, self.hop_size)
             show.curr_param_values['pitch'] = 0
+
         if 'tempo' in self.listen_params:
             self.tempo = tempo.Tempo(
                 self.audio_input, self.window_size, self.hop_size)
             show.curr_param_values['tempo'] = 0
+
         if 'volume' in self.listen_params:
             show.curr_param_values['volume'] = 0
+
         if 'time' in self.listen_params:
             show.curr_param_values['time'] = 0
+
+        # initialize averager - used to find average of data
+        # self.max_samples = 10 # number of samples collected to find true average
+        # self.averager = averager.Averager(self.max_samples)
 
     def __del__(self):
         self.audio_input.stream.stop_stream()
@@ -45,7 +55,8 @@ class AudioListener:
         analyze() is the main loop for analyzing audio
         """
         # get show start time
-        start_time = time.time()
+        if 'time' in self.listen_params:
+            start_time = time.time()
 
         while True:
             try:
@@ -56,9 +67,12 @@ class AudioListener:
                 sample = numpy.frombuffer(audiobuffer, dtype=numpy.float32)
 
                 if 'pitch' in self.listen_params:
-                    # analyze sample for aubio's pitch (currently in Hz) and update current value
-                    show.curr_param_values['pitch'] = self.pitch.analyze_pitch(
-                        sample)
+                    # analyze sample for aubio's pitch (currently in Hz)
+                    curr_pitch = self.pitch.analyze_pitch(sample)
+                    # add to average and find current true average
+                    # curr_pitch = self.averager.update_average(curr_pitch)
+                    # update current value
+                    show.curr_param_values['pitch'] = curr_pitch
 
                 if 'tempo' in self.listen_params:
                     # analyze sample for aubio's tempo and update current value
