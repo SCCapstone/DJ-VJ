@@ -3,10 +3,12 @@
 audio_listner is the main driver for analyzing audio
 """
 
+import time
 import pyaudio
 import numpy
 import djvj.pitch as pitch
 import djvj.tempo as tempo
+# import djvj.averager as averager
 
 
 class AudioListener:
@@ -14,19 +16,34 @@ class AudioListener:
     sets up instances of audio analyzers
     """
 
-    def __init__(self, audio_params):
+    def __init__(self, show):
         self.audio_input = Microphone()
-        self.window_size = 4096
-        self.hop_size = 512
+        self.window_size = 4096  # needed for pyaudio and aubio
+        self.hop_size = 512  # needed for pyaudio and aubio
 
-        self.listen_params = set(audio_params)  # gets unique values from list
+        self.listen_params = set(show.params)  # gets unique values from list
 
+        # check for listening param and initalize necessary objects
+        # also populate show.curr_param_values dictionary
         if 'pitch' in self.listen_params:
             self.pitch = pitch.Pitch(
                 self.audio_input, self.window_size, self.hop_size)
+            show.curr_param_values['pitch'] = 0
+
         if 'tempo' in self.listen_params:
             self.tempo = tempo.Tempo(
                 self.audio_input, self.window_size, self.hop_size)
+            show.curr_param_values['tempo'] = 0
+
+        if 'volume' in self.listen_params:
+            show.curr_param_values['volume'] = 0
+
+        if 'time' in self.listen_params:
+            show.curr_param_values['time'] = 0
+
+        # initialize averager - used to find average of data
+        # self.max_samples = 10 # number of samples collected to find true average
+        # self.averager = averager.Averager(self.max_samples)
 
     def __del__(self):
         self.audio_input.stream.stop_stream()
@@ -37,6 +54,10 @@ class AudioListener:
         """
         analyze() is the main loop for analyzing audio
         """
+        # get show start time
+        if 'time' in self.listen_params:
+            start_time = time.time()
+
         while True:
             try:
                 # get next sample
@@ -47,15 +68,27 @@ class AudioListener:
 
                 if 'pitch' in self.listen_params:
                     # analyze sample for aubio's pitch (currently in Hz)
-                    show.curr_param_values[0] = self.pitch.analyze_pitch(
-                        sample)
+                    curr_pitch = self.pitch.analyze_pitch(sample)
+                    # add to average and find current true average
+                    # curr_pitch = self.averager.update_average(curr_pitch)
+                    # update current value
+                    show.curr_param_values['pitch'] = curr_pitch
+
                 if 'tempo' in self.listen_params:
-                    # analyze sample for aubio's tempo
-                    show.curr_param_values[1] = self.tempo.analyze_tempo(
+                    # analyze sample for aubio's tempo and update current value
+                    show.curr_param_values['tempo'] = self.tempo.analyze_tempo(
                         sample)
+
                 if 'volume' in self.listen_params:
-                    show.curr_param_values[2] = int(
+                    # analyze sample for volume and update current value
+                    show.curr_param_values['volume'] = int(
                         (numpy.sum(sample**2) / len(sample)) * 60000)
+
+                if 'time' in self.listen_params:
+                    # find elapsed timed
+                    elapsed_time = time.time() - start_time
+                    # update current value
+                    show.curr_param_values['time'] = elapsed_time
 
             except KeyboardInterrupt:
                 break

@@ -6,9 +6,10 @@ allows for data to be shared between the different components of the program
 """
 
 import threading
-import time
 import djvj.audio_listener as audio
 import djvj.visual as video
+# import djvj.interpreter as interpreter
+# import djvj.video_player as video
 
 
 class Show:
@@ -23,19 +24,28 @@ class Show:
         self.values = show_params[2]
         self.videos = show_params[3]
 
-        # self.interpreter = interpreter.Interpreter(show_params)
-        self.audio_listener = audio.AudioListener(self.params)
-        self.video_player = video.Visual(self, self.values)
-
         # initialize list of current audio values at a given moment of time
-        # [pitch, tempo, volume, time]
-        self.curr_param_values = [0, 0, 0, 0]
+        # populated in audio_listener
+        self.curr_param_values = {}
+
+        # initialze audio listener
+        self.audio_listener = audio.AudioListener(self)
+
+        # TODO initialize interpreter
+        # self.interpreter = interpreter.Interpreter(show_params)
+
+        # TODO initialze video_player
+        # Update this with new VideoPlayer class
+        # self.video_player = video.VideoPlayer()
+
+        # only used for current visual.py
+        self.video_player = video.Visual(self, self.values)
 
     def start(self):
         """
         start() starts the show
         """
-        #  start audio_listener thread
+        # start audio_listener thread
         # updates self.curr_param_values
         try:
             audio_thread = threading.Thread(
@@ -45,16 +55,14 @@ class Show:
         except KeyboardInterrupt:
             pass
 
-        # get show start time
-        start_time = time.time()
         # main show loop
         while True:
-            # find elapsed timed
-            elapsed_time = time.time() - start_time
-            self.curr_param_values[3] = elapsed_time
 
-            if self.curr_param_values[0] != 0:
-                print(self.curr_param_values)
+            # TODO
+            # make video decision
+            # video = self.interpreter.make_decision(self.curr_param_values)
 
             # play video
-            self.video_player.play_video()
+            self.video_player.play_video()  # remove or update to next comment
+            # TODO
+            # self.video_player.play_video(video)
