@@ -22,24 +22,19 @@ class Show:
         self.values = show_params[2]
         self.videos = show_params[3]
 
+        # initialize list of current audio values at a given moment of time
+        # populated in audio_listener
+        self.curr_param_values = {}
+
         # TODO initialize interpreter
         # self.interpreter = interpreter.Interpreter(show_params)
 
         # initialze audio listener
-        self.audio_listener = audio.AudioListener(self.params)
+        self.audio_listener = audio.AudioListener(self)
 
         # TODO Update this with new VideoPlayer class
         # will pass just self.interpreter.curr_video
         self.video_player = video.Visual(self, self.values)
-
-        # initialize list of current audio values at a given moment of time
-        # [pitch, tempo, volume, time]
-        self.curr_param_values = {
-            'pitch': 0,
-            'tempo': 0,
-            'volume': 0,
-            'time': 0
-        }
 
     def start(self):
         """

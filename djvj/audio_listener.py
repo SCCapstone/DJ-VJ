@@ -15,19 +15,25 @@ class AudioListener:
     sets up instances of audio analyzers
     """
 
-    def __init__(self, audio_params):
+    def __init__(self, show):
         self.audio_input = Microphone()
         self.window_size = 4096
         self.hop_size = 512
 
-        self.listen_params = set(audio_params)  # gets unique values from list
+        self.listen_params = set(show.params)  # gets unique values from list
 
         if 'pitch' in self.listen_params:
             self.pitch = pitch.Pitch(
                 self.audio_input, self.window_size, self.hop_size)
+            show.curr_param_values['pitch'] = 0
         if 'tempo' in self.listen_params:
             self.tempo = tempo.Tempo(
                 self.audio_input, self.window_size, self.hop_size)
+            show.curr_param_values['tempo'] = 0
+        if 'volume' in self.listen_params:
+            show.curr_param_values['volume'] = 0
+        if 'time' in self.listen_params:
+            show.curr_param_values['time'] = 0
 
     def __del__(self):
         self.audio_input.stream.stop_stream()
@@ -49,18 +55,6 @@ class AudioListener:
                 # convert sample to list
                 sample = numpy.frombuffer(audiobuffer, dtype=numpy.float32)
 
-                """
-                the following code checks to see if a current feature is being
-                listened for, if it is it analyzes and adds to
-                show.curr_param_values
-
-                show.curr_param_values = {
-                    'pitch': <curr_value>,
-                    'tempo': <curr_value>,
-                    'volume': <curr_value>.
-                    'time:' <curr_value>
-                }
-                """
                 if 'pitch' in self.listen_params:
                     # analyze sample for aubio's pitch (currently in Hz) and update current value
                     show.curr_param_values['pitch'] = self.pitch.analyze_pitch(
