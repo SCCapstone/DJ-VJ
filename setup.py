@@ -4,7 +4,7 @@ setup.py is used similar as a makefile in c. It complies .pyx files into
 .py files
 
 To build:
-$ python setup.py build_ext --inplace
+$ python3 setup.py build_ext --inplace
 """
 
 from distutils.core import setup, Extension

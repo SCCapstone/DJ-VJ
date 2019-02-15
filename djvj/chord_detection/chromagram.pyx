@@ -8,8 +8,8 @@ from cpython cimport array
 cdef extern from "Chromagramc.h":
   cdef cppclass Chromagram:
     Chromagram(int frameSize, int fs) except +
-    # void processAudioFrame(double* inputAudioFrame)
-    void processAudioFrame(vector[double] inputAudioFrame)
+    void processAudioFrame(double* inputAudioFrame)
+    # void processAudioFrame(vector[double] inputAudioFrame)
     void setChromaCalculationInterval(int numSamples)
     vector[double] getChromagram()
     bool isReady()
@@ -24,7 +24,11 @@ cdef class PyChromagram:
     del self.chromagram
 
   def processAudioFrame(self, inputAudioFrame):
-    return self.chromagram.processAudioFrame(inputAudioFrame)
+    tmp = inputAudioFrame[0]
+    cdef double inputAudioFrame_arr[512]
+    for i in range(0,512):
+      inputAudioFrame_arr[i] = tmp[i]
+    return self.chromagram.processAudioFrame(inputAudioFrame_arr)
 
   def setChromaCalculationInterval (self, numSamples):
     return self.chromagram.setChromaCalculationInterval(numSamples)

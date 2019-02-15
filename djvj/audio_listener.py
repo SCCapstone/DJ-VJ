@@ -75,8 +75,8 @@ class AudioListener:
                 if 'chord' in self.listen_params:
                     self.frame.append(sample)
                     self.chromagram.processAudioFrame(self.frame)
-                    if chromagram.isReady():
-                        print("Here", self.chromagram.getChromagram())
+                    if self.chromagram.isReady:
+                        print(self.chromagram.getChromagram())
                 if 'pitch' in self.listen_params:
                     # analyze sample for aubio's pitch (currently in Hz)
                     curr_pitch = self.pitch.analyze_pitch(sample)
