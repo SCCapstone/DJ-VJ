@@ -7,10 +7,13 @@ To build:
 $ python setup.py build_ext --inplace
 """
 
-
-from distutils import setup
+from distutils.core import setup, Extension
 from Cython.Build import cythonize
 
+extensions = Extension("djvj.chord_detection.chromagram", [
+    "djvj/chord_detection/chromagram.pyx"],)
+
 setup(
-    ext_module=cythonize("chords.pyx")
+
+    ext_modules=cythonize(extensions)
 )

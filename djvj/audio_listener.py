@@ -8,6 +8,7 @@ import pyaudio
 import numpy
 import djvj.pitch as pitch
 import djvj.tempo as tempo
+import djvj.chord_detection.chromagram as chromagram
 # import djvj.averager as averager
 
 
@@ -25,6 +26,11 @@ class AudioListener:
 
         # check for listening param and initalize necessary objects
         # also populate show.curr_param_values dictionary
+        if 'chord' in self.listen_params:
+            self.chromagram = chromagram.PyChromagram(
+                self.hop_size, self.audio_input.samplerate)
+            self.frame = []
+
         if 'pitch' in self.listen_params:
             self.pitch = pitch.Pitch(
                 self.audio_input, self.window_size, self.hop_size)
@@ -66,6 +72,11 @@ class AudioListener:
                 # convert sample to list
                 sample = numpy.frombuffer(audiobuffer, dtype=numpy.float32)
 
+                if 'chord' in self.listen_params:
+                    self.frame.append(sample)
+                    self.chromagram.processAudioFrame(self.frame)
+                    if chromagram.isReady():
+                        print("Here", self.chromagram.getChromagram())
                 if 'pitch' in self.listen_params:
                     # analyze sample for aubio's pitch (currently in Hz)
                     curr_pitch = self.pitch.analyze_pitch(sample)
