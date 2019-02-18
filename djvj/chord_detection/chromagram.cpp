@@ -1616,8 +1616,8 @@ static void __pyx_pf_4djvj_15chord_detection_10chromagram_12PyChromagram_2__deal
  *     del self.chromagram
  * 
  *   def processAudioFrame(self, inputAudioFrame):             # <<<<<<<<<<<<<<
- *     tmp = inputAudioFrame[0]
- *     cdef double inputAudioFrame_arr[512]
+ *     # tmp = inputAudioFrame[0]
+ *     cdef double frame[512]
  */
 
 /* Python wrapper */
@@ -1634,88 +1634,74 @@ static PyObject *__pyx_pw_4djvj_15chord_detection_10chromagram_12PyChromagram_5p
 }
 
 static PyObject *__pyx_pf_4djvj_15chord_detection_10chromagram_12PyChromagram_4processAudioFrame(struct __pyx_obj_4djvj_15chord_detection_10chromagram_PyChromagram *__pyx_v_self, PyObject *__pyx_v_inputAudioFrame) {
-  PyObject *__pyx_v_tmp = NULL;
-  double __pyx_v_inputAudioFrame_arr[0x200];
+  double __pyx_v_frame[0x200];
   long __pyx_v_i;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  long __pyx_t_2;
+  long __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
   double __pyx_t_3;
   __Pyx_RefNannySetupContext("processAudioFrame", 0);
 
-  /* "djvj/chord_detection/chromagram.pyx":27
- * 
- *   def processAudioFrame(self, inputAudioFrame):
- *     tmp = inputAudioFrame[0]             # <<<<<<<<<<<<<<
- *     cdef double inputAudioFrame_arr[512]
- *     for i in range(0,512):
- */
-  __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_inputAudioFrame, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 27, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_v_tmp = __pyx_t_1;
-  __pyx_t_1 = 0;
-
   /* "djvj/chord_detection/chromagram.pyx":29
- *     tmp = inputAudioFrame[0]
- *     cdef double inputAudioFrame_arr[512]
+ *     # tmp = inputAudioFrame[0]
+ *     cdef double frame[512]
  *     for i in range(0,512):             # <<<<<<<<<<<<<<
- *       inputAudioFrame_arr[i] = tmp[i]
- *     return self.chromagram.processAudioFrame(inputAudioFrame_arr)
+ *       frame[i] = inputAudioFrame[i]
+ *     return self.chromagram.processAudioFrame(frame)
  */
-  for (__pyx_t_2 = 0; __pyx_t_2 < 0x200; __pyx_t_2+=1) {
-    __pyx_v_i = __pyx_t_2;
+  for (__pyx_t_1 = 0; __pyx_t_1 < 0x200; __pyx_t_1+=1) {
+    __pyx_v_i = __pyx_t_1;
 
     /* "djvj/chord_detection/chromagram.pyx":30
- *     cdef double inputAudioFrame_arr[512]
+ *     cdef double frame[512]
  *     for i in range(0,512):
- *       inputAudioFrame_arr[i] = tmp[i]             # <<<<<<<<<<<<<<
- *     return self.chromagram.processAudioFrame(inputAudioFrame_arr)
+ *       frame[i] = inputAudioFrame[i]             # <<<<<<<<<<<<<<
+ *     return self.chromagram.processAudioFrame(frame)
  * 
  */
-    __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_tmp, __pyx_v_i, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 30, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    (__pyx_v_inputAudioFrame_arr[__pyx_v_i]) = __pyx_t_3;
+    __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_inputAudioFrame, __pyx_v_i, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 30, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 30, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    (__pyx_v_frame[__pyx_v_i]) = __pyx_t_3;
   }
 
   /* "djvj/chord_detection/chromagram.pyx":31
  *     for i in range(0,512):
- *       inputAudioFrame_arr[i] = tmp[i]
- *     return self.chromagram.processAudioFrame(inputAudioFrame_arr)             # <<<<<<<<<<<<<<
+ *       frame[i] = inputAudioFrame[i]
+ *     return self.chromagram.processAudioFrame(frame)             # <<<<<<<<<<<<<<
  * 
  *   def setChromaCalculationInterval (self, numSamples):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_void_to_None(__pyx_v_self->chromagram->processAudioFrame(__pyx_v_inputAudioFrame_arr)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 31, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_void_to_None(__pyx_v_self->chromagram->processAudioFrame(__pyx_v_frame)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 31, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_r = __pyx_t_2;
+  __pyx_t_2 = 0;
   goto __pyx_L0;
 
   /* "djvj/chord_detection/chromagram.pyx":26
  *     del self.chromagram
  * 
  *   def processAudioFrame(self, inputAudioFrame):             # <<<<<<<<<<<<<<
- *     tmp = inputAudioFrame[0]
- *     cdef double inputAudioFrame_arr[512]
+ *     # tmp = inputAudioFrame[0]
+ *     cdef double frame[512]
  */
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
   __Pyx_AddTraceback("djvj.chord_detection.chromagram.PyChromagram.processAudioFrame", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
-  __Pyx_XDECREF(__pyx_v_tmp);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
 /* "djvj/chord_detection/chromagram.pyx":33
- *     return self.chromagram.processAudioFrame(inputAudioFrame_arr)
+ *     return self.chromagram.processAudioFrame(frame)
  * 
  *   def setChromaCalculationInterval (self, numSamples):             # <<<<<<<<<<<<<<
  *     return self.chromagram.setChromaCalculationInterval(numSamples)
@@ -1758,7 +1744,7 @@ static PyObject *__pyx_pf_4djvj_15chord_detection_10chromagram_12PyChromagram_6s
   goto __pyx_L0;
 
   /* "djvj/chord_detection/chromagram.pyx":33
- *     return self.chromagram.processAudioFrame(inputAudioFrame_arr)
+ *     return self.chromagram.processAudioFrame(frame)
  * 
  *   def setChromaCalculationInterval (self, numSamples):             # <<<<<<<<<<<<<<
  *     return self.chromagram.setChromaCalculationInterval(numSamples)

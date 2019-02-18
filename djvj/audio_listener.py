@@ -26,10 +26,9 @@ class AudioListener:
 
         # check for listening param and initalize necessary objects
         # also populate show.curr_param_values dictionary
-        if 'chord' in self.listen_params:
-            self.chromagram = chromagram.PyChromagram(
-                self.hop_size, self.audio_input.samplerate)
-            self.frame = []
+        # if 'chord' in self.listen_params:
+        #     self.chromagram = chromagram.PyChromagram(
+        #         self.hop_size, self.audio_input.samplerate)
 
         if 'pitch' in self.listen_params:
             self.pitch = pitch.Pitch(
@@ -69,14 +68,16 @@ class AudioListener:
                 # get next sample
                 audiobuffer = self.audio_input.stream.read(
                     self.audio_input.buffer_size, exception_on_overflow=False)
-                # convert sample to list
+                # convert sample to numpy array
                 sample = numpy.frombuffer(audiobuffer, dtype=numpy.float32)
 
                 if 'chord' in self.listen_params:
-                    self.frame.append(sample)
-                    self.chromagram.processAudioFrame(self.frame)
+                    self.chromagram = chromagram.PyChromagram(
+                        self.hop_size, self.audio_input.samplerate)
+                    self.chromagram.processAudioFrame(sample)
                     if self.chromagram.isReady:
                         print(self.chromagram.getChromagram())
+
                 if 'pitch' in self.listen_params:
                     # analyze sample for aubio's pitch (currently in Hz)
                     curr_pitch = self.pitch.analyze_pitch(sample)

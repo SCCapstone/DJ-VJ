@@ -24,11 +24,11 @@ cdef class PyChromagram:
     del self.chromagram
 
   def processAudioFrame(self, inputAudioFrame):
-    tmp = inputAudioFrame[0]
-    cdef double inputAudioFrame_arr[512]
+    # tmp = inputAudioFrame[0]
+    cdef double frame[512]
     for i in range(0,512):
-      inputAudioFrame_arr[i] = tmp[i]
-    return self.chromagram.processAudioFrame(inputAudioFrame_arr)
+      frame[i] = inputAudioFrame[i]
+    return self.chromagram.processAudioFrame(frame)
 
   def setChromaCalculationInterval (self, numSamples):
     return self.chromagram.setChromaCalculationInterval(numSamples)
