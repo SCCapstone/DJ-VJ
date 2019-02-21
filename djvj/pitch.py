@@ -31,6 +31,9 @@ class Pitch:  # pylint: disable=too-few-public-methods
         # options = default, schmitt, fcomb, mcomb, yin
         self.pitch_analyzer = pitch(
             "default", self.window_size, self.hop_size, self.input.samplerate)
+        
+        #saves the average pitch for better accuracy
+        self.average = 0
 
     def analyze_pitch(self, sample):
         """
