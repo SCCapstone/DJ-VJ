@@ -11,6 +11,7 @@ import djvj.tempo as tempo
 import djvj.pitchAverager as pitchAverager
 from pitchAverager import pitchAverager
 from pitchAverager import PitchAvgs
+
 # import djvj.averager as averager
 
 
@@ -74,9 +75,9 @@ class AudioListener:
                     # analyze sample for aubio's pitch (currently in Hz)
                     curr_pitch = self.pitch.analyze_pitch(sample)
                     # add to average and find current true average
-                    self.averager.pitch = curr_pitch
+                    #self.averager.pitch = curr_pitch
                     self.averager.pitchArr.append(curr_pitch)
-                    self.averager.lastAvg = pitchAverager(self.averager)
+                    pitchAverager(self.averager)
                     curr_pitch = self.averager.lastAvg
                     # curr_pitch = self.averager.update_average(curr_pitch)
                     # update current value

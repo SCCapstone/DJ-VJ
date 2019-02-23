@@ -26,5 +26,5 @@ def pitchAverager(self):
         if length == 0:
             return self.lastAvg
         else:
-        	self.pitchArr.clear()
+            self.pitchArr.clear()
             return self.lastAvg
