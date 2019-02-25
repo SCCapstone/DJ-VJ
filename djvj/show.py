@@ -6,6 +6,7 @@ allows for data to be shared between the different components of the program
 """
 
 import threading
+import pandas as pd
 import djvj.audio_listener as audio
 import djvj.Visual as video
 import djvj.interpreter as interpreter
@@ -18,28 +19,12 @@ class Show:
     needed functions
     """
 
-    def __init__(self, show_params):
+    def __init__(self, show_params, df):
         self.params = show_params[0]
         self.rules = show_params[1]
         self.values = show_params[2]
         self.videos = show_params[3]
-        self.df = pd.dataFrame(['File_Name', 'Sign', 'Pitch', 'Tempo', 'Time'])
-        """
-        ###########         MESSAGE FROM OMARI      #########################
-        Omari:
-            is it possible for the value object to be differentiated based 
-            on what kind of value it would be (is it a value for pitch, tempo, ect).
-            Currently how i have the function adding into the database is ex.
-
-            interperater.addPanda(videos, rules, pitch, tempo, time, self.df)
-
-            The dataframe can handle Null values i just need a way to store everything 
-            in order. i dont know much about the show_param function but i was
-            thinking you can do
-
-            if(show_param[0] == 'pitch'){pitch = show_param[5]}
-        """
-
+        
         # initialize list of current audio values at a given moment of time
         # populated in audio_listener
         self.curr_param_values = {}
@@ -47,10 +32,9 @@ class Show:
         # initialze audio listener
         self.audio_listener = audio.AudioListener(self)
 
-        # TODO initialize interpreter
-
-        # function added - Omari 
-        # self.data_interperter = interpreter.Interpreter(self)
+        # initialize interpreter
+ 
+         self.data_interperter = interpreter.Interpreter(self, self.values, self.df)
 
         # TODO initialze video_player
         # Update this with new VideoPlayer class
@@ -89,7 +73,7 @@ def add_panda_data(videos, rules, pitch, tempo, time, df):
     """
         addPandaData ( takes in video file name, comparative operator,
                         pitch value, temp value, time value)
-        Line 14: appends data that is givin into dataFrame
+        Line 79: appends data that is givin into dataFrame
     """
 
     df = df.append({'File_Name' : videos,
@@ -97,3 +81,4 @@ def add_panda_data(videos, rules, pitch, tempo, time, df):
                   'Pitch' : pitch,
                   'Tempo' : tempo,
                   'Time' : time}, ignore_index=True)
+    return df
