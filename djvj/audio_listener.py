@@ -9,8 +9,8 @@ import numpy
 import djvj.pitch as pitch
 import djvj.tempo as tempo
 import djvj.pitchAverager as pitchAverager
-from pitchAverager import pitchAverager
-from pitchAverager import PitchAvgs
+from djvj.pitchAverager import pitchAverager
+from djvj.pitchAverager import PitchAvgs
 
 # import djvj.averager as averager
 

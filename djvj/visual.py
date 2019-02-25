@@ -17,6 +17,7 @@ class Visual:
         # placeholder for now, but the value from the param file
         threshold = values[0]
         self.pitch_threshold = int(threshold)
+        #variables for the current show playing and the new show that we want to play
 
     def play_video(self):
         """ plays the video """
