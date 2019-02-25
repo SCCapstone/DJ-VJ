@@ -8,7 +8,7 @@ allows for data to be shared between the different components of the program
 import threading
 import pandas as pd
 import djvj.audio_listener as audio
-import djvj.Visual as video
+import djvj.visual as video
 import djvj.interpreter as interpreter
 # import djvj.video_player as video
 
@@ -19,7 +19,7 @@ class Show:
     needed functions
     """
 
-    def __init__(self, show_params, df):
+    def __init__(self, show_params):
         self.params = show_params[0]
         self.rules = show_params[1]
         self.values = show_params[2]
@@ -33,8 +33,7 @@ class Show:
         self.audio_listener = audio.AudioListener(self)
 
         # initialize interpreter
- 
-         self.data_interperter = interpreter.Interpreter(self, self.values, self.df)
+        self.data_interperter = interpreter.Interpreter(self, self.values, self.df)
 
         # TODO initialze video_player
         # Update this with new VideoPlayer class

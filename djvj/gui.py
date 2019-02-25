@@ -5,7 +5,9 @@ Create Show screen functionality is built out, more to come!
 """
 
 import pickle
+import pandas as pd
 import tkinter as tk
+import djvj.show as show
 from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage, \
     StringVar, OptionMenu, NW, END
 import time
@@ -17,6 +19,7 @@ audio_attr = list()  # what the audio should listen for
 rules = list()  # <, >, =
 values = list()  # what threshold the change happens at
 video_loc = list()  # video path
+DF = pd.DataFrame(columns = ['File_Name', 'Sign', 'Pitch', 'Tempo', 'Time'])
 
 
 class SplashScreen(tk.Toplevel):
@@ -95,6 +98,7 @@ class IntroScreen(tk.Tk):
         parses the data into audio_attr, rules, values, and videos
         and appends these lists to the show list that is used by main.py
         """
+
         filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
                                               filetypes=(("djvj files", "*.djvj"),
                                                          ("all files", "*.*")))
@@ -107,6 +111,12 @@ class IntroScreen(tk.Tk):
             rules.append(attribute[2])
             values.append(attribute[3])
             video_loc.append(attribute[5])
+            if attribute[1] == 'pitch':
+                DF = show.add_panda_data(attribute[5], attribute[2], attribute[3], None, None, DF)
+            elif attribute[1] == 'tempo':
+                DF = show.add_panda_data(attribute[5], attribute[2], None, attribute[3], None, DF)
+            elif attribute[1] == 'time':
+                DF = show.add_panda_data(attribute[5], attribute[2], None, None, attribute[3], DF)
         # appends all these lists to a larger list, used in main to send to show.py
         show.append(audio_attr)
         show.append(rules)
