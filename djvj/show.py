@@ -23,6 +23,7 @@ class Show:
         self.rules = show_params[1]
         self.values = show_params[2]
         self.videos = show_params[3]
+        self.df = pd.dataFrame(['File_Name', 'Sign', 'Pitch', 'Tempo', 'Time'])
         """
         ###########         MESSAGE FROM OMARI      #########################
         Omari:
@@ -30,7 +31,7 @@ class Show:
             on what kind of value it would be (is it a value for pitch, tempo, ect).
             Currently how i have the function adding into the database is ex.
 
-            interperater.addPanda(videos, rules, pitch, tempo, time)
+            interperater.addPanda(videos, rules, pitch, tempo, time, self.df)
 
             The dataframe can handle Null values i just need a way to store everything 
             in order. i dont know much about the show_param function but i was
@@ -83,3 +84,16 @@ class Show:
             self.video_player.play_video()  # remove or update to next comment
             # TODO
             # self.video_player.play_video(video)
+
+def add_panda_data(videos, rules, pitch, tempo, time, df):
+    """
+        addPandaData ( takes in video file name, comparative operator,
+                        pitch value, temp value, time value)
+        Line 14: appends data that is givin into dataFrame
+    """
+
+    df = df.append({'File_Name' : videos,
+                  'Sign' : rules,
+                  'Pitch' : pitch,
+                  'Tempo' : tempo,
+                  'Time' : time}, ignore_index=True)
