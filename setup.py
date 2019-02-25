@@ -10,8 +10,8 @@ $ python3 setup.py build_ext --inplace
 from distutils.core import setup, Extension
 from Cython.Build import cythonize
 
-extensions = Extension("djvj.chord_detection.chromagram", [
-    "djvj/chord_detection/chromagram.pyx"],)
+extensions = Extension("djvj.chord_detection.chord_detection", [
+    "djvj/chord_detection/chord_detection.pyx"],)
 
 setup(
 

@@ -56,13 +56,13 @@ class Show:
             pass
 
         # main show loop
-        while True:
-
+        # while True:
+            # print(self.curr_param_values)
             # TODO
             # make video decision
             # video = self.interpreter.make_decision(self.curr_param_values)
 
             # play video
-            self.video_player.play_video()  # remove or update to next comment
+            # self.video_player.play_video()  # remove or update to next comment
             # TODO
             # self.video_player.play_video(video)

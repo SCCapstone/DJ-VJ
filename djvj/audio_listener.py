@@ -6,9 +6,11 @@ audio_listner is the main driver for analyzing audio
 import time
 import pyaudio
 import numpy
+import librosa
 import djvj.pitch as pitch
 import djvj.tempo as tempo
-import djvj.chord_detection.chromagram as chromagram
+# import djvj.chord_detection.chromagram as chromagram
+import djvj.chord_detection.chord_detection as chord_detection
 # import djvj.averager as averager
 
 
@@ -29,6 +31,9 @@ class AudioListener:
         # if 'chord' in self.listen_params:
         #     self.chromagram = chromagram.PyChromagram(
         #         self.hop_size, self.audio_input.samplerate)
+
+        if 'chord' in self.listen_params:
+            self.chord_detection = chord_detection.PyChordDetection()
 
         if 'pitch' in self.listen_params:
             self.pitch = pitch.Pitch(
@@ -62,6 +67,7 @@ class AudioListener:
         # get show start time
         if 'time' in self.listen_params:
             start_time = time.time()
+            curr_time = start_time
 
         while True:
             try:
@@ -72,11 +78,21 @@ class AudioListener:
                 sample = numpy.frombuffer(audiobuffer, dtype=numpy.float32)
 
                 if 'chord' in self.listen_params:
-                    self.chromagram = chromagram.PyChromagram(
-                        self.hop_size, self.audio_input.samplerate)
-                    self.chromagram.processAudioFrame(sample)
-                    if self.chromagram.isReady:
-                        print(self.chromagram.getChromagram())
+                    # self.chromagram.processAudioFrame(sample)
+                    # if self.chromagram.isReady:
+                    #     print(self.chromagram.getChromagram())
+                    chroma = librosa.feature.chroma_stft(
+                        y=sample, sr=self.audio_input.samplerate, n_fft=self.window_size, hop_length=self.hop_size)
+
+                    flat_chroma = []
+                    for i in range(len(chroma)):
+                        flat_chroma.append(chroma[i][0])
+
+                    if time.time() - curr_time > 2:
+                        # print(chroma, "\n")
+                        print(flat_chroma, "\n")
+                        curr_time = time.time()
+                    # chord = self.chord_detection.detectChord(chroma)
 
                 if 'pitch' in self.listen_params:
                     # analyze sample for aubio's pitch (currently in Hz)
