@@ -17,15 +17,15 @@ class Interpreter:
         self.df = df
         self.window_x = 700
         self.window_y = 900
-        if self.show.curr_param_values['pitch'] == True:
+        if 'pitch' in self.show.curr_param_values:
             self.curr_pitch = self.show.curr_param_values['pitch']
             self.curr_tempo = None
             self.curr_time = None
-        elif self.show_tempo.curr_param_values['tempo'] == True:
+        if 'tempo' in self.show.curr_param_values:
             self.curr = self.show.curr_param_values['tempo']
             self.curr_pitch = None
             self.curr_time = None
-        elif self.show.curr_param_values['time'] == True:
+        if 'time' in self.show.curr_param_values:
             self.curr_time = self.show.curr_param_values['time']
             self.curr_pitch = None
             self.curr_tempo = None
