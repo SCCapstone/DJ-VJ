@@ -7,7 +7,7 @@ Create Show screen functionality is built out, more to come!
 import pickle
 import pandas as pd
 import tkinter as tk
-import djvj.show as show
+import djvj.show as showF
 from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage, \
     StringVar, OptionMenu, NW, END
 import time
@@ -20,7 +20,6 @@ rules = list()  # <, >, =
 values = list()  # what threshold the change happens at
 video_loc = list()  # video path
 DF = pd.DataFrame(columns = ['File_Name', 'Sign', 'Pitch', 'Tempo', 'Time'])
-
 
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
@@ -98,6 +97,14 @@ class IntroScreen(tk.Tk):
         parses the data into audio_attr, rules, values, and videos
         and appends these lists to the show list that is used by main.py
         """
+        """
+        Line 22: inittialize dataframe 
+        Line (121,122,125): stores value of each param into the dataframe.
+                         if the value was not specify, the dataframe will
+                         set the cell to null
+        Line(122,124,126): add values to dataframe
+        """
+        global DF
 
         filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
                                               filetypes=(("djvj files", "*.djvj"),
@@ -112,11 +119,11 @@ class IntroScreen(tk.Tk):
             values.append(attribute[3])
             video_loc.append(attribute[5])
             if attribute[1] == 'pitch':
-                DF = show.add_panda_data(attribute[5], attribute[2], attribute[3], None, None, DF)
+                DF = showF.add_panda_data(attribute[5], attribute[2], attribute[3], None, None, DF)
             elif attribute[1] == 'tempo':
-                DF = show.add_panda_data(attribute[5], attribute[2], None, attribute[3], None, DF)
+                DF = showF.add_panda_data(attribute[5], attribute[2], None, attribute[3], None, DF)
             elif attribute[1] == 'time':
-                DF = show.add_panda_data(attribute[5], attribute[2], None, None, attribute[3], DF)
+                DF = showF.add_panda_data(attribute[5], attribute[2], None, None, attribute[3], DF)
         # appends all these lists to a larger list, used in main to send to show.py
         show.append(audio_attr)
         show.append(rules)

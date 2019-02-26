@@ -16,8 +16,8 @@ class Interpreter:
         self.show = show
         self.df = df
         self.curr_pitch = self.show.curr_param_values['pitch']
-        self.curr_tempo = self.show.curr_param_values['tempo']
-        self.curr_time = self.show.curr_param_values['time']
+        # self.curr_tempo = self.show.curr_param_values['tempo']
+        # self.curr_time = self.show.curr_param_values['time']
         self.window_x = 700
         self.window_y = 900
 

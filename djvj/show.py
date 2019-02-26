@@ -19,11 +19,12 @@ class Show:
     needed functions
     """
 
-    def __init__(self, show_params):
+    def __init__(self, show_params, df):
         self.params = show_params[0]
         self.rules = show_params[1]
         self.values = show_params[2]
         self.videos = show_params[3]
+        self.df = df
         
         # initialize list of current audio values at a given moment of time
         # populated in audio_listener
