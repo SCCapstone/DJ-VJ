@@ -15,11 +15,20 @@ class Interpreter:
     def __init__(self, show, values, df):
         self.show = show
         self.df = df
-        self.curr_pitch = self.show.curr_param_values['pitch']
-        # self.curr_tempo = self.show.curr_param_values['tempo']
-        # self.curr_time = self.show.curr_param_values['time']
         self.window_x = 700
         self.window_y = 900
+        if self.show.curr_param_values['pitch'] == True:
+            self.curr_pitch = self.show.curr_param_values['pitch']
+            self.curr_tempo = None
+            self.curr_time = None
+        elif self.show_tempo.curr_param_values['tempo'] == True:
+            self.curr = self.show.curr_param_values['tempo']
+            self.curr_pitch = None
+            self.curr_time = None
+        elif self.show.curr_param_values['time'] == True:
+            self.curr_time = self.show.curr_param_values['time']
+            self.curr_pitch = None
+            self.curr_tempo = None
 
     def search_panda_data(self):
         """
