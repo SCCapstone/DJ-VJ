@@ -2,8 +2,8 @@
 This program displays videos based on the audio input passed
 from the audio listener.
 """
-import os
 import cv2
+import threading
 
 
 class Visual:
@@ -12,13 +12,12 @@ class Visual:
     def __init__(self):
         """ initialize the class """
         self.currShow = None
-        #self.window_x = 700
-        #self.window_y = 900
+        self.window_x = 700
+        self.window_y = 900
         # placeholder for now, but the value from the param file
-        #threshold = values[0]
-        #self.pitch_threshold = int(threshold)
+        threshold = values[0]
+        self.pitch_threshold = int(threshold)
         #current show playing and the new show that we want to play
-        #self.currShow = None
         #self.newShow = None
 
 def play_video(self, video):
@@ -36,7 +35,10 @@ def play_video(self, video):
     # print("now here")
     while cap.isOpened():
         # if pitch changes, change video
-        ret, frame = cap.read()     # play video
+        if self.currShow != video:
+            self.currShow = video
+            cap.cv2.VideoCapture(self.currShow)
+        frame = cap.read()     # play video
         try:
             (h, w) = frame.shape[:2]
             center = (w / 2, h / 2)
@@ -48,7 +50,6 @@ def play_video(self, video):
             frame = cv2.resize(frame, (self.window_y, self.window_x))
             cv2.imshow('video', frame)  # play video
         except:
-            pass
             cap.release()
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
