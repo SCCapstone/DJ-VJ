@@ -20,6 +20,8 @@ rules = list()  # <, >, =
 values = list()  # what threshold the change happens at
 video_loc = list()  # video path
 DF = pd.DataFrame(columns = ['File_Name', 'Sign', 'Pitch', 'Tempo', 'Time'])
+master_df = pd.DataFrame(columns = ['File_Path', 'Pitch_Com', 'Pitch',
+                                   'Tempo_Com', 'Tempo', 'Time_Com', 'Time'])
 
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
@@ -105,6 +107,7 @@ class IntroScreen(tk.Tk):
         Line(122,124,126): add values to dataframe
         """
         global DF
+        global master_df
 
         filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
                                               filetypes=(("djvj files", "*.djvj"),

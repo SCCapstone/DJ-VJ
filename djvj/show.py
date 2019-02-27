@@ -19,7 +19,7 @@ class Show:
     needed functions
     """
 
-    def __init__(self, show_params, df):
+    def __init__(self, show_params, df, master_df):
         self.params = show_params[0]
         self.rules = show_params[1]
         self.values = show_params[2]
@@ -81,4 +81,5 @@ def add_panda_data(videos, rules, pitch, tempo, time, df):
                   'Pitch' : pitch,
                   'Tempo' : tempo,
                   'Time' : time}, ignore_index=True)
+
     return df
