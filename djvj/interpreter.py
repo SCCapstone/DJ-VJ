@@ -25,72 +25,116 @@ class Interpreter:
         self.mf = master_df
         self.window_x = 700
         self.window_y = 900
+        self.curr_tempo = None
+        self.curr_time = None
+        self.curr_pitch = None
+        self.bool_pitch = None
+        self.bool_tempo = None
+        self.bool_tempo = None
         if 'pitch' in self.show.curr_param_values:
             self.curr_pitch = self.show.curr_param_values['pitch']
-            self.curr_tempo = None
-            self.curr_time = None
         if 'tempo' in self.show.curr_param_values:
             self.curr = self.show.curr_param_values['tempo']
-            self.curr_pitch = None
-            self.curr_time = None
         if 'time' in self.show.curr_param_values:
             self.curr_time = self.show.curr_param_values['time']
-            self.curr_pitch = None
-            self.curr_tempo = None
 
     def search_panda_data(self):
-        """
-		    searchPandaData: Takes in the dataframe called df along with another object
-		    Line 37: The for loop will walk through the dataframe row by row
-		    Line 39,48,55: The dataframe will first check for only the operator
-					       of <,>, or =. if it can not find any of those operators,
-					       the dataframe will not pursue any further executions
-		    Line (40,43,46),
-			     (49,51,53),
-			     (56,58,60): The dataframe will use the operator it found from previous
-			 			     if statement to comapare the values of Pitch, Tempo, and Time
-			 			     that can found within the dataframe
-        """
 
-        master_frame(self.df, self.mf)
+        iterate_master_frame(self.df, self.mf)
 
-        print(master_df)
+        for index, row in self.mf.iterrows():
 
+            if self.curr_pitch != None:  
 
-        for index, row in self.df.iterrows():
+                bool_pitch = comapare(self.mf, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
 
-            if row['Sign'] == '=':
-                if self.curr_pitch == int(row['Pitch']) and self.curr_pitch != None:
-                    break
+                if self.curr_tempo != None:
+                    bool_tempo = comapare(self.mf, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                    if bool_tempo == bool_pitch:
+                        continue
+                    else:
+                        flag_tempo = 1
 
-                elif self.curr_tempo == int(row['Tempo']) and self.curr_tempo != None:
-                    
-                    break
+                if self.curr_time != None:
+                    bool_time = comapare(self.mf, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                    if bool_time == bool_pitch:
+                        continue
+                    else:
+                        flag_time = 1
 
-                elif self.curr_time == int(row['Time']) and self.curr_time != None:
-                    
+                if flag_tempo == 1 or flag_time == 1 or curr_pitch:
+                    flag_tempo = 0
+                    flag_time = 0
                     break
-            elif row['Sign'] == '>':
-                if self.curr_pitch > int(row['Pitch']) and self.curr_pitch != None:
-                    
+                else:
+                    flag_tempo = 0
+                    flag_time = 0
+                    return bool_pitch
+
+            if self.curr_tempo != None:
+                bool_tempo = comapare(self.mf, self.curr_tempo, row['Tempo_Com'], int(row['Tempo']))
+
+                if self.curr_pitch != None:
+                    bool_pitch = comapare(self.mf, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                    if bool_pitch == bool_tempo:
+                        continue
+                    else:
+                        flag_pitch = 1
+
+                if self.curr_time != None:
+                    bool_time = comapare(self.mf, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                    if bool_time == bool_tempo:
+                        continue
+                    else:
+                        flag_time = 1
+
+                if flag_pitch == 1 or flag_time == 1 or self.curr_tempo:
+                    flag_pitch = 0
+                    flag_time = 0
                     break
-                elif self.curr_tempo > int(row['Tempo']) and self.curr_tempo != None:
-                    
-                    break
-                elif self.curr_time > int(row['Time']) and self.curr_time != None:
-                    
-                    break
-            elif row['Sign'] == '<':
-                if self.curr_pitch < int(row['Pitch']) and self.curr_pitch != None:
-                    
-                    break
-                elif self.curr_tempo < int(row['Tempo']) and self.curr_tempo != None:
-                    
-                    break
-                elif self.curr_time < int(row['Time']) and self.curr_time != None:
-                    
-                    break
-    
+                else:
+                    flag_pitch = 0
+                    flag_time = 0
+                    return bool_tempo
+
+            if self.curr_time != None:
+                bool_time = comapare(self.mf, self.curr_tempo, row['Tempo_Com'], int(row['Tempo']))
+
+                if self.curr_pitch != None:
+                    bool_pitch = comapare(self.mf, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                    if bool_pitch == bool_time:
+                        continue
+                    else:
+                        bool_pitch = 1
+
+                if self.curr_time != None:
+                    bool_time = comapare(self.mf, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                    if bool_tempo == bool_time:
+                        continue
+                    else:
+                        bool_tempo = 1
+
+                if flag_pitch == 1 or flag_tempo == 1 or self.curr_time == 1:
+                    flag_pitch = 0
+                    flag_tempo = 0
+                else:
+                    flag_pitch = 0
+                    flag_tempo = 0
+                    return bool_time
+
+    def comapare(measure, sign, value):
+        if sign == '=':
+            if measure == value:
+                return row['File_Name']
+        elif sign == '>':
+            if measure > value:
+                return row['File_Name']
+        elif sign == '<':
+            if measure < value:
+                return row['File_Name']
+        else:
+            return 1
+
     def iterate_master_frame(df, master_df):
         for index, row in df.iterrows():
             pitch_s, pitch_v,
