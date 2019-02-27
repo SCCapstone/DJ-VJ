@@ -3,6 +3,7 @@ This program displays videos based on the audio input passed
 from the audio listener.
 """
 import os
+import threading
 #import cv2
 import time
 from visual import Visual
