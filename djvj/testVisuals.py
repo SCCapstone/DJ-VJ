@@ -13,7 +13,8 @@ show = Visual()
 #Play the first video
 my_path = os.path.abspath(os.path.dirname(__file__))
 path = os.path.join(my_path, "../test/test_assets/video1.MOV")
-play_video(show, path)
+playVideo = threading.Thread(target=play_video, args=(show, path))
+playVideo.start()
 time.sleep(5) #5 second delay
 #Send the same video again to see if original video keeps playing
 play_video(show, path)
