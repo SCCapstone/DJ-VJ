@@ -31,90 +31,94 @@ class Interpreter:
         self.tempo_v = None
         self.time_s = None
         self.time_v = None
+        self.flag_time = 0
+        self.flag_tempo = 0
+        self.flag_pitch = 0
         if 'pitch' in self.show.curr_param_values:
             self.curr_pitch = self.show.curr_param_values['pitch']
         if 'tempo' in self.show.curr_param_values:
             self.curr = self.show.curr_param_values['tempo']
         if 'time' in self.show.curr_param_values:
             self.curr_time = self.show.curr_param_values['time']
+    
+    def creating_master_frame(self):
+        self.mf = iterate_master_frame(self, self.mf,)
+        return mf
 
     def search_panda_data(self):
-
-        iterate_master_frame(self.df, self.mf)
-
-        print(self.mf)
 
         for index, row in self.mf.iterrows():
 
             if self.curr_pitch != None:  
-                bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                self.bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
 
                 if self.curr_tempo != None:
-                    bool_tempo = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
-                    if bool_tempo == bool_pitch:
+                    self.bool_tempo = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                    if self.bool_tempo == self.bool_pitch:
                         continue
                     else:
                         flag_tempo = 1
                 if self.curr_time != None:
-                    bool_time = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
-                    if bool_time == bool_pitch:
+                    self.bool_time = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                    if self.bool_time == self.bool_pitch:
                         continue
                     else:
-                        flag_time = 1
-                if flag_tempo == 1 or flag_time == 1 or curr_pitch:
-                    flag_tempo = 0
-                    flag_time = 0
+                        self.flag_time = 1
+
+                if self.flag_tempo == 1 or self.flag_time == 1 or self.curr_pitch == 1:
+                    self.flag_tempo = 0
+                    self.flag_time = 0
                     break
                 else:
-                    flag_tempo = 0
-                    flag_time = 0
-                    return bool_pitch
+                    self.flag_tempo = 0
+                    self.flag_time = 0
+                    return self.bool_pitch
 
             if self.curr_tempo != None:
-                bool_tempo = comapare(row, self.curr_tempo, row['Tempo_Com'], int(row['Tempo']))
+                self.bool_tempo = comapare(row, self.curr_tempo, row['Tempo_Com'], int(row['Tempo']))
 
                 if self.curr_pitch != None:
-                    bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
-                    if bool_pitch == bool_tempo:
+                    self.bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                    if self.bool_pitch == self.bool_tempo:
                         continue
                     else:
                         flag_pitch = 1
                 if self.curr_time != None:
-                    bool_time = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
-                    if bool_time == bool_tempo:
+                    self.bool_time = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                    if self.bool_time == self.bool_tempo:
                         continue
                     else:
                         flag_time = 1
-                if flag_pitch == 1 or flag_time == 1 or self.curr_tempo:
-                    flag_pitch = 0
-                    flag_time = 0
+                if self.flag_pitch == 1 or self.flag_time == 1 or self.curr_tempo == 1:
+                    self.flag_pitch = 0
+                    self.flag_time = 0
                     break
                 else:
-                    flag_pitch = 0
-                    flag_time = 0
-                    return bool_tempo
+                    self.flag_pitch = 0
+                    self.flag_time = 0
+                    return self.bool_tempo
 
             if self.curr_time != None:
-                bool_time = comapare(row, self.curr_tempo, row['Tempo_Com'], int(row['Tempo']))
+                self.bool_time = comapare(row, self.curr_tempo, row['Tempo_Com'], int(row['Tempo']))
 
                 if self.curr_pitch != None:
-                    bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
-                    if bool_pitch == bool_time:
+                    self.bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                    if self.bool_pitch == bool_time:
                         continue
                     else:
-                        bool_pitch = 1
+                        self.bool_pitch = 1
                 if self.curr_time != None:
-                    bool_time = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
-                    if bool_tempo == bool_time:
+                    self.bool_time = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                    if self.bool_tempo == bool_time:
                         continue
                     else:
-                        bool_tempo = 1
-                if flag_pitch == 1 or flag_tempo == 1 or self.curr_time == 1:
-                    flag_pitch = 0
-                    flag_tempo = 0
+                        self.bool_tempo = 1
+                if self.flag_pitch == 1 or self.flag_tempo == 1 or self.curr_time == 1:
+                    self.flag_pitch = 0
+                    self.flag_tempo = 0
                 else:
-                    flag_pitch = 0
-                    flag_tempo = 0
+                    self.flag_pitch = 0
+                    self.flag_tempo = 0
                     return bool_time
 
 def iterate_master_frame(df, master_df):
@@ -125,7 +129,7 @@ def iterate_master_frame(df, master_df):
     time_s = None
     time_v = None
 
-    for index, row in df.iterrows():
+    for index, rowA in df.iterrows():
         pitch_s = None 
         pitch_v = None
         tempo_s = None 
@@ -133,13 +137,18 @@ def iterate_master_frame(df, master_df):
         time_s = None 
         time_v = None
         flag = 0
-        df_file = row['File_Name'] 
+        df_file = rowA['File_Name']
 
-        for index, row in master_df.iterrows():
-            if df_file == row['File_Path']:
+        for index, rowB in master_df.iterrows():
+            master_df = create_master_frame(df, rowA['File_Name'], master_df)
+            print('HOLLA')
+            if df_file == rowB['File_Path']:
                 flag = 1
-            elif flag == 0:
-                create_master_frame(df, row['File_Name'], master_df)
+            else:
+                print(master_df)
+                master_df = create_master_frame(df, row['File_Name'], master_df)
+                print(master_df)
+    return master_df
 
 def create_master_frame(df, file, master_df):
     for index, row in df.iterrows():
@@ -156,10 +165,13 @@ def create_master_frame(df, file, master_df):
                 time_s = row['Sign']
                 time_v = row['Time']
 
-    master_df = master_df.append({'File_Path': file, 
-                                  'Pitch_Com': self.pitch_s, 'Pitch': self.pitch_v,
-                                  'Tempo_Com': self.tempo_s, 'Tempo': self.tempo_v, 
+    master_df = master_df.append({'File_Path': file, 'Pitch_Com': self.pitch_s, 'Pitch': self.pitch_v,'Tempo_Com': self.tempo_s, 'Tempo': self.tempo_v,
                                   'Time_Com': self.time_s, 'Time': self.time_v}, ignore_index=True)
+    print(master_df)
+
+    # return master_df.append({'File_Path': file, 'Pitch_Com': self.pitch_s, 'Pitch': self.pitch_v,
+    #                          'Tempo_Com': self.tempo_s, 'Tempo': self.tempo_v, 
+    #                          'Time_Com': self.time_s, 'Time': self.time_v}, ignore_index=True)
 
 def comapare(row, measure, sign, value):
     if sign == '=':

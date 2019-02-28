@@ -4,7 +4,6 @@
 show is the primary driver for the program
 allows for data to be shared between the different components of the program
 """
-
 import threading
 import pandas as pd
 import djvj.audio_listener as audio
@@ -36,6 +35,9 @@ class Show:
 
         # initialize interpreter
         self.data_interperter = interpreter.Interpreter(self, self.values, self.df, self.master_df)
+        # initialize master frame
+        self.data_interperter = self.data_interperter.creating_master_frame()
+        #self.created_master = self.data_interperter.creating_master_frame()
 
         # TODO initialze video_player
         # Update this with new VideoPlayer class
