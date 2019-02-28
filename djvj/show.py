@@ -25,6 +25,7 @@ class Show:
         self.values = show_params[2]
         self.videos = show_params[3]
         self.df = df
+        self.master_df = master_df
         
         # initialize list of current audio values at a given moment of time
         # populated in audio_listener
@@ -62,7 +63,7 @@ class Show:
 
             # TODO
             # make video decision
-            # video = self.interpreter.make_decision(self.curr_param_values)
+            video = self.interpreter.search_panda_data()
 
             # play video
             self.video_player.play_video()  # remove or update to next comment

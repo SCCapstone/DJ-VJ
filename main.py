@@ -23,7 +23,7 @@ SHOW_PARAMS = [gui.show[0],
 #                ['<', '>', '=', '='], [500, 120, 20, 5200], ['']]
 
 # initialize show
-SHOW = show.Show(SHOW_PARAMS, gui.DF, gui.master_dF)
+SHOW = show.Show(SHOW_PARAMS, gui.DF, gui.master_df)
 
 # start show
 SHOW.start()
