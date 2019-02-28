@@ -34,10 +34,9 @@ def play_video(self, video):
     cap = cv2.VideoCapture(self.currShow)    # open first video
     # print("now here")
     while cap.isOpened():
-        # if pitch changes, change video
-        if self.currShow != video:
-            self.currShow = video
-            cap.cv2.VideoCapture(self.currShow)
+        #if self.currShow != video:
+             #self.currShow = video
+             #cap.cv2.VideoCapture(self.currShow)
         frame = cap.read()     # play video
         try:
             (h, w) = frame.shape[:2]
