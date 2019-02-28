@@ -34,7 +34,7 @@ class Show:
         self.audio_listener = audio.AudioListener(self)
 
         # initialize interpreter
-        self.data_interperter = interpreter.Interpreter(self, self.values, self.df)
+        self.data_interperter = interpreter.Interpreter(self, self.values, self.df, self.master_df)
 
         # TODO initialze video_player
         # Update this with new VideoPlayer class
