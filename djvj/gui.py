@@ -9,6 +9,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage, \
     StringVar, OptionMenu, NW, END
 import time
+import djvj.edit_screen as e_screen
 
 # global variable params
 PARAMS = ""
@@ -17,7 +18,7 @@ audio_attr = list()  # what the audio should listen for
 rules = list()  # <, >, =
 values = list()  # what threshold the change happens at
 video_loc = list()  # video path
-
+updated = False
 
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
@@ -65,12 +66,17 @@ class IntroScreen(tk.Tk):
         self.create_button = Button(self, text="Create\nShow", bg='#05F72D', fg="#000000",
                                     highlightbackground='#05F72D', font=("Courier", 48),
                                     height=5, width=10, command=self.create)
-        self.create_button.place(relx=.33, rely=.75, anchor="center")
+        self.create_button.place(relx=.2, rely=.75, anchor="center")
+
+        self.edit_button = Button(self, text="Edit\nShow", bg='#05F72D', fg="#000000",
+                                  highlightbackground='#05F72D', font=("Courier", 48),
+                                  height=5, width=10, command=self.edit)
+        self.edit_button.place(relx=.5, rely=.75, anchor="center")
 
         self.load_button = Button(self, text="Load\nShow", bg='#05F72D', fg="#000000",
                                   highlightbackground='#05F72D', font=("Courier", 48),
                                   height=5, width=10, command=self.load)
-        self.load_button.place(relx=.66, rely=.75, anchor="center")
+        self.load_button.place(relx=.8, rely=.75, anchor="center")
 
         # Allows for easy exit from Intro Screen
         self.exit_button = Button(self, text="X", bg='#05F72D', fg="#000000",
@@ -88,6 +94,34 @@ class IntroScreen(tk.Tk):
         splash.destroy()
         # show main screen again
         self.deiconify()
+
+    def edit(self):
+        '''edit a file'''
+
+        #chose file to edit
+        filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
+                                              filetypes=(("djvj files", "*.djvj"),
+                                                         ("all files", "*.*")))
+        data = pickle.load(open("%s" % filename, "rb"))
+        param_list = data.split("\n")
+        param_list.pop(0)
+        i = 0
+        global PARAMS
+        for parameter in param_list:
+            attribute = parameter.split(" ")
+            audio_attr.append(attribute[1])
+            rules.append(attribute[2])
+            values.append(attribute[3])
+            video_loc.append(attribute[5])
+        print(PARAMS)
+
+
+        src = e_screen.EditShow(self)
+        j=0
+        #load any existing parameters
+        for parameter in param_list:
+            src.load_param(audio_attr[j], rules[j], values[j], video_loc[j])
+            j += 1
 
     def load(self):
         """
