@@ -12,8 +12,13 @@ show = Visual()
 #Play the first video
 my_path = os.path.abspath(os.path.dirname(__file__))
 path = os.path.join(my_path, "../test/test_assets/video1.MOV")
-play_video(show, path)
-
+#play_video(show, path)
+show.currShow = path
+play_video = threading.Thread(target=play_video, args=(show, show.currShow))
 doTest = threading.Thread(target=do_test, args=())
+play_video.start()
 doTest.start()
+play_video.join()
+doTest.join()
+print("They done")
 
