@@ -63,7 +63,7 @@ class Show:
 
             # TODO
             # make video decision
-            video = self.interpreter.search_panda_data()
+            video = self.data_interperter.search_panda_data()
 
             # play video
             self.video_player.play_video()  # remove or update to next comment
