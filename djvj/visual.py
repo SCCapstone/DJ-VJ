@@ -5,7 +5,6 @@ from the audio listener.
 import os
 import cv2
 
-
 class Visual:
     """Main class in the file, creates the video"""
 

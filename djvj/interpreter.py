@@ -12,7 +12,6 @@ class Interpreter:
     """
         Interpreter will find the video file to play based on input
     """
-
     def __init__(self, show, values, df, master_df):
         self.show = show
         self.df = df
@@ -36,12 +35,13 @@ class Interpreter:
             self.curr_time = self.show.curr_param_values['time']
     
     def creating_master_frame(self):
+        #creates master data frame that will be used
         self.mf = iterate_master_frame(self.df, self.mf)
         return self.mf
 
-    def search_panda_data(self, mf):
+    def search_panda_data(self):
 
-        for index, row in mf.iterrows():
+        for index, row in self.mf.iterrows():
 
             if self.curr_pitch != None:  
                 self.bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
@@ -59,9 +59,10 @@ class Interpreter:
                     else:
                         self.flag_time = 1
 
-                if self.flag_tempo == 1 or self.flag_time == 1 or self.curr_pitch == 1:
+                if self.flag_tempo == 1 or self.flag_time == 1 or self.bool_pitch == 1:
                     self.flag_tempo = 0
                     self.flag_time = 0
+                    self.bool_pitch = None
                     break
                 else:
                     self.flag_tempo = 0
@@ -116,22 +117,27 @@ class Interpreter:
                     return bool_time
 
 def iterate_master_frame(df, master_df):
+    #iterates through old dataframe
     for index, row in df.iterrows():
         flag = 0
-        flag = nested_iteration(row['File_Name'], master_df)
+        # if flag is not zero, then master frame already haves the conditions for the file name saved within it 
+        flag = nested_iteration(row, master_df)
 
         print(flag)
 
         if flag == 0:
-            print('NEW DATA COMING INTO MASTER')
+            print('NEW DATA COMING IN')
             master_df = create_master_frame(df, row['File_Name'], master_df)
+            print(master_df)
 
     return master_df
 
 def nested_iteration(cell, master_df):
+
     for index, row in master_df.iterrows():
+        #checks to see if the file exist within the master frame
         if cell['File_Name'] == row['File_Path']:
-            #print(cell['File_Name'], ' ', cell['Sign'])
+            print(cell['File_Name'], ' ', cell['Sign'])
             return 1
     return 0
 
@@ -142,7 +148,7 @@ def create_master_frame(df, file, master_df):
     tempo_v = None
     time_s = None 
     time_v = None
-
+    # gets every value poossible that is saved under the file name and places it in one row on the master frame
     for index, row in df.iterrows():
         if row['File_Name'] == file:
             if row['Pitch'] != None:
@@ -163,13 +169,13 @@ def create_master_frame(df, file, master_df):
 def comapare(row, measure, sign, value):
     if sign == '=':
         if measure == value:
-            return row['File_Name']
+            return row['File_Path']
     elif sign == '>':
         if measure > value:
-            return row['File_Name']
+            return row['File_Path']
     elif sign == '<':
         if measure < value:
-            return row['File_Name']
+            return row['File_Path']
     else:
         return 1
 
