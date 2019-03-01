@@ -3,7 +3,7 @@ This program displays videos based on the audio input passed
 from the audio listener.
 """
 import cv2
-import threading
+#import threading
 
 
 class Visual:
@@ -22,18 +22,6 @@ class Visual:
 
 def play_video(self):
     """ plays the video """
-    #my_path = os.path.abspath(os.path.dirname(__file__))
-    #self.newShow = video
-    #if self.currShow == None:
-        #self.currShow = video
-    #elif self.currShow == video:
-        #pass
-    #else:
-        #self.currShow = video
-    #path = os.path.join(my_path, "../test/test_assets/video1.MOV")
-    #if self.currShow == video:
-        #return
-     
     if self.currShow == self.newShow:
         cap = cv2.VideoCapture(self.currShow)    # open first video
             # print("now here")
@@ -53,7 +41,6 @@ def play_video(self):
                 frame = cv2.resize(frame, (self.window_y, self.window_x))
                 cv2.imshow('video', frame)  # play video
             except:
-                pass
                 cap.release()
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -78,53 +65,6 @@ def play_video(self):
                 frame = cv2.resize(frame, (self.window_y, self.window_x))
                 cv2.imshow('video', frame)  # play video
             except:
-                pass
                 cap.release()
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
-
-    """
-    daShow = self.currShow
-    if self.currShow == video:
-        cap = cv2.VideoCapture(self.currShow)    # open first video
-        # print("now here")
-        while cap.isOpened():
-            ret, frame = cap.read()     # play video
-            try:
-                (h, w) = frame.shape[:2]
-                center = (w / 2, h / 2)
-            except:
-                break
-            try:
-                M = cv2.getRotationMatrix2D(center, -90, 1.0)
-                frame = cv2.warpAffine(frame, M, (w, h))  # rotate video
-                frame = cv2.resize(frame, (self.window_y, self.window_x))
-                cv2.imshow('video', frame)  # play video
-            except:
-                cap.release()
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-
-    if self.currShow != video:
-        self.currShow = video
-        cap = cv2.VideoCapture(self.currShow)    # open first video
-        # print("now here")
-        while cap.isOpened():
-            ret, frame = cap.read()     # play video
-            try:
-                (h, w) = frame.shape[:2]
-                center = (w / 2, h / 2)
-            except:
-                break
-            try:
-                M = cv2.getRotationMatrix2D(center, -90, 1.0)
-                frame = cv2.warpAffine(frame, M, (w, h))  # rotate video
-                frame = cv2.resize(frame, (self.window_y, self.window_x))
-                cv2.imshow('video', frame)  # play video
-            except:
-                cap.release()
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-    
-    return self.currShow
-    """
