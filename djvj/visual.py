@@ -39,6 +39,7 @@ def play_video(self):
             # print("now here")
         while cap.isOpened():
             if self.currShow != self.newShow:
+                cap.release()
                 break
             ret, frame = cap.read()     # play video
             try:
@@ -63,6 +64,7 @@ def play_video(self):
             # print("now here")
         while cap.isOpened():
             if self.currShow != self.newShow:
+                cap.release()
                 break
             ret, frame = cap.read()     # play video
             try:

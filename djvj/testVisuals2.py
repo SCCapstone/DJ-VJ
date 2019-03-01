@@ -22,10 +22,12 @@ n = 0
 print("Try first video")
 first = threading.Thread(target=play_video, args=(show,))
 first.start()
+#daShow = play_video(show)
 time.sleep(3)
 print("Try the second show")
 show.newShow = path2
-play_video(show)
+#daShow = play_video(show)
+first = threading.Thread(target=play_video, args=(show))
 print("We did it!")
 #playVideo = threading.Thread(target=play_video, args=(show, videoList[0]))
 """
