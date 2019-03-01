@@ -55,7 +55,8 @@ class Show:
         """
         start() starts the show
         """
-
+        # start audio_listener thread
+        # updates show.curr_param_values
         try:
             # start audio_listener thread
             # updates show.curr_param_values
