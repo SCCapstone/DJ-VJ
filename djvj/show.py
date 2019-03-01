@@ -29,17 +29,14 @@ class Show:
         # populated in audio_listener
         self.curr_param_values = {}
 
-        # initialze audio listener
+        # initialze audio listener, takes a Show
         self.audio_listener = audio.AudioListener(self)
 
         # TODO initialize interpreter
         # self.interpreter = interpreter.Interpreter(show_params)
 
-        # TODO initialze video_player
-        self.curr_video = ""  # keep track of which video should be playing
-        # self.video_player = video.VideoPlayer()
-
-        # only used for current visual.py
+        # initialze video_player, takes a Show
+        self.curr_video = ""  # video that should be currently playing
         self.video_player = video_player.VideoPlayer(self)
 
     def start(self):
@@ -47,7 +44,7 @@ class Show:
         start() starts the show
         """
         # start audio_listener thread
-        # updates self.curr_param_values
+        # updates show.curr_param_values
         try:
             audio_thread = threading.Thread(
                 target=self.audio_listener.analyze, args=(self,))
@@ -58,20 +55,21 @@ class Show:
 
         # TODO
         # make video decision
-        # probably spin off on our thread
+        # updates show.curr_video
         # video = self.interpreter.make_decision(self.curr_param_values)
 
-        # play video
-
-        # testing loop for updating video
-        interpreter_thread = threading.Thread(target=test, args=(self,))
+        # temporary interpreter for testing video player
+        interpreter_thread = threading.Thread(
+            target=tmp_interpreter, args=(self,))
         interpreter_thread.start()
 
         # start video player
+        # compares show.curr_video to video_player.curr_video and
+        # updates accordingly
         self.video_player.play_video()
 
 
-def test(show):
+def tmp_interpreter(show):
     # temp videos
     path1 = "../test/test_assets/video1.MOV"
     path2 = "../test/test_assets/video2.mp4"
