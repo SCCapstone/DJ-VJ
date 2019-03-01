@@ -6,8 +6,9 @@ allows for data to be shared between the different components of the program
 """
 
 import threading
+import time
 import djvj.audio_listener as audio
-import djvj.visual as video
+import djvj.video_player as video_player
 # import djvj.interpreter as interpreter
 # import djvj.video_player as video
 
@@ -35,11 +36,11 @@ class Show:
         # self.interpreter = interpreter.Interpreter(show_params)
 
         # TODO initialze video_player
-        # Update this with new VideoPlayer class
+        self.curr_video = ""  # keep track of which video should be playing
         # self.video_player = video.VideoPlayer()
 
         # only used for current visual.py
-        self.video_player = video.Visual(self, self.values)
+        self.video_player = video_player.VideoPlayer(self)
 
     def start(self):
         """
@@ -55,14 +56,33 @@ class Show:
         except KeyboardInterrupt:
             pass
 
-        # main show loop
-        while True:
+        # TODO
+        # make video decision
+        # probably spin off on our thread
+        # video = self.interpreter.make_decision(self.curr_param_values)
 
-            # TODO
-            # make video decision
-            # video = self.interpreter.make_decision(self.curr_param_values)
+        # play video
 
-            # play video
-            self.video_player.play_video()  # remove or update to next comment
-            # TODO
-            # self.video_player.play_video(video)
+        # testing loop for updating video
+        interpreter_thread = threading.Thread(target=test, args=(self,))
+        interpreter_thread.start()
+
+        # start video player
+        self.video_player.play_video()
+
+
+def test(show):
+    # temp videos
+    path1 = "../test/test_assets/video1.MOV"
+    path2 = "../test/test_assets/video2.mp4"
+
+    num = "1"
+    while True:
+        if num == "1":
+            show.curr_video = path1
+            num = "2"
+        else:
+            show.curr_video = path2
+            num = "1"
+        # print(show.curr_video)
+        time.sleep(2)
