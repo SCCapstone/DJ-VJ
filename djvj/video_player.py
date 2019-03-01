@@ -1,12 +1,14 @@
 """
-
-    """
+video_player displays videos that are determined by interpreter.py
+"""
 import os
 import cv2 as visual
 
 
 class VideoPlayer:
     """
+    VideoPlayer is the primary class for playing videos
+    It takes a Show
     """
 
     def __init__(self, show):
@@ -17,6 +19,8 @@ class VideoPlayer:
 
     def play_video(self):
         """
+        play_video checks if the Show's current video has been updated and plays
+        the current video
         """
 
         # update video loop
@@ -39,6 +43,8 @@ class VideoPlayer:
                 # get next frame: returns bool, image
                 _, frame = cap.read()
 
+                #######################################################
+                # may not need this code if using horizontal videos
                 try:
                     # get height and width
                     (height, width) = frame.shape[:2]
@@ -56,12 +62,14 @@ class VideoPlayer:
                     # rotate the video
                     frame = visual.warpAffine(
                         frame, rotation_matrix, (width, height))
+                #######################################################
                     # resize the frame
                     frame = visual.resize(
                         frame, (self.window_y, self.window_x))
                     visual.namedWindow("window", visual.WND_PROP_FULLSCREEN)
                     visual.setWindowProperty(
                         "window", visual.WND_PROP_FULLSCREEN, visual.WINDOW_FULLSCREEN)
+
                     # show the frame
                     visual.imshow('window', frame)
                 except:
