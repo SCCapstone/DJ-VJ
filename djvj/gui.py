@@ -100,11 +100,11 @@ class IntroScreen(tk.Tk):
         and appends these lists to the show list that is used by main.py
         """
         """
-        Line 22: inittialize dataframe 
-        Line (121,122,125): stores value of each param into the dataframe.
+        Line 22-23: inittialize dataframe 
+        Line (124,126,128): stores value of each param into the dataframe.
                          if the value was not specify, the dataframe will
                          set the cell to null
-        Line(122,124,126): add values to dataframe
+        Line(125,127,129): add values to dataframe
         """
         global DF
         global master_df

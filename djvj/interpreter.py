@@ -35,7 +35,6 @@ class Interpreter:
             self.curr_time = self.show.curr_param_values['time']
     
     def creating_master_frame(self):
-        #creates master data frame that will be used
         self.mf = iterate_master_frame(self.df, self.mf)
         return self.mf
 
@@ -67,7 +66,7 @@ class Interpreter:
                 else:
                     self.flag_tempo = 0
                     self.flag_time = 0
-                    return self.bool_pitch
+                    return row
 
             if self.curr_tempo != None:
                 self.bool_tempo = comapare(row, self.curr_tempo, row['Tempo_Com'], int(row['Tempo']))
@@ -117,25 +116,22 @@ class Interpreter:
                     return bool_time
 
 def iterate_master_frame(df, master_df):
-    #iterates through old dataframe
+    #df.to_csv("df.csv")
     for index, row in df.iterrows():
-        flag = 0
-        # if flag is not zero, then master frame already haves the conditions for the file name saved within it 
+        flag = 0 
         flag = nested_iteration(row, master_df)
 
         print(flag)
 
         if flag == 0:
-            print('NEW DATA COMING IN')
             master_df = create_master_frame(df, row['File_Name'], master_df)
-            print(master_df)
+            #master_df.to_csv("master.csv")
 
     return master_df
 
 def nested_iteration(cell, master_df):
 
     for index, row in master_df.iterrows():
-        #checks to see if the file exist within the master frame
         if cell['File_Name'] == row['File_Path']:
             print(cell['File_Name'], ' ', cell['Sign'])
             return 1
@@ -148,7 +144,6 @@ def create_master_frame(df, file, master_df):
     tempo_v = None
     time_s = None 
     time_v = None
-    # gets every value poossible that is saved under the file name and places it in one row on the master frame
     for index, row in df.iterrows():
         if row['File_Name'] == file:
             if row['Pitch'] != None:
