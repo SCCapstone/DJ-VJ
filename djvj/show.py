@@ -1,5 +1,7 @@
 #! /usr/bin/env python3
 
+import djvj.video_player as video_player
+import djvj.interpreter as interpreter
 """
 show is the primary driver for the program
 allows for data to be shared between the different components of the program
@@ -11,8 +13,9 @@ __email__ = "mjs10@email.sc.edu"
 import threading
 import time
 import djvj.audio_listener as audio
-import djvj.interpreter as interpreter
-import djvj.video_player as video_player
+<< << << < HEAD
+== == == =
+>>>>>> > video player
 # import djvj.interpreter as interpreter
 # import djvj.video_player as video
 
