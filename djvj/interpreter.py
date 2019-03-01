@@ -25,12 +25,6 @@ class Interpreter:
         self.bool_pitch = None
         self.bool_tempo = None
         self.bool_tempo = None
-        self.pitch_s = None
-        self.pitch_v = None
-        self.tempo_s = None
-        self.tempo_v = None
-        self.time_s = None
-        self.time_v = None
         self.flag_time = 0
         self.flag_tempo = 0
         self.flag_pitch = 0
@@ -42,12 +36,12 @@ class Interpreter:
             self.curr_time = self.show.curr_param_values['time']
     
     def creating_master_frame(self):
-        self.mf = iterate_master_frame(self, self.mf,)
-        return mf
+        self.mf = iterate_master_frame(self.df, self.mf)
+        return self.mf
 
-    def search_panda_data(self):
+    def search_panda_data(self, mf):
 
-        for index, row in self.mf.iterrows():
+        for index, row in mf.iterrows():
 
             if self.curr_pitch != None:  
                 self.bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
@@ -122,35 +116,33 @@ class Interpreter:
                     return bool_time
 
 def iterate_master_frame(df, master_df):
-    pitch_s = None 
-    pitch_v = None 
-    tempo_s = None
-    tempo_v = None
-    time_s = None
-    time_v = None
-
-    for index, rowA in df.iterrows():
-        pitch_s = None 
-        pitch_v = None
-        tempo_s = None 
-        tempo_v = None
-        time_s = None 
-        time_v = None
+    for index, row in df.iterrows():
         flag = 0
-        df_file = rowA['File_Name']
+        flag = nested_iteration(row['File_Name'], master_df)
 
-        for index, rowB in master_df.iterrows():
-            master_df = create_master_frame(df, rowA['File_Name'], master_df)
-            print('HOLLA')
-            if df_file == rowB['File_Path']:
-                flag = 1
-            else:
-                print(master_df)
-                master_df = create_master_frame(df, row['File_Name'], master_df)
-                print(master_df)
+        print(flag)
+
+        if flag == 0:
+            print('NEW DATA COMING INTO MASTER')
+            master_df = create_master_frame(df, row['File_Name'], master_df)
+
     return master_df
 
+def nested_iteration(cell, master_df):
+    for index, row in master_df.iterrows():
+        if cell['File_Name'] == row['File_Path']:
+            #print(cell['File_Name'], ' ', cell['Sign'])
+            return 1
+    return 0
+
 def create_master_frame(df, file, master_df):
+    pitch_s = None 
+    pitch_v = None
+    tempo_s = None 
+    tempo_v = None
+    time_s = None 
+    time_v = None
+
     for index, row in df.iterrows():
         if row['File_Name'] == file:
             if row['Pitch'] != None:
@@ -165,13 +157,8 @@ def create_master_frame(df, file, master_df):
                 time_s = row['Sign']
                 time_v = row['Time']
 
-    master_df = master_df.append({'File_Path': file, 'Pitch_Com': self.pitch_s, 'Pitch': self.pitch_v,'Tempo_Com': self.tempo_s, 'Tempo': self.tempo_v,
-                                  'Time_Com': self.time_s, 'Time': self.time_v}, ignore_index=True)
-    print(master_df)
-
-    # return master_df.append({'File_Path': file, 'Pitch_Com': self.pitch_s, 'Pitch': self.pitch_v,
-    #                          'Tempo_Com': self.tempo_s, 'Tempo': self.tempo_v, 
-    #                          'Time_Com': self.time_s, 'Time': self.time_v}, ignore_index=True)
+    return master_df.append({'File_Path': file, 'Pitch_Com': pitch_s, 'Pitch': pitch_v,'Tempo_Com': tempo_s, 'Tempo': tempo_v,
+                                  'Time_Com': time_s, 'Time':time_v}, ignore_index=True)
 
 def comapare(row, measure, sign, value):
     if sign == '=':

@@ -36,8 +36,10 @@ class Show:
         # initialize interpreter
         self.data_interperter = interpreter.Interpreter(self, self.values, self.df, self.master_df)
         # initialize master frame
-        self.data_interperter = self.data_interperter.creating_master_frame()
-        #self.created_master = self.data_interperter.creating_master_frame()
+        self.master_df = self.data_interperter.creating_master_frame()
+        #reinitialize interpreter with new table
+        self.data_interperter = interpreter.Interpreter(self, self.values, self.df, self.master_df)
+
 
         # TODO initialze video_player
         # Update this with new VideoPlayer class
@@ -65,7 +67,8 @@ class Show:
 
             # TODO
             # make video decision
-            video = self.data_interperter.search_panda_data()
+            # video = self.data_interperter.search_panda_data(self.master_df)
+            # print(video)
 
             # play video
             self.video_player.play_video()  # remove or update to next comment
