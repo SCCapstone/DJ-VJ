@@ -18,9 +18,9 @@ class Visual:
         #threshold = values[0]
         #self.pitch_threshold = int(threshold)
         #current show playing and the new show that we want to play
-        #self.newShow = None
+        self.newShow = None
 
-def play_video(self, video):
+def play_video(self):
     """ plays the video """
     #my_path = os.path.abspath(os.path.dirname(__file__))
     #self.newShow = video
@@ -31,6 +31,57 @@ def play_video(self, video):
     #else:
         #self.currShow = video
     #path = os.path.join(my_path, "../test/test_assets/video1.MOV")
+    #if self.currShow == video:
+        #return
+     
+    if self.currShow == self.newShow:
+        cap = cv2.VideoCapture(self.currShow)    # open first video
+            # print("now here")
+        while cap.isOpened():
+            if self.currShow != self.newShow:
+                break
+            ret, frame = cap.read()     # play video
+            try:
+                (h, w) = frame.shape[:2]
+                center = (w / 2, h / 2)
+            except:
+                break
+            try:
+                M = cv2.getRotationMatrix2D(center, -90, 1.0)
+                frame = cv2.warpAffine(frame, M, (w, h))  # rotate video
+                frame = cv2.resize(frame, (self.window_y, self.window_x))
+                cv2.imshow('video', frame)  # play video
+            except:
+                pass
+                cap.release()
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+
+    if self.currShow != self.newShow:
+        self.currShow = self.newShow
+        cap = cv2.VideoCapture(self.currShow)    # open first video
+            # print("now here")
+        while cap.isOpened():
+            if self.currShow != self.newShow:
+                break
+            ret, frame = cap.read()     # play video
+            try:
+                (h, w) = frame.shape[:2]
+                center = (w / 2, h / 2)
+            except:
+                break
+            try:
+                M = cv2.getRotationMatrix2D(center, -90, 1.0)
+                frame = cv2.warpAffine(frame, M, (w, h))  # rotate video
+                frame = cv2.resize(frame, (self.window_y, self.window_x))
+                cv2.imshow('video', frame)  # play video
+            except:
+                pass
+                cap.release()
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+
+    """
     daShow = self.currShow
     if self.currShow == video:
         cap = cv2.VideoCapture(self.currShow)    # open first video
@@ -73,3 +124,5 @@ def play_video(self, video):
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
     
+    return self.currShow
+    """
