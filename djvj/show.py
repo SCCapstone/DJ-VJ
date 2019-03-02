@@ -66,7 +66,7 @@ class Show:
         while True:
             #returns file name that needs to play
             video = self.data_interperter.search_panda_data()
-            #print(video)
+            print(video)
 
             # play video
             self.video_player.play_video()  # remove or update to next comment
