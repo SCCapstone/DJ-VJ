@@ -16,6 +16,9 @@ import djvj.show as show
 
 # initialize GUI
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> interpreter working with small shows. not fast enough for larger ones. main is bypassing GUI for testing
 # gui.init()
 
 # once a show is loaded, audio_attr/video_attr is initialized
@@ -43,6 +46,18 @@ MOMENTS = moment.create_moments(gui.moments)
 #
 # MOMENTS = moment.create_moments(gui_moments_list)
 
+
+# SHOW_PARAMS = [['pitch', 'pitch'],
+#                ['<', '>'], [500, 500], ["/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV", "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4"]]
+
+# SHOW_PARAMS = [['tempo', 'tempo'],
+#                ['<', '>'], [120, 120], ["/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV", "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4"]]
+
+SHOW_PARAMS = [['time', 'time'],
+               ['<', '>'], [10, 10], ["/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV", "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4"]]
+
+# SHOW_PARAMS = [['pitch', 'time', 'pitch', 'time', 'pitch', 'time', 'pitch', 'time'],
+#                ['<', '<', '>', '<', '<', '>', '>', '>'], [500, 30, 500, 30, 500, 30, 500, 30], ["/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV", "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV", "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4", "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4", "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4", "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4", "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV", "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV"]]
 
 # initialize show
 <<<<<<< HEAD
