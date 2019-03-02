@@ -42,6 +42,7 @@ class Interpreter:
             self.curr_time = self.show.curr_param_values['time']
 
         for index, row in self.mf.iterrows():
+            print('iterate')
 
             if self.curr_pitch != None:
                 self.bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
@@ -60,14 +61,12 @@ class Interpreter:
                         self.flag_time = 1
 
                 if self.flag_tempo == 1 or self.flag_time == 1 or self.bool_pitch == 1:
-                    print("Error")
                     self.flag_tempo = 0
                     self.flag_time = 0
                     self.bool_pitch = None
                 else:
                     self.flag_tempo = 0
                     self.flag_time = 0
-                    self.bool_pitch = None
                     return row
 
             if self.curr_tempo != None:
@@ -166,18 +165,21 @@ def create_master_frame(df, file, master_df):
 
 def comapare(row, measure, sign, value):
     measure = int(measure)
+    value = int(value)
+    print(measure)
 
     if sign == '=':
         if measure == value:
             return row['File_Path']
     if sign == '>':
         if measure > value:
+            print(measure, "is greater than", value)
             return row['File_Path']
     if sign == '<':
         if measure < value:
+            print(measure, "is less than", value)
             return row['File_Path']
-    else:
-        return 1
+    return 1
 
 
 
