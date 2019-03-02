@@ -27,12 +27,6 @@ class Interpreter:
         self.flag_time = 0
         self.flag_tempo = 0
         self.flag_pitch = 0
-        if 'pitch' in self.show.curr_param_values:
-            self.curr_pitch = self.show.curr_param_values['pitch']
-        if 'tempo' in self.show.curr_param_values:
-            self.curr = self.show.curr_param_values['tempo']
-        if 'time' in self.show.curr_param_values:
-            self.curr_time = self.show.curr_param_values['time']
     
     def creating_master_frame(self):
         self.mf = iterate_master_frame(self.df, self.mf)
@@ -40,9 +34,16 @@ class Interpreter:
 
     def search_panda_data(self):
 
+        if 'pitch' in self.show.curr_param_values:
+            self.curr_pitch = self.show.curr_param_values['pitch']
+        if 'tempo' in self.show.curr_param_values:
+            self.curr = self.show.curr_param_values['tempo']
+        if 'time' in self.show.curr_param_values:
+            self.curr_time = self.show.curr_param_values['time']
+
         for index, row in self.mf.iterrows():
 
-            if self.curr_pitch != None:  
+            if self.curr_pitch != None:
                 self.bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
 
                 if self.curr_tempo != None:
@@ -59,13 +60,14 @@ class Interpreter:
                         self.flag_time = 1
 
                 if self.flag_tempo == 1 or self.flag_time == 1 or self.bool_pitch == 1:
+                    print("Error")
                     self.flag_tempo = 0
                     self.flag_time = 0
                     self.bool_pitch = None
-                    break
                 else:
                     self.flag_tempo = 0
                     self.flag_time = 0
+                    self.bool_pitch = None
                     return row
 
             if self.curr_tempo != None:
@@ -86,7 +88,7 @@ class Interpreter:
                 if self.flag_pitch == 1 or self.flag_time == 1 or self.curr_tempo == 1:
                     self.flag_pitch = 0
                     self.flag_time = 0
-                    break
+                    self.curr_tempo = None
                 else:
                     self.flag_pitch = 0
                     self.flag_time = 0
@@ -110,22 +112,23 @@ class Interpreter:
                 if self.flag_pitch == 1 or self.flag_tempo == 1 or self.curr_time == 1:
                     self.flag_pitch = 0
                     self.flag_tempo = 0
+                    self.curr_time = None
                 else:
                     self.flag_pitch = 0
                     self.flag_tempo = 0
                     return bool_time
 
 def iterate_master_frame(df, master_df):
-    #df.to_csv("df.csv")
+    df.to_csv("df.csv")
     for index, row in df.iterrows():
         flag = 0 
         flag = nested_iteration(row, master_df)
 
-        print(flag)
+        #print(flag)
 
         if flag == 0:
             master_df = create_master_frame(df, row['File_Name'], master_df)
-            #master_df.to_csv("master.csv")
+            master_df.to_csv("master.csv")
 
     return master_df
 
@@ -133,7 +136,7 @@ def nested_iteration(cell, master_df):
 
     for index, row in master_df.iterrows():
         if cell['File_Name'] == row['File_Path']:
-            print(cell['File_Name'], ' ', cell['Sign'])
+            #print(cell['File_Name'], ' ', cell['Sign'])
             return 1
     return 0
 
@@ -162,13 +165,15 @@ def create_master_frame(df, file, master_df):
                                   'Time_Com': time_s, 'Time':time_v}, ignore_index=True)
 
 def comapare(row, measure, sign, value):
+    measure = int(measure)
+
     if sign == '=':
         if measure == value:
             return row['File_Path']
-    elif sign == '>':
+    if sign == '>':
         if measure > value:
             return row['File_Path']
-    elif sign == '<':
+    if sign == '<':
         if measure < value:
             return row['File_Path']
     else:
