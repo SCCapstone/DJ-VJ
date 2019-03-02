@@ -102,7 +102,7 @@ class IntroScreen(tk.Tk):
         param_list = data.split("\n")
         param_list.pop(0)
         for parameter in param_list:
-            attribute = parameter.split(" ")
+            attribute = parameter.split("\t")
             audio_attr.append(attribute[1])
             rules.append(attribute[2])
             values.append(attribute[3])
@@ -208,9 +208,9 @@ class CreateScreen(tk.Toplevel):
             return
 
         global PARAMS
-        PARAMS = PARAMS + "\n" + "If " + self.attr.get() \
-            + " " + self.sign.get() + " " + self.target_value.get() \
-            + " play " + VIDEO_PATH
+        PARAMS = PARAMS + "\n" + "If\t" + self.attr.get() \
+            + "\t" + self.sign.get() + "\t" + self.target_value.get() \
+            + "\t play\t" + VIDEO_PATH
         self.params_added()
         # clears all the fields
         self.target_value.delete(0, END)
@@ -257,6 +257,9 @@ class CreateScreen(tk.Toplevel):
                                                            ("mp4 files", "*.mp4"),
                                                            ("all files", "*.*")))
         print(VIDEO_PATH)
+        # uncomment to fix file paths
+        # VIDEO_PATH = VIDEO_PATH.replace(" ", "\ ").replace("\'", "\\'")\
+        #     .replace("?", "\?").replace("(", "\(").replace(")", "\)")
         video_list = VIDEO_PATH.split("/")
         # shortens full path to just the video name
         shortened_video = video_list[len(video_list)-1]
