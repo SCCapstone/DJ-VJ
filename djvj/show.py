@@ -6,8 +6,10 @@ allows for data to be shared between the different components of the program
 """
 
 import threading
+import multiprocessing
 import time
 import djvj.audio_listener as audio
+import djvj.interpreter as interpreter
 import djvj.video_player as video_player
 # import djvj.interpreter as interpreter
 # import djvj.video_player as video
@@ -21,7 +23,7 @@ class Show:
 
     def __init__(self, show_params):
         self.params = show_params[0]
-        self.rules = show_params[1]
+        self.operator = show_params[1]
         self.values = show_params[2]
         self.videos = show_params[3]
 
@@ -33,7 +35,7 @@ class Show:
         self.audio_listener = audio.AudioListener(self)
 
         # TODO initialize interpreter
-        # self.interpreter = interpreter.Interpreter(self)
+        self.interpreter = interpreter.Interpreter(self)
 
         # initialze video_player, takes a Show
         self.curr_video = ""  # video that should be currently playing
@@ -43,30 +45,41 @@ class Show:
         """
         start() starts the show
         """
-        # start audio_listener thread
-        # updates show.curr_param_values
+
+        threads = []
         try:
+            # start audio_listener thread
+            # updates show.curr_param_values
+            print("Listening")
             audio_thread = threading.Thread(
                 target=self.audio_listener.analyze, args=(self,))
             audio_thread.start()
+            threads.append(audio_thread)
+
+            # make video decision
+            # updates show.curr_video
+            print("Interpreting")
+            interpreter_thread = threading.Thread(
+                target=self.interpreter.interpret)
+            interpreter_thread.start()
+            threads.append(interpreter_thread)
+
+            # temporary interpreter for testing video player
+            # interpreter_thread = threading.Thread(
+            #     target=tmp_interpreter, args=(self,))
+            # interpreter_thread.start()
+            # threads.append(interpreter_thread)
+
+            # start video player
+            # compares show.curr_video to video_player.curr_video and
+            # updates accordingly
+            print("Playing video")
+            self.video_player.play_video()
 
         except KeyboardInterrupt:
+            # for thread in threads:
+            #     thread.terminate()
             pass
-
-        # TODO
-        # make video decision
-        # updates show.curr_video
-        # video = self.interpreter.make_decision(self.curr_param_values)
-
-        # temporary interpreter for testing video player
-        interpreter_thread = threading.Thread(
-            target=tmp_interpreter, args=(self,))
-        interpreter_thread.start()
-
-        # start video player
-        # compares show.curr_video to video_player.curr_video and
-        # updates accordingly
-        self.video_player.play_video()
 
 
 def tmp_interpreter(show):
@@ -83,4 +96,4 @@ def tmp_interpreter(show):
             show.curr_video = path2
             num = "1"
         # print(show.curr_video)
-        time.sleep(2)
+        time.sleep(4)
