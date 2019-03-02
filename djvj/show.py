@@ -33,7 +33,7 @@ class Show:
         self.audio_listener = audio.AudioListener(self)
 
         # TODO initialize interpreter
-        # self.interpreter = interpreter.Interpreter(show_params)
+        # self.interpreter = interpreter.Interpreter(self)
 
         # initialze video_player, takes a Show
         self.curr_video = ""  # video that should be currently playing
