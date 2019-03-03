@@ -6,7 +6,6 @@ allows for data to be shared between the different components of the program
 """
 
 import threading
-import multiprocessing
 import time
 import djvj.audio_listener as audio
 import djvj.interpreter as interpreter
@@ -45,8 +44,8 @@ class Show:
         """
         start() starts the show
         """
-
         threads = []
+
         try:
             # start audio_listener thread
             # updates show.curr_param_values
@@ -78,7 +77,9 @@ class Show:
 
         except KeyboardInterrupt:
             # for thread in threads:
-            #     thread.terminate()
+            #     thread.event.set()
+            # audio_thread.join(timeout=None)
+            # interpreter_thread.join(timeout=None)
             pass
 
 
