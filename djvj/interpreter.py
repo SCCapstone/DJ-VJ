@@ -2,7 +2,7 @@
 
 """
 Iterpreter decides which video should be played based
-on the conditions met through the dadaframe
+on the conditions met through the dataframe
 """
 import os
 import pandas as pd
@@ -131,8 +131,6 @@ def iterate_master_frame(df, master_df):
         flag = 0 
         flag = nested_iteration(row, master_df)
 
-        #print(flag)
-
         if flag == 0:
             master_df = create_master_frame(df, row['File_Name'], master_df)
             master_df.to_csv("master.csv")
@@ -143,7 +141,6 @@ def nested_iteration(cell, master_df):
 
     for index, row in master_df.iterrows():
         if cell['File_Name'] == row['File_Path']:
-            #print(cell['File_Name'], ' ', cell['Sign'])
             return 1
     return 0
 
