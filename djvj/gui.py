@@ -7,7 +7,7 @@ Create Show screen functionality is built out, more to come!
 import pickle
 import tkinter as tk
 from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage, \
-    StringVar, OptionMenu, NW, END
+    StringVar, OptionMenu, Scrollbar, N, S, NW, END
 import time
 
 # global variable params
@@ -211,10 +211,13 @@ class CreateScreen(tk.Toplevel):
                                   height=1, width=5, command=self.exit)
         self.exit_button.place(relx=.9, rely=.1, anchor="center")
 
+        self.w = Canvas(self, width=self.winfo_width(), height=1000)
+        self.w.place(relx=.25, rely=.5)
+
         # shows running params
-        self.display = Label(self, text="", bg="#212121",
+        self.display = Label(self.w, text="", bg="#212121",
                              fg="#05F72D", font=("Courier", 16))
-        self.display.place(relx=.5, rely=.65, anchor="center")
+        self.display.pack()
 
     def add_moment(self):
         """ Separates groups of parameters """
