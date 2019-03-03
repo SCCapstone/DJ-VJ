@@ -78,6 +78,7 @@ class IntroScreen(tk.Tk):
                                   height=1, width=2, command=self.exit)
         self.exit_button.place(relx=.9, rely=.1, anchor="center")
 
+        '''
         # after all the main screen is set up, get rid of it so the splash screen can show
         self.withdraw()
         # display splash screen
@@ -88,7 +89,7 @@ class IntroScreen(tk.Tk):
         splash.destroy()
         # show main screen again
         self.deiconify()
-
+        '''
     def load(self):
         """
         loads the user's chosen file, reads data,
@@ -151,47 +152,53 @@ class CreateScreen(tk.Toplevel):
         # makes full-screen
         self.attributes('-fullscreen', True)
 
-        Label(self, text="Create a Show! Add Parameters: ", bg="#212121",
-              fg="#05F72D", font=("Courier", 36)).place(relx=.5, rely=.1, anchor="center")
-
+        Label(self, text="Create a Show!", bg="#212121",
+              fg="#05F72D", font=("Courier", 48)).place(relx=.5, rely=.06, anchor="center")
+        Label(self, text="Add parameters to your show by filling out the form below.\n"
+                         "To add a parameter, select \"Add Param\"\n Moments are groups of parameters "
+                         "for the show to interpret together.\n"
+                         "To add a new \"moment\" to your show, "
+                         "select \"Add Moment\", and then add parameters to that moment.\n When finished, "
+                         "click \"Create Show\".",
+              bg="#212121", fg="#05F72D", font=("Courier", 18)).place(relx=.5, rely=.17, anchor="center")
         Label(self, text="If", bg="#212121", fg="#05F72D",
-              font=("Courier", 36)).place(relx=.15, rely=.25, anchor="center")
+              font=("Courier", 36)).place(relx=.15, rely=.3, anchor="center")
         # the sound attribute being tracked
         self.attr = StringVar(self)
         self.attr.set("           ")  # default value
         self.set_attribute = OptionMenu(self, self.attr, "pitch", "tempo")
-        self.set_attribute.place(relx=.22, rely=.25, anchor="center")
+        self.set_attribute.place(relx=.22, rely=.3, anchor="center")
         # the sign (ie greater than, less than, etc)
         self.sign = StringVar(self)
         self.sign.set(" ")  # default value
         self.set_sign = OptionMenu(self, self.sign, ">", "<", "=")
-        self.set_sign.place(relx=.3, rely=.25, anchor="center")
+        self.set_sign.place(relx=.3, rely=.3, anchor="center")
         # the target value
         self.target_value = Entry(self)
-        self.target_value.place(relx=.4, rely=.25, anchor="center")
+        self.target_value.place(relx=.4, rely=.3, anchor="center")
 
         Label(self, text=", ", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
-            .place(relx=.45, rely=.25, anchor="center")
+            .place(relx=.45, rely=.3, anchor="center")
 
         Label(self, text="play ", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
-            .place(relx=.5, rely=.25, anchor="center")
+            .place(relx=.5, rely=.3, anchor="center")
 
         Button(self, text='Choose Video', fg="#000000", command=self.choose_video) \
-            .place(relx=.57, rely=.25, anchor="center")
+            .place(relx=.57, rely=.3, anchor="center")
 
         self.video = StringVar(self)
         Label(self, textvariable=self.video, bg="#212121", fg="#05F72D", font=("Courier", 24)) \
-            .place(relx=.8, rely=.25, anchor="center")
+            .place(relx=.8, rely=.3, anchor="center")
 
         # buttons
         Button(self, text='Add Param', fg="#000000", command=self.addition) \
-            .place(relx=.45, rely=.35, anchor="center")
+            .place(relx=.45, rely=.4, anchor="center")
         Button(self, text='Remove Param', fg="#000000", command=self.remove) \
-            .place(relx=.55, rely=.35, anchor="center")
+            .place(relx=.55, rely=.4, anchor="center")
         Button(self, text='Add Moment', fg="#000000", command=self.add_moment) \
-            .place(relx=.65, rely=.35, anchor="center")
+            .place(relx=.65, rely=.4, anchor="center")
         Button(self, text='Create File', fg="#000000", command=self.create_file) \
-            .place(relx=.5, rely=.43, anchor="center")
+            .place(relx=.5, rely=.47, anchor="center")
 
         # Allows for easy exit from Create Screen
         self.exit_button = Button(self, text="Back", bg='#05F72D', fg="#000000",
@@ -202,7 +209,7 @@ class CreateScreen(tk.Toplevel):
         # shows running params
         self.display = Label(self, text="", bg="#212121",
                              fg="#05F72D", font=("Courier", 20))
-        self.display.place(relx=.5, rely=.6, anchor="center")
+        self.display.place(relx=.5, rely=.65, anchor="center")
 
     def add_moment(self):
         global PARAMS
