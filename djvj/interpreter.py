@@ -37,7 +37,7 @@ class Interpreter:
         if 'pitch' in self.show.curr_param_values:
             self.curr_pitch = self.show.curr_param_values['pitch']
         if 'tempo' in self.show.curr_param_values:
-            self.curr = self.show.curr_param_values['tempo']
+            self.curr_tempo = self.show.curr_param_values['tempo']
         if 'time' in self.show.curr_param_values:
             self.curr_time = self.show.curr_param_values['time']
 
@@ -67,7 +67,7 @@ class Interpreter:
                 else:
                     self.flag_tempo = 0
                     self.flag_time = 0
-                    return row
+                    return row['File_Path']
 
             if self.curr_tempo != None:
                 self.bool_tempo = comapare(row, self.curr_tempo, row['Tempo_Com'], int(row['Tempo']))
@@ -91,7 +91,7 @@ class Interpreter:
                 else:
                     self.flag_pitch = 0
                     self.flag_time = 0
-                    return row
+                    return row['File_Path']
 
             if self.curr_time != None:
                 self.bool_time = comapare(row, self.curr_tempo, row['Tempo_Com'], int(row['Tempo']))
@@ -115,7 +115,7 @@ class Interpreter:
                 else:
                     self.flag_pitch = 0
                     self.flag_tempo = 0
-                    return row
+                    return row['File_Path']
 
 def iterate_master_frame(df, master_df):
     df.to_csv("df.csv")
