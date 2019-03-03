@@ -162,7 +162,8 @@ class CreateScreen(tk.Toplevel):
                          "for the show to interpret together.\n"
                          "To add a new \"moment\" to your show, "
                          "select \"Add Moment\", and then add parameters "
-                         "to that moment.\n When finished, "
+                         "to that moment.\n Please ensure all parameters "
+                         "in a moment have the same video. \n When finished, "
                          "click \"Create Show\".", bg="#212121", fg="#05F72D",
               font=("Courier", 18)).place(relx=.5, rely=.17, anchor="center")
         Label(self, text="If", bg="#212121", fg="#05F72D",
@@ -212,7 +213,7 @@ class CreateScreen(tk.Toplevel):
 
         # shows running params
         self.display = Label(self, text="", bg="#212121",
-                             fg="#05F72D", font=("Courier", 20))
+                             fg="#05F72D", font=("Courier", 16))
         self.display.place(relx=.5, rely=.65, anchor="center")
 
     def add_moment(self):
@@ -240,6 +241,7 @@ class CreateScreen(tk.Toplevel):
         PARAMS = PARAMS + "\n" + "If\t" + self.attr.get() \
             + "\t" + self.sign.get() + "\t" + self.target_value.get() \
             + "\t play\t" + VIDEO_PATH
+
         self.params_added()
         # clears all the fields
         self.target_value.delete(0, END)
