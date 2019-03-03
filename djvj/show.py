@@ -21,11 +21,15 @@ class Show:
     """
 
     def __init__(self, moments):
+        """
+        moments = list of Moments class
+        """
+
         self.moments = moments
         # get listening params
         self.params = []
         for moment in moments:
-            self.params = self.params + moment.params
+            self.params += moment.params
 
         # initialize list of current audio values at a given moment of time
         # populated in audio_listener
