@@ -91,7 +91,7 @@ class Interpreter:
                 else:
                     self.flag_pitch = 0
                     self.flag_time = 0
-                    return self.bool_tempo
+                    return row
 
             if self.curr_time != None:
                 self.bool_time = comapare(row, self.curr_tempo, row['Tempo_Com'], int(row['Tempo']))
@@ -115,7 +115,7 @@ class Interpreter:
                 else:
                     self.flag_pitch = 0
                     self.flag_tempo = 0
-                    return bool_time
+                    return row
 
 def iterate_master_frame(df, master_df):
     df.to_csv("df.csv")
