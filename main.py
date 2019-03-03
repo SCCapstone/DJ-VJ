@@ -6,8 +6,6 @@ import djvj.show as show
 # initialize GUI
 gui.init()
 
-print(gui.DF)
-
 # once a show is loaded, audio_attr/video_attr is initialized
 # print("This will be passed to the audio listener: %s" % gui.audio_attr)
 #

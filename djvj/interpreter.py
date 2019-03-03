@@ -42,72 +42,80 @@ class Interpreter:
             self.curr_time = self.show.curr_param_values['time']
 
         for index, row in self.mf.iterrows():
-            print('iterate')
 
             if self.curr_pitch != None:
-                self.bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                if row['Pitch'] != None:
+                    self.bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
 
-                if self.curr_tempo != None:
-                    self.bool_tempo = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
-                    if self.bool_tempo == self.bool_pitch:
-                        continue
-                    else:
-                        flag_tempo = 1
-                if self.curr_time != None:
-                    self.bool_time = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
-                    if self.bool_time == self.bool_pitch:
-                        continue
-                    else:
-                        self.flag_time = 1
+                    if self.curr_tempo != None:
+                        if row['Tempo'] != None:
+                            self.bool_tempo = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                            if self.bool_tempo == self.bool_pitch:
+                                continue
+                            else:
+                                flag_tempo = 1
+                    if self.curr_time != None:
+                        if row['Time'] != None:
+                            self.bool_time = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                            if self.bool_time == self.bool_pitch:
+                                continue
+                            else:
+                                self.flag_time = 1
 
-                if self.flag_tempo == 1 or self.flag_time == 1 or self.bool_pitch == 1:
-                    self.flag_tempo = 0
-                    self.flag_time = 0
-                    self.bool_pitch = None
-                else:
-                    self.flag_tempo = 0
-                    self.flag_time = 0
-                    return row['File_Path']
+                    if self.flag_tempo == 1 or self.flag_time == 1 or self.bool_pitch == 1:
+                        self.flag_tempo = 0
+                        self.flag_time = 0
+                        self.bool_pitch = None
+                    else:
+                        self.flag_tempo = 0
+                        self.flag_time = 0
+                        return row['File_Path']
 
             if self.curr_tempo != None:
-                self.bool_tempo = comapare(row, self.curr_tempo, row['Tempo_Com'], int(row['Tempo']))
+                if row['Tempo'] != None:
+                    self.bool_tempo = comapare(row, self.curr_tempo, row['Tempo_Com'], int(row['Tempo']))
 
-                if self.curr_pitch != None:
-                    self.bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
-                    if self.bool_pitch == self.bool_tempo:
-                        continue
+                    if self.curr_pitch != None:
+                        if row['Pitch'] != None:
+                            self.bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                            if self.bool_pitch == self.bool_tempo:
+                                continue
+                            else:
+                                flag_pitch = 1
+                        if self.curr_time != None:
+                            if['Time'] != None:
+                                self.bool_time = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                                if self.bool_time == self.bool_tempo:
+                                    continue
+                                else:
+                                    flag_time = 1
+                    if self.flag_pitch == 1 or self.flag_time == 1 or self.curr_tempo == 1:
+                        self.flag_pitch = 0
+                        self.flag_time = 0
+                        self.curr_tempo = None
                     else:
-                        flag_pitch = 1
-                if self.curr_time != None:
-                    self.bool_time = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
-                    if self.bool_time == self.bool_tempo:
-                        continue
-                    else:
-                        flag_time = 1
-                if self.flag_pitch == 1 or self.flag_time == 1 or self.curr_tempo == 1:
-                    self.flag_pitch = 0
-                    self.flag_time = 0
-                    self.curr_tempo = None
-                else:
-                    self.flag_pitch = 0
-                    self.flag_time = 0
-                    return row['File_Path']
+                        self.flag_pitch = 0
+                        self.flag_time = 0
+                        return row['File_Path']
 
             if self.curr_time != None:
-                self.bool_time = comapare(row, self.curr_tempo, row['Tempo_Com'], int(row['Tempo']))
+                if row['Time'] != None:
+                    self.bool_time = comapare(row, self.curr_tempo, row['Tempo_Com'], int(row['Tempo']))
 
-                if self.curr_pitch != None:
-                    self.bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
-                    if self.bool_pitch == bool_time:
-                        continue
-                    else:
-                        self.bool_pitch = 1
-                if self.curr_time != None:
-                    self.bool_time = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
-                    if self.bool_tempo == bool_time:
-                        continue
-                    else:
-                        self.bool_tempo = 1
+                    if self.curr_pitch != None:
+                        if row['Pitch'] != None:
+                            self.bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                            if self.bool_pitch == bool_time:
+                                continue
+                            else:
+                                flag_pitch = 1
+                    if self.curr_tempo != None:
+                        if row['Tempo'] != None:
+                            self.bool_time = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                            if self.bool_tempo == bool_time:
+                                continue
+                            else:
+                                flag_tempo = 1
                 if self.flag_pitch == 1 or self.flag_tempo == 1 or self.curr_time == 1:
                     self.flag_pitch = 0
                     self.flag_tempo = 0
@@ -164,22 +172,17 @@ def create_master_frame(df, file, master_df):
                                   'Time_Com': time_s, 'Time':time_v}, ignore_index=True)
 
 def comapare(row, measure, sign, value):
-    measure = int(measure)
-    value = int(value)
-    print(measure)
 
-    if sign == '=':
+    if sign == '=' and value != None:
         if measure == value:
             return row['File_Path']
-    if sign == '>':
+    if sign == '>' and value != None:
         if measure > value:
-            print(measure, "is greater than", value)
             return row['File_Path']
-    if sign == '<':
+    if sign == '<' and value != None:
         if measure < value:
-            print(measure, "is less than", value)
             return row['File_Path']
-    return 1
+    return 1      
 
 
 
