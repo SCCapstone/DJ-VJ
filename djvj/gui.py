@@ -17,7 +17,8 @@ audio_attr = list()  # what the audio should listen for
 rules = list()  # <, >, =
 values = list()  # what threshold the change happens at
 video_loc = list()  # video path
-moments = list()
+moments = list() # groups of parameters for the show
+
 
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
@@ -78,7 +79,6 @@ class IntroScreen(tk.Tk):
                                   height=1, width=2, command=self.exit)
         self.exit_button.place(relx=.9, rely=.1, anchor="center")
 
-
         # after all the main screen is set up, get rid of it so the splash screen can show
         self.withdraw()
         # display splash screen
@@ -102,22 +102,24 @@ class IntroScreen(tk.Tk):
         data = pickle.load(open("%s" % filename, "rb"))
         param_list = data.split("\n")
         param_list.pop(0)
-        curr_mom = list()
+        curr_mom = list()   # a list of the parameters in the current moment
         for parameter in param_list:
-            print(parameter)
-            if parameter == "Moment":
+            blank = list()
+            if parameter == "Moment":   # switch to a new moment
                 moments.append(curr_mom)
-                curr_mom = list()
+                curr_mom = list()   # clear the list
             else:
                 attribute = parameter.split("\t")
                 audio_attr.append(attribute[1])
                 rules.append(attribute[2])
                 values.append(attribute[3])
                 video_loc.append(attribute[5])
-                curr_mom.append(attribute[1])
-                curr_mom.append(attribute[2])
-                curr_mom.append(attribute[3])
-                curr_mom.append(attribute[5])
+                blank.append(attribute[1])
+                blank.append(attribute[2])
+                blank.append(attribute[3])
+                blank.append(attribute[5])
+                curr_mom.append(blank)
+
         # appends all these lists to a larger list, used in main to send to show.py
         show.append(audio_attr)
         show.append(rules)
