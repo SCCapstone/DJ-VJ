@@ -5,7 +5,8 @@ import djvj.show as show
 
 class Moment:
 
-    def __init__(self, params, operators, values, video):
+    def __init__(self, name, params, operators, values, video):
+        self.name = name
         self.params = params
         self.operators = operators
         self.values = values
@@ -13,32 +14,29 @@ class Moment:
 
 
 # one param test
-# MOMENT_1 = Moment(['time'], ['<'], [10], [
-#                   "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV"])
-# MOMENT_2 = Moment(['time'], ['>'], [10], [
-#                   "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4"])
-#
+# MOMENT_1 = Moment("moment1", ['time'], ['<'], [10],
+#                   "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV")
+# MOMENT_2 = Moment("moment2", ['time'], ['>'], [10],
+#                   "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4")
 # SHOW_PARAMS = [MOMENT_1, MOMENT_2]
 
 # two param test, doesnt make sense after 10 seconds
-# MOMENT_1 = Moment(['time', 'pitch'], ['<', '<'], [10, 500], [
-#                   "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV"])
-# MOMENT_2 = Moment(['time', 'pitch'], ['<', '>'], [10, 500], [
-#                   "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4"])
-#
+# MOMENT_1 = Moment("moment1", ['time', 'pitch'], ['<', '<'], [10, 500],
+#                   "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV")
+# MOMENT_2 = Moment("moment2", ['time', 'pitch'], ['<', '>'], [10, 500],
+#                   "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4")
 # SHOW_PARAMS = [MOMENT_1, MOMENT_2]
 
 # pitch rules reverse after 10 seconds
-# MOMENT_1 = Moment(['time', 'pitch'], ['<', '<'], [10, 500], [
-#                   "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV"])
-# MOMENT_2 = Moment(['time', 'pitch'], ['<', '>'], [10, 500], [
-#                   "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4"])
-# MOMENT_3 = Moment(['time', 'pitch'], ['>', '<'], [10, 500], [
-#                   "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.MOV"])
-# MOMENT_4 = Moment(['time', 'pitch'], ['>', '<'], [10, 500], [
-#                   "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV"])
-#
-# SHOW_PARAMS = [MOMENT_1, MOMENT_2, MOMENT_3, MOMENT_4]
+MOMENT_1 = Moment("moment1", ['time', 'pitch'], ['<', '<'], [15, 500],
+                  "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV")
+MOMENT_2 = Moment("moment2", ['time', 'pitch'], ['<', '>'], [15, 500],
+                  "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4")
+MOMENT_3 = Moment("moment3", ['time', 'pitch'], ['>', '<'], [15, 500],
+                  "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4")
+MOMENT_4 = Moment("moment4", ['time', 'pitch'], ['>', '>'], [15, 500],
+                  "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV")
+SHOW_PARAMS = [MOMENT_1, MOMENT_2, MOMENT_3, MOMENT_4]
 
 # initialize GUI
 # gui.init()
@@ -64,16 +62,16 @@ print(gui.show[3])
 # SHOW_PARAMS = [['time', 'time'],
 #                ['<', '>'], [10, 10], ["/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV", "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4"]]
 
-SHOW_PARAMS = [['pitch', 'time', 'pitch', 'time'],
-
-               ['<', '<', '>', '<'],
-
-               [500, 10, 500, 10],
-
-               ["/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV",
-                "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV",
-                "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4",
-                "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4"]]
+# SHOW_PARAMS = [['pitch', 'time', 'pitch', 'time'],
+#
+#                ['<', '<', '>', '<'],
+#
+#                [500, 10, 500, 10],
+#
+#                ["/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV",
+#                 "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video1.MOV",
+#                 "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4",
+#                 "/Users/matt/USC/CSCE_490/DJ-VJ/test/test_assets/video2.mp4"]]
 """
 need instance of videos???? to account for multiple of the same parameter for one video
 
