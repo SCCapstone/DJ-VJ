@@ -78,7 +78,7 @@ class IntroScreen(tk.Tk):
                                   height=1, width=2, command=self.exit)
         self.exit_button.place(relx=.9, rely=.1, anchor="center")
 
-        '''
+
         # after all the main screen is set up, get rid of it so the splash screen can show
         self.withdraw()
         # display splash screen
@@ -89,7 +89,7 @@ class IntroScreen(tk.Tk):
         splash.destroy()
         # show main screen again
         self.deiconify()
-        '''
+
     def load(self):
         """
         loads the user's chosen file, reads data,
@@ -155,12 +155,14 @@ class CreateScreen(tk.Toplevel):
         Label(self, text="Create a Show!", bg="#212121",
               fg="#05F72D", font=("Courier", 48)).place(relx=.5, rely=.06, anchor="center")
         Label(self, text="Add parameters to your show by filling out the form below.\n"
-                         "To add a parameter, select \"Add Param\"\n Moments are groups of parameters "
+                         "To add a parameter, select \"Add Param\""
+                         "\n Moments are groups of parameters "
                          "for the show to interpret together.\n"
                          "To add a new \"moment\" to your show, "
-                         "select \"Add Moment\", and then add parameters to that moment.\n When finished, "
-                         "click \"Create Show\".",
-              bg="#212121", fg="#05F72D", font=("Courier", 18)).place(relx=.5, rely=.17, anchor="center")
+                         "select \"Add Moment\", and then add parameters "
+                         "to that moment.\n When finished, "
+                         "click \"Create Show\".", bg="#212121", fg="#05F72D",
+              font=("Courier", 18)).place(relx=.5, rely=.17, anchor="center")
         Label(self, text="If", bg="#212121", fg="#05F72D",
               font=("Courier", 36)).place(relx=.15, rely=.3, anchor="center")
         # the sound attribute being tracked
@@ -212,6 +214,7 @@ class CreateScreen(tk.Toplevel):
         self.display.place(relx=.5, rely=.65, anchor="center")
 
     def add_moment(self):
+        """ Separates groups of parameters """
         global PARAMS
         PARAMS = PARAMS + "\nMoment"
         self.params_added()
