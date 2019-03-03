@@ -85,21 +85,12 @@ class Show:
             print("Playing video")
             self.video_player.play_video()
 
-<<<<<<< HEAD
             # make video decision
             # updates show.curr_video
             print("Interpreting")
             interpreter_thread = threading.Thread(
                 target=self.interpreter.interpret)
             interpreter_thread.start()
-=======
-        except KeyboardInterrupt:
-            # for thread in threads:
-            #     thread.event.set()
-            # audio_thread.join(timeout=None)
-            # interpreter_thread.join(timeout=None)
-            pass
->>>>>>> created interpreter that can handle one instance of each param per video
 
             # start video player
             # compares show.curr_video to video_player.curr_video and
