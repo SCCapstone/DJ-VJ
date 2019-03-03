@@ -17,7 +17,7 @@ audio_attr = list()  # what the audio should listen for
 rules = list()  # <, >, =
 values = list()  # what threshold the change happens at
 video_loc = list()  # video path
-
+moments = list()
 
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
@@ -101,12 +101,22 @@ class IntroScreen(tk.Tk):
         data = pickle.load(open("%s" % filename, "rb"))
         param_list = data.split("\n")
         param_list.pop(0)
+        curr_mom = list()
         for parameter in param_list:
-            attribute = parameter.split("\t")
-            audio_attr.append(attribute[1])
-            rules.append(attribute[2])
-            values.append(attribute[3])
-            video_loc.append(attribute[5])
+            print(parameter)
+            if parameter == "Moment":
+                moments.append(curr_mom)
+                curr_mom = list()
+            else:
+                attribute = parameter.split("\t")
+                audio_attr.append(attribute[1])
+                rules.append(attribute[2])
+                values.append(attribute[3])
+                video_loc.append(attribute[5])
+                curr_mom.append(attribute[1])
+                curr_mom.append(attribute[2])
+                curr_mom.append(attribute[3])
+                curr_mom.append(attribute[5])
         # appends all these lists to a larger list, used in main to send to show.py
         show.append(audio_attr)
         show.append(rules)
@@ -178,6 +188,8 @@ class CreateScreen(tk.Toplevel):
             .place(relx=.45, rely=.35, anchor="center")
         Button(self, text='Remove Param', fg="#000000", command=self.remove) \
             .place(relx=.55, rely=.35, anchor="center")
+        Button(self, text='Add Moment', fg="#000000", command=self.add_moment) \
+            .place(relx=.65, rely=.35, anchor="center")
         Button(self, text='Create File', fg="#000000", command=self.create_file) \
             .place(relx=.5, rely=.43, anchor="center")
 
@@ -191,6 +203,11 @@ class CreateScreen(tk.Toplevel):
         self.display = Label(self, text="", bg="#212121",
                              fg="#05F72D", font=("Courier", 20))
         self.display.place(relx=.5, rely=.6, anchor="center")
+
+    def add_moment(self):
+        global PARAMS
+        PARAMS = PARAMS + "\nMoment"
+        self.params_added()
 
     def addition(self):
         """ lets users add parameters """
@@ -221,6 +238,7 @@ class CreateScreen(tk.Toplevel):
     def create_file(self):
         """ creates the file once users are finished """
         global PARAMS
+        PARAMS = PARAMS + "\nMoment"
         # lets user choose name/save location
         filename = filedialog.asksaveasfilename(initialdir="/home/Documents",
                                                 title="Save file location",
