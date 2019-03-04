@@ -58,14 +58,12 @@ class Show:
         try:
             # start audio_listener thread
             # updates show.curr_param_values
-            print("Listening")
             audio_thread = threading.Thread(
                 target=self.audio_listener.analyze, args=(self,))
             audio_thread.start()
 
             # make video decision
             # updates show.curr_video
-            print("Interpreting")
             interpreter_thread = threading.Thread(
                 target=self.interpreter.interpret)
             interpreter_thread.start()
@@ -73,7 +71,6 @@ class Show:
             # start video player
             # compares show.curr_video to video_player.curr_video and
             # updates accordingly
-            print("Playing video")
             self.video_player.play_video()
 
         except KeyboardInterrupt:
