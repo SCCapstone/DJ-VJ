@@ -1,10 +1,12 @@
 #! /usr/bin/env python3
 """
 Pitch utilizes aubio's' pitch analysis function
+
+__author__ = "Matthew J. Smith"
+__email__ = "mjs10@email.sc.edu"
 """
 
 from math import log2
-import numpy
 from aubio import pitch
 
 
@@ -31,24 +33,15 @@ class Pitch:  # pylint: disable=too-few-public-methods
         # options = default, schmitt, fcomb, mcomb, yin
         self.pitch_analyzer = pitch(
             "default", self.window_size, self.hop_size, self.input.samplerate)
-        
-        #saves the average pitch for better accuracy
-        self.average = 0
 
     def analyze_pitch(self, sample):
         """
         analyze_pitch analyzes the pitch of a given audio sample
         """
         freq = self.pitch_analyzer(sample)[0]
-        volume = int((numpy.sum(sample**2) / len(sample)) * 60000)
         # confidence = self.pitch_analyzer.get_confidence()
 
-        # if sample has a frequency
-        if freq > 0 and volume > 20:
-            # get and print the pitch
-            return freq
-
-        return 0
+        return freq
 
 
 def get_pitch(freq):

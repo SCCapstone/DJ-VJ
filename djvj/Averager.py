@@ -4,15 +4,20 @@
 Defines the Averager class that can store an individual value,
 a list of values, and the last average that was calculated by the
 Averager function
+
+__author__ = "Timothy Dyar"
+__email__ = "tdyar@email.sc.edu"
 """
 from collections import Counter
+
 
 class Avgs:
     def __init__(self):
         self.val = 0
         self.valArr = []
-	    #self.pitchArr.append(pitch)
+    # self.pitchArr.append(pitch)
         self.lastAvg = 0
+
 
 def Averager(self):
     """
@@ -21,7 +26,7 @@ def Averager(self):
     and returns that mode.
     """
     gets_tuple = 0
-    #Gets the length of the Array
+    # Gets the length of the Array
     length = len(self.valArr)
     if length == 10:
         average = Counter(self.valArr)

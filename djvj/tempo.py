@@ -1,6 +1,9 @@
 #! /usr/bin/env python3
 """
 Tempo utilizes aubio's tempo analysis function
+
+__author__ = "Matthew J. Smith"
+__email__ = "mjs10@email.sc.edu"
 """
 
 from aubio import tempo
@@ -34,9 +37,6 @@ class Tempo:
 
         # keep up with current tempo
         self.curr_tempo = 0
-
-        # keeps the average tempo for better accuracy
-        self.average = 0
 
     def analyze_tempo(self, sample):
         """

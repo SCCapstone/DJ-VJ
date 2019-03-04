@@ -2,19 +2,20 @@
 """
 show is the primary driver for the program
 allows for data to be shared between the different components of the program
+
+__author__ = "Matthew J. Smith"
+__email__ = "mjs10@email.sc.edu"
 """
 
 import threading
 import os
 import time
 import djvj.audio_listener as audio
-import djvj.visual as video
-from djvj.visual import play_video
-from djvj.visual import Visual
-
-
-# import djvj.interpreter as interpreter
-# import djvj.video_player as video
+import djvj.interpreter as interpreter
+import djvj.video_player as video_player
+# import djvj.visual as video
+# from djvj.visual import play_video
+# from djvj.visual import Visual
 
 
 class Show:
@@ -23,65 +24,53 @@ class Show:
     needed functions
     """
 
-    def __init__(self, show_params):
-        self.params = show_params[0]
-        self.rules = show_params[1]
-        self.values = show_params[2]
-        self.videos = show_params[3]
+    def __init__(self, moments):
+        """
+        moments = list of Moments class
+        """
+        # list of Moments
+        self.moments = moments
+        # get listening params
+        self.params = []
+        for moment in moments:
+            self.params += moment.params
 
         # initialize list of current audio values at a given moment of time
         # populated in audio_listener
         self.curr_param_values = {}
 
-        # initialze audio listener
+        # initialze audio listener, takes a Show
         self.audio_listener = audio.AudioListener(self)
 
-        # TODO initialize interpreter
-        # self.interpreter = interpreter.Interpreter(show_params)
+        # initialize interpreter
+        self.interpreter = interpreter.Interpreter(self)
 
-        # new visual.py
-        # MY INITIALIZING THE VISUALS CLASS TO KEEP TRACK OF THE CURRENT SHOW
-        self.play_video = video.Visual()
+        # initialze video_player, takes a Show
+        self.curr_video = ""  # video that should be currently playing
+        self.video_player = video_player.VideoPlayer(self)
 
     def start(self):
         """
         start() starts the show
         """
-        # start audio_listener thread
-        # updates self.curr_param_values
+
         try:
+            # start audio_listener thread
+            # updates show.curr_param_values
             audio_thread = threading.Thread(
                 target=self.audio_listener.analyze, args=(self,))
             audio_thread.start()
 
+            # make video decision
+            # updates show.curr_video
+            interpreter_thread = threading.Thread(
+                target=self.interpreter.interpret)
+            interpreter_thread.start()
+
+            # start video player
+            # compares show.curr_video to video_player.curr_video and
+            # updates accordingly
+            self.video_player.play_video()
+
         except KeyboardInterrupt:
             pass
-
-        # testing loop for updating video
-        interpreter_thread = threading.Thread(
-            target=tmp_interpreter, args=(self,))
-        interpreter_thread.start()
-
-        # main show loop
-        while True:
-            play_video(self.play_video)
-
-
-def tmp_interpreter(show):
-    # temp videos
-    my_path = os.path.abspath(os.path.dirname(__file__))
-    # Set the video paths for the video
-    path1 = os.path.join(my_path, "../test/test_assets/video1.MOV")
-    path2 = os.path.join(my_path, "../test/test_assets/video2.mp4")
-    num = "1"
-    while True:
-        if num == "1":
-            show.curr_video = path1
-            show.play_video.newShow = path1
-            num = "2"
-        else:
-            show.curr_video = path2
-            show.play_video.newShow = path2
-            num = "1"
-        print(show.curr_video)
-        time.sleep(3)
