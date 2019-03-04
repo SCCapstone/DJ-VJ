@@ -7,7 +7,7 @@ Create Show screen functionality is built out, more to come!
 import pickle
 import tkinter as tk
 from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage, \
-    StringVar, OptionMenu, NW, END
+    StringVar, OptionMenu, Scrollbar, N, S, NW, END
 import time
 
 # global variable params
@@ -80,13 +80,13 @@ class IntroScreen(tk.Tk):
         self.exit_button.place(relx=.9, rely=.1, anchor="center")
 
         # after all the main screen is set up, get rid of it so the splash screen can show
-        self.withdraw()
-        # display splash screen
-        splash = SplashScreen(self)
-        # for 6 seconds
-        time.sleep(6)
-        # kill splash screen
-        splash.destroy()
+        # self.withdraw()
+        # # display splash screen
+        # splash = SplashScreen(self)
+        # # for 6 seconds
+        # time.sleep(6)
+        # # kill splash screen
+        # splash.destroy()
         # show main screen again
         self.deiconify()
 
@@ -162,7 +162,8 @@ class CreateScreen(tk.Toplevel):
                          "for the show to interpret together.\n"
                          "To add a new \"moment\" to your show, "
                          "select \"Add Moment\", and then add parameters "
-                         "to that moment.\n When finished, "
+                         "to that moment.\n Please ensure all parameters "
+                         "in a moment have the same video. \n When finished, "
                          "click \"Create Show\".", bg="#212121", fg="#05F72D",
               font=("Courier", 18)).place(relx=.5, rely=.17, anchor="center")
         Label(self, text="If", bg="#212121", fg="#05F72D",
@@ -170,7 +171,7 @@ class CreateScreen(tk.Toplevel):
         # the sound attribute being tracked
         self.attr = StringVar(self)
         self.attr.set("           ")  # default value
-        self.set_attribute = OptionMenu(self, self.attr, "pitch", "time")
+        self.set_attribute = OptionMenu(self, self.attr, "pitch", "tempo")
         self.set_attribute.place(relx=.22, rely=.3, anchor="center")
         # the sign (ie greater than, less than, etc)
         self.sign = StringVar(self)
@@ -210,10 +211,13 @@ class CreateScreen(tk.Toplevel):
                                   height=1, width=5, command=self.exit)
         self.exit_button.place(relx=.9, rely=.1, anchor="center")
 
+        self.w = Canvas(self, width=self.winfo_width(), height=1000)
+        self.w.place(relx=.25, rely=.5)
+
         # shows running params
-        self.display = Label(self, text="", bg="#212121",
-                             fg="#05F72D", font=("Courier", 20))
-        self.display.place(relx=.5, rely=.65, anchor="center")
+        self.display = Label(self.w, text="", bg="#212121",
+                             fg="#05F72D", font=("Courier", 16))
+        self.display.pack()
 
     def add_moment(self):
         """ Separates groups of parameters """
@@ -240,6 +244,7 @@ class CreateScreen(tk.Toplevel):
         PARAMS = PARAMS + "\n" + "If\t" + self.attr.get() \
             + "\t" + self.sign.get() + "\t" + self.target_value.get() \
             + "\t play\t" + VIDEO_PATH
+
         self.params_added()
         # clears all the fields
         self.target_value.delete(0, END)
