@@ -14,13 +14,14 @@ gui.init()
 SHOW_PARAMS = [gui.show[0],
                gui.show[1], gui.show[2], gui.show[3]]
 
-# gui.IntroScreen().quit()
+print(gui.moments)
+# this is only for testing purposes, show that the file path stays the same
 
 # SHOW_PARAMS = [['pitch', 'tempo', 'volume', 'time'],
 #                ['<', '>', '=', '='], [500, 120, 20, 5200], ['']]
 
 # initialize show
-SHOW = show.Show(SHOW_PARAMS)
+#SHOW = show.Show(SHOW_PARAMS)
 
 # start show
-SHOW.start()
+#SHOW.start()

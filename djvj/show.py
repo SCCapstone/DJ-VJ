@@ -1,13 +1,18 @@
 #! /usr/bin/env python3
-
 """
 show is the primary driver for the program
 allows for data to be shared between the different components of the program
 """
 
 import threading
+import os
+import time
 import djvj.audio_listener as audio
 import djvj.visual as video
+from djvj.visual import play_video
+from djvj.visual import Visual
+
+
 # import djvj.interpreter as interpreter
 # import djvj.video_player as video
 
@@ -34,12 +39,9 @@ class Show:
         # TODO initialize interpreter
         # self.interpreter = interpreter.Interpreter(show_params)
 
-        # TODO initialze video_player
-        # Update this with new VideoPlayer class
-        # self.video_player = video.VideoPlayer()
-
-        # only used for current visual.py
-        self.video_player = video.Visual(self, self.values)
+        # new visual.py
+        # MY INITIALIZING THE VISUALS CLASS TO KEEP TRACK OF THE CURRENT SHOW
+        self.play_video = video.Visual()
 
     def start(self):
         """
@@ -55,14 +57,31 @@ class Show:
         except KeyboardInterrupt:
             pass
 
+        # testing loop for updating video
+        interpreter_thread = threading.Thread(
+            target=tmp_interpreter, args=(self,))
+        interpreter_thread.start()
+
         # main show loop
         while True:
+            play_video(self.play_video)
 
-            # TODO
-            # make video decision
-            # video = self.interpreter.make_decision(self.curr_param_values)
 
-            # play video
-            self.video_player.play_video()  # remove or update to next comment
-            # TODO
-            # self.video_player.play_video(video)
+def tmp_interpreter(show):
+    # temp videos
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    # Set the video paths for the video
+    path1 = os.path.join(my_path, "../test/test_assets/video1.MOV")
+    path2 = os.path.join(my_path, "../test/test_assets/video2.mp4")
+    num = "1"
+    while True:
+        if num == "1":
+            show.curr_video = path1
+            show.play_video.newShow = path1
+            num = "2"
+        else:
+            show.curr_video = path2
+            show.play_video.newShow = path2
+            num = "1"
+        print(show.curr_video)
+        time.sleep(3)
