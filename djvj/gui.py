@@ -17,7 +17,7 @@ audio_attr = list()  # what the audio should listen for
 rules = list()  # <, >, =
 values = list()  # what threshold the change happens at
 video_loc = list()  # video path
-moments = list() # groups of parameters for the show
+moments = list()  # groups of parameters for the show
 
 
 class SplashScreen(tk.Toplevel):
@@ -171,7 +171,8 @@ class CreateScreen(tk.Toplevel):
         # the sound attribute being tracked
         self.attr = StringVar(self)
         self.attr.set("           ")  # default value
-        self.set_attribute = OptionMenu(self, self.attr, "pitch", "tempo")
+        self.set_attribute = OptionMenu(
+            self, self.attr, "pitch", "tempo", "time")
         self.set_attribute.place(relx=.22, rely=.3, anchor="center")
         # the sign (ie greater than, less than, etc)
         self.sign = StringVar(self)
@@ -293,7 +294,7 @@ class CreateScreen(tk.Toplevel):
                                                            ("all files", "*.*")))
         video_list = VIDEO_PATH.split("/")
         # shortens full path to just the video name
-        shortened_video = video_list[len(video_list)-1]
+        shortened_video = video_list[len(video_list) - 1]
         self.video.set(shortened_video)
 
     def exit(self):
