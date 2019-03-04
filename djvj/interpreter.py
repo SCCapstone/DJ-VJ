@@ -188,7 +188,7 @@ def comapare(row, measure, sign, value):
         if measure > value:
             return row['File_Path']
     if sign == '<' and value != None:
-        if measure < value:
+        if measure <= value:
             return row['File_Path']
     return 1      
 
