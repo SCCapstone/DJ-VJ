@@ -73,8 +73,8 @@ class Show:
             # start video player
             # compares show.curr_video to video_player.curr_video and
             # updates accordingly
-            # print("Playing video")
-            # self.video_player.play_video()
+            print("Playing video")
+            self.video_player.play_video()
 
         except KeyboardInterrupt:
             pass
