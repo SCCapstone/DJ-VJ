@@ -111,15 +111,15 @@ class Interpreter:
                             if self.bool_time == self.bool_pitch:
                                 continue
                             else:
-                                flag_time = 1
+                                self.flag_pitch = 1
 
                     if self.curr_pitch != None:
-                        if row['Pitch'] != None:
-                            self.bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
-                            if self.bool_time == self.bool_pitch:
+                        if row['Tempo'] != None:
+                            self.bool_pitch = comapare(row, self.curr_pitch, row['Tempo_Com'], int(row['Tempo']))
+                            if self.bool_time == self.bool_tempo:
                                 continue
                             else:
-                                self.flag_pitch = 1
+                                self.flag_tempo = 1
 
                     if self.flag_tempo == 1 or self.flag_time == 1 or self.bool_time == 1:
                         self.flag_tempo = 0
