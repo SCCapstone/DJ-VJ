@@ -47,18 +47,14 @@ class Interpreter:
                 # check if moment video is already the current video being played
                 # if so, no need to interpret
                 if moment.video == self.show.curr_video:
-                    print("skip")
                     continue
                 # for each param in a moment
                 for index, param in enumerate(moment.params):
-                    print(moment.name, param, moment.values[index])
-                    print(self.show.curr_param_values)
                     # get current value of param
                     curr_param_value = self.show.curr_param_values[param]
                     # get value of moment param
                     moment_param_value = moment.values[index]
-                    print(self.ops[moment.operators[index]](
-                        curr_param_value, moment_param_value))
+
                     # compare current param value to show rule value
                     # using rule operator
                     # if true, add to possible values and continue to next moment param
@@ -69,16 +65,22 @@ class Interpreter:
                     possible_moments.pop(moment, None)
                     # break to next moment
                     break
+            # check if no possible_moments
+            # most likely because doesnt need to update current video
+            # could be because of show logic error
+            if len(possible_moments) == 0:
+                continue
+
             # check if more than one possible moments
             # if so, show was not created correctly
-            if len(possible_moments) != 1:
+            if len(possible_moments) > 1:
                 print("Show Logic Error")
                 for moment in possible_moments:
                     print(moment.name)
                 time.sleep(self.sleep)
                 continue
+
             # get moment that was found to match current audio values
-            print("clear")
             moment, _ = possible_moments.popitem()
             # update the show current video
             self.show.curr_video = moment.video
