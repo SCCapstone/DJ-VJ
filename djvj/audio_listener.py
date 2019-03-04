@@ -1,6 +1,9 @@
 #! /usr/bin/env python3
 """
 audio_listner is the main driver for analyzing audio
+
+__author__ = "Matthew J. Smith"
+__email__ = "mjs10@email.sc.edu"
 """
 
 import time
@@ -8,11 +11,8 @@ import pyaudio
 import numpy
 import djvj.pitch as pitch
 import djvj.tempo as tempo
-import djvj.Averager as Averager
 from djvj.Averager import Averager
 from djvj.Averager import Avgs
-
-# import djvj.averager as averager
 
 
 class AudioListener:
