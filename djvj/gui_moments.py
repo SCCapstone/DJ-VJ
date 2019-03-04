@@ -80,13 +80,13 @@ class IntroScreen(tk.Tk):
         self.exit_button.place(relx=.9, rely=.1, anchor="center")
 
         # after all the main screen is set up, get rid of it so the splash screen can show
-        # self.withdraw()
-        # # display splash screen
-        # splash = SplashScreen(self)
-        # # for 6 seconds
-        # time.sleep(6)
-        # # kill splash screen
-        # splash.destroy()
+        self.withdraw()
+        # display splash screen
+        splash = SplashScreen(self)
+        # for 6 seconds
+        time.sleep(6)
+        # kill splash screen
+        splash.destroy()
         # show main screen again
         self.deiconify()
 
@@ -291,8 +291,6 @@ class CreateScreen(tk.Toplevel):
                                                 filetypes=(("mov files", "*.MOV"),
                                                            ("mp4 files", "*.mp4"),
                                                            ("all files", "*.*")))
-        VIDEO_PATH = VIDEO_PATH.replace(" ", "\ ").replace("\'", "\\'")\
-            .replace("?", "\?").replace("(", "\(").replace(")", "\)")
         video_list = VIDEO_PATH.split("/")
         # shortens full path to just the video name
         shortened_video = video_list[len(video_list) - 1]
