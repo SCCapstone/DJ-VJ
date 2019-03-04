@@ -1,15 +1,19 @@
 #! /usr/bin/env python3
 
+import djvj.video_player as video_player
+import djvj.interpreter as interpreter
 """
 show is the primary driver for the program
 allows for data to be shared between the different components of the program
+
+__author__ = "Matthew J. Smith"
+__email__ = "mjs10@email.sc.edu"
 """
 
 import threading
 import djvj.audio_listener as audio
-import djvj.visual as video
-# import djvj.interpreter as interpreter
-# import djvj.video_player as video
+import djvj.interpreter as interpreter
+import djvj.video_player as video_player
 
 
 class Show:
@@ -18,51 +22,53 @@ class Show:
     needed functions
     """
 
-    def __init__(self, show_params):
-        self.params = show_params[0]
-        self.rules = show_params[1]
-        self.values = show_params[2]
-        self.videos = show_params[3]
+    def __init__(self, moments):
+        """
+        moments = list of Moments class
+        """
+        # list of Moments
+        self.moments = moments
+        # get listening params
+        self.params = []
+        for moment in moments:
+            self.params += moment.params
 
         # initialize list of current audio values at a given moment of time
         # populated in audio_listener
         self.curr_param_values = {}
 
-        # initialze audio listener
+        # initialze audio listener, takes a Show
         self.audio_listener = audio.AudioListener(self)
 
-        # TODO initialize interpreter
-        # self.interpreter = interpreter.Interpreter(show_params)
+        # initialize interpreter
+        self.interpreter = interpreter.Interpreter(self)
 
-        # TODO initialze video_player
-        # Update this with new VideoPlayer class
-        # self.video_player = video.VideoPlayer()
-
-        # only used for current visual.py
-        self.video_player = video.Visual(self, self.values)
+        # initialze video_player, takes a Show
+        self.curr_video = ""  # video that should be currently playing
+        self.video_player = video_player.VideoPlayer(self)
 
     def start(self):
         """
         start() starts the show
         """
-        # start audio_listener thread
-        # updates self.curr_param_values
+
         try:
+            # start audio_listener thread
+            # updates show.curr_param_values
             audio_thread = threading.Thread(
                 target=self.audio_listener.analyze, args=(self,))
             audio_thread.start()
 
+            # make video decision
+            # updates show.curr_video
+            interpreter_thread = threading.Thread(
+                target=self.interpreter.interpret)
+            interpreter_thread.start()
+
+            # start video player
+            # compares show.curr_video to video_player.curr_video and
+            # updates accordingly
+            self.video_player.play_video()
+
         except KeyboardInterrupt:
             pass
-
-        # main show loop
-        while True:
-
-            # TODO
-            # make video decision
-            # video = self.interpreter.make_decision(self.curr_param_values)
-
-            # play video
-            self.video_player.play_video()  # remove or update to next comment
-            # TODO
-            # self.video_player.play_video(video)
