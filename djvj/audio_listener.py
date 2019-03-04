@@ -8,6 +8,10 @@ import pyaudio
 import numpy
 import djvj.pitch as pitch
 import djvj.tempo as tempo
+import djvj.Averager as Averager
+from djvj.Averager import Averager
+from djvj.Averager import Avgs
+
 # import djvj.averager as averager
 
 
@@ -22,7 +26,6 @@ class AudioListener:
         self.hop_size = 512  # needed for pyaudio and aubio
 
         self.listen_params = set(show.params)  # gets unique values from list
-
         # check for listening param and initalize necessary objects
         # also populate show.curr_param_values dictionary
         if 'pitch' in self.listen_params:
@@ -44,6 +47,7 @@ class AudioListener:
         # initialize averager - used to find average of data
         # self.max_samples = 10 # number of samples collected to find true average
         # self.averager = averager.Averager(self.max_samples)
+        self.averager = Avgs()
 
     def __del__(self):
         self.audio_input.stream.stop_stream()
@@ -70,6 +74,10 @@ class AudioListener:
                     # analyze sample for aubio's pitch (currently in Hz)
                     curr_pitch = self.pitch.analyze_pitch(sample)
                     # add to average and find current true average
+                    #self.averager.pitch = curr_pitch
+                    self.averager.valArr.append(curr_pitch)
+                    Averager(self.averager)
+                    curr_pitch = self.averager.lastAvg
                     # curr_pitch = self.averager.update_average(curr_pitch)
                     # update current value
                     show.curr_param_values['pitch'] = curr_pitch

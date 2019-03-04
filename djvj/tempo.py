@@ -35,6 +35,9 @@ class Tempo:
         # keep up with current tempo
         self.curr_tempo = 0
 
+        # keeps the average tempo for better accuracy
+        self.average = 0
+
     def analyze_tempo(self, sample):
         """
         analyze_tempo takes in a sample and analzes the beat of that sample
