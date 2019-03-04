@@ -14,7 +14,8 @@ import djvj.show as show
 # SHOW_PARAMS = [gui.show[0],
 #                gui.show[1], gui.show[2], gui.show[3]]
 
-# gui.IntroScreen().quit()
+# this is only for testing purposes, show that the file path stays the same
+print(gui.show[3])
 
 SHOW_PARAMS = [['pitch', 'tempo', 'volume', 'time'],
                ['<', '>', '=', '='], [500, 120, 20, 5200], ['']]
