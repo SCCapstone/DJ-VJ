@@ -1,3 +1,5 @@
 ,File_Name,Sign,Pitch,Tempo,Time
-0,/Users/omaririchards/Dropbox/Uni/Semesters/Spring\ 2019/CSCE\ 492/DJ-VJ/test/test_assets/video1.MOV,<,,120,
-1,/Users/omaririchards/Dropbox/Uni/Semesters/Spring\ 2019/CSCE\ 492/DJ-VJ/test/test_assets/video2.mp4,>,,120,
+0,/Users/omaririchards/Dropbox/Uni/Semesters/Spring\ 2019/CSCE\ 492/DJ-VJ/test/test_assets/video1.MOV,>,100,,
+1,/Users/omaririchards/Dropbox/Uni/Semesters/Spring\ 2019/CSCE\ 492/DJ-VJ/test/test_assets/video1.MOV,<,,400,
+2,/Users/omaririchards/Dropbox/Uni/Semesters/Spring\ 2019/CSCE\ 492/DJ-VJ/test/test_assets/video2.mp4,>,100,,
+3,/Users/omaririchards/Dropbox/Uni/Semesters/Spring\ 2019/CSCE\ 492/DJ-VJ/test/test_assets/video2.mp4,>,,400,

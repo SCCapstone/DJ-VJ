@@ -80,7 +80,7 @@ class Interpreter:
 
                     if self.curr_pitch != None:
                         if row['Pitch'] != None:
-                            self.bool_pitch = comapare(row, self.curr_pitch, row['Tempo_Pitch'], int(row['Pitch']))
+                            self.bool_pitch = comapare(row, self.curr_pitch, row['Tempo_Com'], int(row['Pitch']))
                             if self.bool_tempo == self.bool_pitch:
                                 continue
                             else:
