@@ -4,6 +4,7 @@
 show is the primary driver for the program
 allows for data to be shared between the different components of the program
 """
+import time
 import threading
 import pandas as pd
 import djvj.audio_listener as audio
@@ -66,6 +67,7 @@ class Show:
         while True:
             #returns file name that needs to play
             video = self.data_interperter.search_panda_data()
+            time.sleep(5)
             # play video
             #self.video_player.play_video()  # remove or update to next comment
             # TODO
