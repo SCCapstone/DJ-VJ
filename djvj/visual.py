@@ -22,6 +22,11 @@ class Visual:
 
 def play_video(self):
     """ plays the video """
+    
+    #Makes Sure that there is a current show
+    if self.currShow == None:
+        self.currShow = self.newShow
+
     if self.currShow == self.newShow:
         cap = cv2.VideoCapture(self.currShow)    # open first video
             # print("now here")
