@@ -1,5 +1,11 @@
 #! /usr/bin/env python3
 
+from djvj.visual import play_video
+from djvj.visual import Visual
+import djvj.visual as video
+import threading
+import os
+import time
 """
 show is the primary driver for the program
 allows for data to be shared between the different components of the program
@@ -12,13 +18,7 @@ AUBIO TO INSTALL AND THAT WAS KEEPING ME FROM TESTING.
 THAT BEING SAID, IT MAY HAVE BEEN WHAT WAS CAUSE THE GUI TO CRASH FOR ME.
 IF YOU HAVE IT INSTALLED, PUT IT BACK IN
 """
-import time
-import os
-import threading
 #import djvj.audio_listener as audio
-import djvj.visual as video
-from djvj.visual import Visual
-from djvj.visual import play_video
 # import djvj.interpreter as interpreter
 # import djvj.video_player as video
 
@@ -38,7 +38,7 @@ class Show:
         # initialize list of current audio values at a given moment of time
         # populated in audio_listener
         self.curr_param_values = {}
-        
+
         # initialze audio listener
         # I COMMENTED OUT FOR TESTING
         #self.audio_listener = audio.AudioListener(self)
@@ -64,13 +64,17 @@ class Show:
         # updates self.curr_param_values
         try:
             # I COMMENTED OUT FOR TESTING
-            #audio_thread = threading.Thread(
+            # audio_thread = threading.Thread(
              #   target=self.audio_listener.analyze, args=(self,))
-            #audio_thread.start()
+            # audio_thread.start()
             pass
 
         except KeyboardInterrupt:
             pass
+        # testing loop for updating video
+        interpreter_thread = threading.Thread(
+            target=tmp_interpreter, args=(self,))
+        interpreter_thread.start()
 
         # main show loop
         while True:
@@ -79,41 +83,53 @@ class Show:
             # make video decision (Omaris function)
             # video = self.interpreter.make_decision(self.curr_param_values)
 
-            # MY TEST CODE FOR VIDEO PLAYBACK
-            video = videoReturns1()
-            self.play_video.currShow = video
-            showPlaying = threading.Thread(target=play_video, args=(self.play_video,))
-
-            video = videoReturns2()
-            self.play_video.newShow = video
-            showPlaying = threading.Thread(target=play_video, args=(self.play_video,))
-
-            # play video
-            #self.play_video.play_video()  # remove or update to next comment
-            # TODO
-            # self.video_player.play_video(video)
-            
-            #Take Omari's video and plays it
-            #WHAT I WOULD PUT IN TO RUN WITH OMARI'S FUNCTION TO PLAY THE VIDEO
-            #self.play_video.newShow = video
-            #showPlaying = threading.Thread(target=play_video, args=(self.play_video,))
+            # Take Omari's video and plays it
+            # WHAT I WOULD PUT IN TO RUN WITH OMARI'S FUNCTION TO PLAY THE VIDEO
+            # print(self.curr_video)
+            play_video(self.play_video)
+            # showPlaying = threading.Thread(
+            #     target=play_video, args=(self.play_video,))
+            # showPlaying.start()
 
 # TEMPORARY FUNCTIONS I MADE TO TEST VIDEO PLAYBACK
 # Return functions that should return what video to play like Omari's code
+
+
+def tmp_interpreter(show):
+    # temp videos
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    # Set the video paths for the video
+    path1 = os.path.join(my_path, "../test/test_assets/video1.MOV")
+    path2 = os.path.join(my_path, "../test/test_assets/video2.mp4")
+    num = "1"
+    while True:
+        if num == "1":
+            show.curr_video = path1
+            show.play_video.newShow = path1
+            num = "2"
+        else:
+            show.curr_video = path2
+            show.play_video.newShow = path2
+            num = "1"
+        print(show.curr_video)
+        time.sleep(1)
+
+
 def videoReturns1():
     """
     Returns videos like Omaris function should just for test sake
     """
     my_path = os.path.abspath(os.path.dirname(__file__))
-    #Set the video paths for the video
+    # Set the video paths for the video
     path1 = os.path.join(my_path, "../test/test_assets/video1.MOV")
     return path1
+
 
 def videoReturns2():
     """
     Returns videos like Omaris function should just for test sake
     """
     my_path = os.path.abspath(os.path.dirname(__file__))
-    #Set the video paths for the video
+    # Set the video paths for the video
     path2 = os.path.join(my_path, "../test/test_assets/video2.mp4")
     return path2
