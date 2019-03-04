@@ -1,11 +1,4 @@
 #! /usr/bin/env python3
-
-import djvj.audio_listener as audio
-import threading
-import os
-import time
-import djvj.video_player as video_player
-import djvj.interpreter as interpreter
 """
 show is the primary driver for the program
 allows for data to be shared between the different components of the program
@@ -14,13 +7,17 @@ __author__ = "Matthew J. Smith"
 __email__ = "mjs10@email.sc.edu"
 """
 
-"""
-NOTE:
-I COMMENTED OUT ALL THE AUDIO STUFF BECAUSE I HAVEN'T BEEN ABLE TO GET
-AUBIO TO INSTALL AND THAT WAS KEEPING ME FROM TESTING.
-THAT BEING SAID, IT MAY HAVE BEEN WHAT WAS CAUSE THE GUI TO CRASH FOR ME.
-IF YOU HAVE IT INSTALLED, PUT IT BACK IN
-"""
+import threading
+import os
+import time
+import djvj.audio_listener as audio
+import djvj.visual as video
+from djvj.visual import play_video
+from djvj.visual import Visual
+
+
+# import djvj.interpreter as interpreter
+# import djvj.video_player as video
 
 
 class Show:
