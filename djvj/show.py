@@ -112,7 +112,7 @@ def tmp_interpreter(show):
             show.play_video.newShow = path2
             num = "1"
         print(show.curr_video)
-        time.sleep(1)
+        time.sleep(5)
 
 
 def videoReturns1():
