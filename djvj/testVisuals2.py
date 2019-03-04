@@ -19,7 +19,7 @@ path1 = os.path.join(my_path, "../test/test_assets/video1.MOV")
 path2 = os.path.join(my_path, "../test/test_assets/video2.mp4")
 
 #Set the videos in show
-show.currShow = path1
+#show.currShow = path1
 show.newShow = path1
 #Initialize thread and play the first videos
 print("Try first video")
@@ -33,5 +33,11 @@ time.sleep(3)
 print("Try the second show")
 show.newShow = path2
 
+first = threading.Thread(target=play_video, args=(show))
+# Pass the second show through again to make sure the video keeps playing
+time.sleep(4)
+print("See if it changes")
+
+#See if it stays on the same show
 first = threading.Thread(target=play_video, args=(show))
 print("We did it!")
