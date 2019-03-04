@@ -47,9 +47,12 @@ class Interpreter:
                 # check if moment video is already the current video being played
                 # if so, no need to interpret
                 if moment.video == self.show.curr_video:
+                    print("skip")
                     continue
                 # for each param in a moment
                 for index, param in enumerate(moment.params):
+                    print(moment.name, param, moment.values[index])
+                    print(self.show.curr_param_values)
                     # get current value of param
                     curr_param_value = self.show.curr_param_values[param]
                     # get value of moment param

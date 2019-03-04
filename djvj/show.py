@@ -54,7 +54,6 @@ class Show:
         """
         start() starts the show
         """
-        threads = []
 
         try:
             # start audio_listener thread
@@ -63,27 +62,6 @@ class Show:
             audio_thread = threading.Thread(
                 target=self.audio_listener.analyze, args=(self,))
             audio_thread.start()
-            threads.append(audio_thread)
-
-            # make video decision
-            # updates show.curr_video
-            print("Interpreting")
-            interpreter_thread = threading.Thread(
-                target=self.interpreter.interpret)
-            interpreter_thread.start()
-            threads.append(interpreter_thread)
-
-            # temporary interpreter for testing video player
-            # interpreter_thread = threading.Thread(
-            #     target=tmp_interpreter, args=(self,))
-            # interpreter_thread.start()
-            # threads.append(interpreter_thread)
-
-            # start video player
-            # compares show.curr_video to video_player.curr_video and
-            # updates accordingly
-            print("Playing video")
-            self.video_player.play_video()
 
             # make video decision
             # updates show.curr_video
@@ -95,8 +73,8 @@ class Show:
             # start video player
             # compares show.curr_video to video_player.curr_video and
             # updates accordingly
-            print("Playing video")
-            self.video_player.play_video()
+            # print("Playing video")
+            # self.video_player.play_video()
 
         except KeyboardInterrupt:
             pass
