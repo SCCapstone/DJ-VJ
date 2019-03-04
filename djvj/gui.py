@@ -9,6 +9,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage, \
     StringVar, OptionMenu, Scrollbar, N, S, NW, END
 import time
+import os
 
 # global variable params
 PARAMS = ""
@@ -101,6 +102,7 @@ class IntroScreen(tk.Tk):
                                                          ("all files", "*.*")))
         data = pickle.load(open("%s" % filename, "rb"))
         param_list = data.split("\n")
+        error = False
         param_list.pop(0)
         curr_mom = list()   # a list of the parameters in the current moment
         for parameter in param_list:
@@ -113,22 +115,31 @@ class IntroScreen(tk.Tk):
                 audio_attr.append(attribute[1])
                 rules.append(attribute[2])
                 values.append(attribute[3])
-                video_loc.append(attribute[5])
+                if os.path.exists(attribute[5]):
+                    video_loc.append(attribute[5])
+                else:
+                    messagebox.showerror("ERROR", "Error: File path %s does not exist.\n"
+                                                  "Please choose a file with valid file paths." % attribute[5])
+                    error = True
+                    break
                 blank.append(attribute[1])
                 blank.append(attribute[2])
                 blank.append(attribute[3])
                 blank.append(attribute[5])
                 curr_mom.append(blank)
 
-        # appends all these lists to a larger list, used in main to send to show.py
-        show.append(audio_attr)
-        show.append(rules)
-        show.append(values)
-        show.append(video_loc)
+        if error:
+            self.load()
+        else:
+            # appends all these lists to a larger list, used in main to send to show.py
+            show.append(audio_attr)
+            show.append(rules)
+            show.append(values)
+            show.append(video_loc)
 
-        # right now, just for error checking
-        messagebox.showinfo("Load Show", data)
-        self.destroy()
+            # right now, just for error checking
+            messagebox.showinfo("Load Show", data)
+            self.destroy()
 
     def create(self):
         """ pulls up create screen """
