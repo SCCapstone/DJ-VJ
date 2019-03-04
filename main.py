@@ -1,4 +1,14 @@
-""" main run file for the project"""
+#! /usr/bin/env python3
+"""
+main run file for the project
+
+sets up necessary instances and passing data between GUI and backend
+
+__author__ = "Matthew J. Smith, Abby Holdeman"
+__email__ = "mjs10@email.sc.edu, holdeman@email.sc.edu"
+"""
+
+
 # import djvj.gui as gui
 import djvj.gui_moments as gui
 import djvj.moment as moment
