@@ -8,6 +8,8 @@ __email__ = "mjs10@email.sc.edu"
 """
 
 import threading
+import os
+import time
 import djvj.audio_listener as audio
 import djvj.interpreter as interpreter
 import djvj.video_player as video_player
