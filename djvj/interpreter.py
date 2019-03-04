@@ -41,8 +41,6 @@ class Interpreter:
         if 'time' in self.show.curr_param_values:
             self.curr_time = self.show.curr_param_values['time']
 
-        print(self.curr_tempo)
-
         for index, row in self.mf.iterrows():
 
             if self.curr_pitch != None:
@@ -80,7 +78,7 @@ class Interpreter:
 
                     if self.curr_pitch != None:
                         if row['Pitch'] != None:
-                            self.bool_pitch = comapare(row, self.curr_pitch, row['Tempo_Com'], int(row['Pitch']))
+                            self.bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
                             if self.bool_tempo == self.bool_pitch:
                                 continue
                             else:
