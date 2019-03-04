@@ -17,19 +17,20 @@ class Visual:
         # placeholder for now, but the value from the param file
         #threshold = values[0]
         #self.pitch_threshold = int(threshold)
-        #current show playing and the new show that we want to play
+        # current show playing and the new show that we want to play
         self.newShow = None
+
 
 def play_video(self):
     """ plays the video """
-    
-    #Makes Sure that there is a current show
+
+    # Makes Sure that there is a current show
     if self.currShow == None:
         self.currShow = self.newShow
 
     if self.currShow == self.newShow:
         cap = cv2.VideoCapture(self.currShow)    # open first video
-            # print("now here")
+        # print("now here")
         while cap.isOpened():
             if self.currShow != self.newShow:
                 cap.release()
@@ -53,7 +54,7 @@ def play_video(self):
     if self.currShow != self.newShow:
         self.currShow = self.newShow
         cap = cv2.VideoCapture(self.currShow)    # open first video
-            # print("now here")
+        # print("now here")
         while cap.isOpened():
             if self.currShow != self.newShow:
                 cap.release()
