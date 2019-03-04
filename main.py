@@ -29,4 +29,4 @@ MOMENTS = moment.create_moments(gui.moments)
 SHOW = show.Show(MOMENTS)
 
 # start show
-# SHOW.start()
+SHOW.start()

@@ -69,28 +69,12 @@ class VideoPlayer:
                     # resize the frame
                     frame = visual.resize(
                         frame, (self.window_y, self.window_x))
-<<<<<<< HEAD
-<<<<<<< HEAD
                 #######################################################
                     # possible fullscreen playback code
                     # visual.namedWindow("window", visual.WND_PROP_FULLSCREEN)
                     # visual.setWindowProperty(
                     #     "window", visual.WND_PROP_FULLSCREEN, visual.WINDOW_FULLSCREEN)
                 #######################################################
-=======
-                    # visual.namedWindow("window", visual.WND_PROP_FULLSCREEN)
-                    # visual.setWindowProperty(
-                    #     "window", visual.WND_PROP_FULLSCREEN, visual.WINDOW_FULLSCREEN)
-
->>>>>>> created Moments class, updated djvj/ to work with Moments
-=======
-                #######################################################
-                    # possible fullscreen playback code
-                    # visual.namedWindow("window", visual.WND_PROP_FULLSCREEN)
-                    # visual.setWindowProperty(
-                    #     "window", visual.WND_PROP_FULLSCREEN, visual.WINDOW_FULLSCREEN)
-                #######################################################
->>>>>>> comments, working on interpreter
                     # show the frame
                     visual.imshow('window', frame)
                 except:
