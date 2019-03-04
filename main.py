@@ -9,8 +9,7 @@ __email__ = "mjs10@email.sc.edu, holdeman@email.sc.edu"
 """
 
 
-# import djvj.gui as gui
-import djvj.gui_moments as gui
+import djvj.gui as gui
 import djvj.moment as moment
 import djvj.show as show
 
