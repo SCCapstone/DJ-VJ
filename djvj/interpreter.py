@@ -46,7 +46,7 @@ class Interpreter:
             for moment in self.show.moments:
                 # check if moment video is already the current video being played
                 # if so, no need to interpret
-                if moment.video == self.show.curr_video:
+                if moment.video == self.show.curr_video.currShow:
                     continue
                 # for each param in a moment
                 for index, param in enumerate(moment.params):
@@ -83,6 +83,6 @@ class Interpreter:
             # get moment that was found to match current audio values
             moment, _ = possible_moments.popitem()
             # update the show current video
-            self.show.curr_video = moment.video
+            self.show.curr_video.newShow = moment.video
             # delay next interpret to save processing power
             time.sleep(self.sleep)

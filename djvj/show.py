@@ -8,14 +8,14 @@ __email__ = "mjs10@email.sc.edu"
 """
 
 import threading
-import os
-import time
+#import os
+#import time
 import djvj.audio_listener as audio
 import djvj.interpreter as interpreter
-import djvj.video_player as video_player
+#import djvj.video_player as video_player
 # import djvj.visual as video
-# from djvj.visual import play_video
-# from djvj.visual import Visual
+from djvj.visual import Visual
+from djvj.visual import play_video
 
 
 class Show:
@@ -46,8 +46,11 @@ class Show:
         self.interpreter = interpreter.Interpreter(self)
 
         # initialze video_player, takes a Show
-        self.curr_video = ""  # video that should be currently playing
-        self.video_player = video_player.VideoPlayer(self)
+        # Matts temp code
+        #self.curr_video = ""  # video that should be currently playing
+        #self.video_player = video_player.VideoPlayer(self)
+        # My code:
+        self.curr_video = Visual()
 
     def start(self):
         """
@@ -70,7 +73,7 @@ class Show:
             # start video player
             # compares show.curr_video to video_player.curr_video and
             # updates accordingly
-            self.video_player.play_video()
+            play_video(self.curr_video)
 
         except KeyboardInterrupt:
             pass
