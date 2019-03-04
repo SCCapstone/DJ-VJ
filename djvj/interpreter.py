@@ -122,7 +122,7 @@ class Interpreter:
                                 continue
                             else:
                                 flag_tempo = 1
-                if self.flag_pitch == 1 or self.flag_tempo == 1 or self.curr_time == 1:
+                if self.flag_pitch == 1 or self.flag_tempo == 1 or self.bool_time == 1:
                     self.flag_pitch = 0
                     self.flag_tempo = 0
                     self.curr_time = None
@@ -179,7 +179,6 @@ def comapare(row, measure, sign, value):
 
     measure = int(measure)
     value = int(value)
-    print(measure, sign, value)
 
     if sign == '=' and value != None:
         if measure == value:
