@@ -101,7 +101,6 @@ class Interpreter:
                         self.flag_time = 0
                         return row['File_Path']
 
-
             if self.curr_time != None:
                 if row['Time'] != None:
                     self.bool_time = comapare(row, self.curr_time, row['Time_Com'], int(row['Time']))
@@ -109,25 +108,29 @@ class Interpreter:
                     if self.curr_pitch != None:
                         if row['Pitch'] != None:
                             self.bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
-                            if self.bool_pitch == bool_time:
+                            if self.bool_time == self.bool_pitch:
                                 continue
                             else:
-                                flag_pitch = 1
-                    if self.curr_tempo != None:
-                        if row['Tempo'] != None:
-                            self.bool_tempo = comapare(row, self.curr_tempo, row['Tempo_Com'], int(row['Tempo']))
-                            if self.bool_tempo == bool_time:
+                                flag_time = 1
+
+                    if self.curr_pitch != None:
+                        if row['Pitch'] != None:
+                            self.bool_pitch = comapare(row, self.curr_pitch, row['Pitch_Com'], int(row['Pitch']))
+                            if self.bool_time == self.bool_pitch:
                                 continue
                             else:
-                                flag_tempo = 1
-                if self.flag_pitch == 1 or self.flag_tempo == 1 or self.bool_time == 1:
-                    self.flag_pitch = 0
-                    self.flag_tempo = 0
-                    self.curr_time = None
-                else:
-                    self.flag_pitch = 0
-                    self.flag_tempo = 0
-                    return row['File_Path']
+                                self.flag_pitch = 1
+
+                    if self.flag_tempo == 1 or self.flag_time == 1 or self.bool_time == 1:
+                        self.flag_tempo = 0
+                        self.flag_time = 0
+                        self.bool_time = None
+                    else:
+                        self.flag_tempo = 0
+                        self.flag_pitch = 0
+                        return row['File_Path']
+
+
 
 
 def iterate_master_frame(df, master_df):
