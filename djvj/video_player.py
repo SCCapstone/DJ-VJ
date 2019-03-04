@@ -1,5 +1,8 @@
 """
 video_player displays videos that are determined by interpreter.py
+
+__author__ = "Matthew J. Smith, Lorthrop Richards, Timothy Dyar"
+__email__ = "mjs10@email.sc.edu, lothropr@email.sc.edu, tdyar@email.sc.edu"
 """
 import os
 import cv2 as visual
@@ -66,10 +69,12 @@ class VideoPlayer:
                     # resize the frame
                     frame = visual.resize(
                         frame, (self.window_y, self.window_x))
+                #######################################################
+                    # possible fullscreen playback code
                     # visual.namedWindow("window", visual.WND_PROP_FULLSCREEN)
                     # visual.setWindowProperty(
                     #     "window", visual.WND_PROP_FULLSCREEN, visual.WINDOW_FULLSCREEN)
-
+                #######################################################
                     # show the frame
                     visual.imshow('window', frame)
                 except:
