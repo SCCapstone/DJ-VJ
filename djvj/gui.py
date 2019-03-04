@@ -291,8 +291,6 @@ class CreateScreen(tk.Toplevel):
                                                 filetypes=(("mov files", "*.MOV"),
                                                            ("mp4 files", "*.mp4"),
                                                            ("all files", "*.*")))
-        VIDEO_PATH = VIDEO_PATH.replace(" ", "\ ").replace("\'", "\\'")\
-            .replace("?", "\?").replace("(", "\(").replace(")", "\)")
         video_list = VIDEO_PATH.split("/")
         # shortens full path to just the video name
         shortened_video = video_list[len(video_list)-1]
