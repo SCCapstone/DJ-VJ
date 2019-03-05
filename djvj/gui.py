@@ -107,9 +107,11 @@ class IntroScreen(tk.Tk):
         curr_mom = list()   # a list of the parameters in the current moment
         for parameter in param_list:
             blank = list()
-            if parameter == "Moment":   # switch to a new moment
-                moments.append(curr_mom)
-                curr_mom = list()   # clear the list
+            print(parameter)
+            if "Moment" in parameter:   # switch to a new moment
+                if len(curr_mom) != 0:
+                    moments.append(curr_mom)
+                    curr_mom = list()   # clear the list
             else:
                 attribute = parameter.split("\t")
                 audio_attr.append(attribute[1])
@@ -178,44 +180,34 @@ class CreateScreen(tk.Toplevel):
                          "click \"Create Show\".", bg="#212121", fg="#05F72D",
               font=("Courier", 18)).place(relx=.5, rely=.17, anchor="center")
         Label(self, text="If", bg="#212121", fg="#05F72D",
-              font=("Courier", 36)).place(relx=.15, rely=.3, anchor="center")
+              font=("Courier", 36)).place(relx=.35, rely=.3, anchor="center")
         # the sound attribute being tracked
         self.attr = StringVar(self)
         self.attr.set("           ")  # default value
         self.set_attribute = OptionMenu(
             self, self.attr, "pitch", "tempo", "time")
-        self.set_attribute.place(relx=.22, rely=.3, anchor="center")
+        self.set_attribute.place(relx=.42, rely=.3, anchor="center")
         # the sign (ie greater than, less than, etc)
         self.sign = StringVar(self)
         self.sign.set(" ")  # default value
         self.set_sign = OptionMenu(self, self.sign, ">", "<", "=")
-        self.set_sign.place(relx=.3, rely=.3, anchor="center")
+        self.set_sign.place(relx=.5, rely=.3, anchor="center")
         # the target value
         self.target_value = Entry(self)
-        self.target_value.place(relx=.4, rely=.3, anchor="center")
+        self.target_value.place(relx=.6, rely=.3, anchor="center")
 
-        Label(self, text=", ", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
-            .place(relx=.45, rely=.3, anchor="center")
-
-        Label(self, text="play ", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
-            .place(relx=.5, rely=.3, anchor="center")
-
-        Button(self, text='Choose Video', fg="#000000", command=self.choose_video) \
-            .place(relx=.57, rely=.3, anchor="center")
-
-        self.video = StringVar(self)
-        Label(self, textvariable=self.video, bg="#212121", fg="#05F72D", font=("Courier", 24)) \
-            .place(relx=.8, rely=.3, anchor="center")
+        Label(self, text=":", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
+            .place(relx=.65, rely=.3, anchor="center")
 
         # buttons
         Button(self, text='Add Param', fg="#000000", command=self.addition) \
-            .place(relx=.45, rely=.4, anchor="center")
+            .place(relx=.42, rely=.4, anchor="center")
         Button(self, text='Remove Param', fg="#000000", command=self.remove) \
-            .place(relx=.55, rely=.4, anchor="center")
+            .place(relx=.52, rely=.4, anchor="center")
         Button(self, text='Add Moment', fg="#000000", command=self.add_moment) \
-            .place(relx=.65, rely=.4, anchor="center")
+            .place(relx=.62, rely=.4, anchor="center")
         Button(self, text='Create File', fg="#000000", command=self.create_file) \
-            .place(relx=.5, rely=.47, anchor="center")
+            .place(relx=.52, rely=.47, anchor="center")
 
         # Allows for easy exit from Create Screen
         self.exit_button = Button(self, text="Back", bg='#05F72D', fg="#000000",
@@ -231,17 +223,21 @@ class CreateScreen(tk.Toplevel):
                              fg="#05F72D", font=("Courier", 16))
         self.display.pack()
 
+        self.add_moment()
+
     def add_moment(self):
         """ Separates groups of parameters """
         global PARAMS
-        PARAMS = PARAMS + "\nMoment"
+        messagebox.showinfo("Add a Moment", "Please choose a video to associate with this moment.")
+        self.choose_video()
+        PARAMS = PARAMS + "\n Moment -- Video: " + VIDEO_PATH
         self.params_added()
 
     def addition(self):
         """ lets users add parameters """
         # basic error checking
         if self.attr.get() == "" or self.sign.get() == "" \
-                or self.target_value.get() == "" or self.video.get() == "":
+                or self.target_value.get() == "":
             messagebox.showinfo("Error", "Please fill out all fields.")
             return
 
@@ -262,7 +258,6 @@ class CreateScreen(tk.Toplevel):
         self.target_value.delete(0, END)
         self.attr.set("          ")
         self.sign.set(" ")
-        self.video.set("")
 
     def create_file(self):
         """ creates the file once users are finished """
@@ -299,14 +294,10 @@ class CreateScreen(tk.Toplevel):
     def choose_video(self):
         """ allows user to choose a video to play for a given parameter """
         global VIDEO_PATH
-        VIDEO_PATH = filedialog.askopenfilename(initialdir="/home/Documents", title="Select file",
+        VIDEO_PATH = filedialog.askopenfilename(initialdir="/home/Documents", title="Select video for current moment",
                                                 filetypes=(("mov files", "*.MOV"),
                                                            ("mp4 files", "*.mp4"),
                                                            ("all files", "*.*")))
-        video_list = VIDEO_PATH.split("/")
-        # shortens full path to just the video name
-        shortened_video = video_list[len(video_list) - 1]
-        self.video.set(shortened_video)
 
     def exit(self):
         """ Warns user about exiting without saving. """
