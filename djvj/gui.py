@@ -7,18 +7,19 @@ Create Show screen functionality is built out, more to come!
 import pickle
 import tkinter as tk
 from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage, \
-    StringVar, OptionMenu, Scrollbar, N, S, NW, END
+    StringVar, OptionMenu, NW, END
 import time
 import os
 
-# global variable params
-PARAMS = ""
-show = list()
+# global variables
+RULES = ""  # running string of all rules added
+moments = list()  # groups of rules for the show
+show = list()   # all moments in a list
+
 audio_attr = list()  # what the audio should listen for
-rules = list()  # <, >, =
+signs = list()  # <, >, =
 values = list()  # what threshold the change happens at
 video_loc = list()  # video path
-moments = list()  # groups of parameters for the show
 
 
 class SplashScreen(tk.Toplevel):
@@ -101,21 +102,21 @@ class IntroScreen(tk.Tk):
                                               filetypes=(("djvj files", "*.djvj"),
                                                          ("all files", "*.*")))
         data = pickle.load(open("%s" % filename, "rb"))
-        param_list = data.split("\n")
-        error = False
-        param_list.pop(0)
-        curr_mom = list()   # a list of the parameters in the current moment
-        for parameter in param_list:
-            blank = list()
-            print(parameter)
-            if "Moment" in parameter:   # switch to a new moment
+        rule_list = data.split("\n")
+        error = False   # not a invalid path
+        rule_list.pop(0)
+        curr_mom = list()   # a list of the rules in the current moment
+        for rule in rule_list:
+            single_mom = list()  # create a list of rules for this moment
+            print(rule)
+            if "Moment" in rule:   # switch to a new moment
                 if len(curr_mom) != 0:
                     moments.append(curr_mom)
                     curr_mom = list()   # clear the list
             else:
-                attribute = parameter.split("\t")
+                attribute = rule.split("\t")
                 audio_attr.append(attribute[1])
-                rules.append(attribute[2])
+                signs.append(attribute[2])
                 values.append(attribute[3])
                 if os.path.exists(attribute[5]):
                     video_loc.append(attribute[5])
@@ -124,18 +125,18 @@ class IntroScreen(tk.Tk):
                                                   "Please choose a file with valid file paths." % attribute[5])
                     error = True
                     break
-                blank.append(attribute[1])
-                blank.append(attribute[2])
-                blank.append(attribute[3])
-                blank.append(attribute[5])
-                curr_mom.append(blank)
+                single_mom.append(attribute[1])
+                single_mom.append(attribute[2])
+                single_mom.append(attribute[3])
+                single_mom.append(attribute[5])
+                curr_mom.append(single_mom)
 
         if error:
             self.load()
         else:
             # appends all these lists to a larger list, used in main to send to show.py
             show.append(audio_attr)
-            show.append(rules)
+            show.append(signs)
             show.append(values)
             show.append(video_loc)
 
@@ -154,7 +155,7 @@ class IntroScreen(tk.Tk):
 
 class CreateScreen(tk.Toplevel):
     """
-    Users can create a .djvj file by adding parameters and setting target values
+    Users can create a .djvj file by adding rules and setting target values
     They can also specify the file name/file save location when saving
     """
     VIDEO_PATH = ""
@@ -169,14 +170,13 @@ class CreateScreen(tk.Toplevel):
 
         Label(self, text="Create a Show!", bg="#212121",
               fg="#05F72D", font=("Courier", 48)).place(relx=.5, rely=.06, anchor="center")
-        Label(self, text="Add parameters to your show by filling out the form below.\n"
-                         "To add a parameter, select \"Add Param\""
-                         "\n Moments are groups of parameters "
+        Label(self, text="Add rules to your show by filling out the form below.\n"
+                         "To add a rules, select \"Add Rule\""
+                         "\n Moments are groups of rules "
                          "for the show to interpret together.\n"
                          "To add a new \"moment\" to your show, "
-                         "select \"Add Moment\", and then add parameters "
-                         "to that moment.\n Please ensure all parameters "
-                         "in a moment have the same video. \n When finished, "
+                         "select \"Add Moment\", and then add rules "
+                         "to that moment. \n When finished, "
                          "click \"Create Show\".", bg="#212121", fg="#05F72D",
               font=("Courier", 18)).place(relx=.5, rely=.17, anchor="center")
         Label(self, text="If", bg="#212121", fg="#05F72D",
@@ -200,9 +200,9 @@ class CreateScreen(tk.Toplevel):
             .place(relx=.65, rely=.3, anchor="center")
 
         # buttons
-        Button(self, text='Add Param', fg="#000000", command=self.addition) \
+        Button(self, text='Add Rule', fg="#000000", command=self.addition) \
             .place(relx=.42, rely=.4, anchor="center")
-        Button(self, text='Remove Param', fg="#000000", command=self.remove) \
+        Button(self, text='Remove Rule', fg="#000000", command=self.remove) \
             .place(relx=.52, rely=.4, anchor="center")
         Button(self, text='Add Moment', fg="#000000", command=self.add_moment) \
             .place(relx=.62, rely=.4, anchor="center")
@@ -218,7 +218,7 @@ class CreateScreen(tk.Toplevel):
         self.w = Canvas(self, width=self.winfo_width(), height=1000)
         self.w.place(relx=.25, rely=.5)
 
-        # shows running params
+        # shows running rules
         self.display = Label(self.w, text="", bg="#212121",
                              fg="#05F72D", font=("Courier", 16))
         self.display.pack()
@@ -226,15 +226,15 @@ class CreateScreen(tk.Toplevel):
         self.add_moment()
 
     def add_moment(self):
-        """ Separates groups of parameters """
-        global PARAMS
+        """ Separates groups of rules """
+        global RULES
         messagebox.showinfo("Add a Moment", "Please choose a video to associate with this moment.")
         self.choose_video()
-        PARAMS = PARAMS + "\n Moment -- Video: " + VIDEO_PATH
-        self.params_added()
+        RULES = RULES + "\n Moment -- Video: " + VIDEO_PATH
+        self.rule_added()
 
     def addition(self):
-        """ lets users add parameters """
+        """ lets users add rules """
         # basic error checking
         if self.attr.get() == "" or self.sign.get() == "" \
                 or self.target_value.get() == "":
@@ -248,20 +248,20 @@ class CreateScreen(tk.Toplevel):
             self.target_value.delete(0, END)
             return
 
-        new_param = "If\t" + self.attr.get() \
+        new_rule = "If\t" + self.attr.get() \
             + "\t" + self.sign.get() + "\t" + self.target_value.get() \
             + "\t play\t"
 
-        global PARAMS
-        if new_param in PARAMS:
+        global RULES
+        if new_rule in RULES:
             messagebox.showinfo("Error", "This rule exists in a moment. Please create a unique rule.")
             self.target_value.delete(0, END)
             self.attr.set("          ")
             self.sign.set(" ")
             return
-        PARAMS = PARAMS + "\n" + new_param + VIDEO_PATH
+        RULES = RULES + "\n" + new_rule + VIDEO_PATH
 
-        self.params_added()
+        self.rule_added()
         # clears all the fields
         self.target_value.delete(0, END)
         self.attr.set("          ")
@@ -269,8 +269,8 @@ class CreateScreen(tk.Toplevel):
 
     def create_file(self):
         """ creates the file once users are finished """
-        global PARAMS
-        PARAMS = PARAMS + "\nMoment"
+        global RULES
+        RULES = RULES + "\nMoment"
         # lets user choose name/save location
         filename = filedialog.asksaveasfilename(initialdir="/home/Documents",
                                                 title="Save file location",
@@ -278,29 +278,29 @@ class CreateScreen(tk.Toplevel):
                                                            ("all files", "*.*")))
         if filename != "":
             # adds to file
-            pickle.dump(PARAMS, open("%s.djvj" % filename, "wb"))
+            pickle.dump(RULES, open("%s.djvj" % filename, "wb"))
             time.sleep(2)
             self.destroy()
 
-    def params_added(self):
-        """ shows running total of params to be added """
-        global PARAMS
-        self.display.configure(text="%s" % PARAMS)
+    def rule_added(self):
+        """ shows running total of rules to be added """
+        global RULES
+        self.display.configure(text="%s" % RULES)
 
     def remove(self):
-        """ removes last parameter added """
-        global PARAMS
+        """ removes last rule added """
+        global RULES
         # basic error checking
-        if PARAMS == "":
-            messagebox.showinfo("Error", "Parameters are empty!")
-        idx = PARAMS.rfind("\n")
-        # take everything up until the second to last \n, which removes the last param
+        if RULES == "":
+            messagebox.showinfo("Error", "Rules are empty!")
+        idx = RULES.rfind("\n")
+        # take everything up until the second to last \n, which removes the last rule
         if idx >= 0:
-            PARAMS = PARAMS[:idx]
-        self.params_added()
+            RULES = RULES[:idx]
+        self.rule_added()
 
     def choose_video(self):
-        """ allows user to choose a video to play for a given parameter """
+        """ allows user to choose a video to play for a given rule """
         global VIDEO_PATH
         VIDEO_PATH = filedialog.askopenfilename(initialdir="/home/Documents", title="Select video for current moment",
                                                 filetypes=(("mov files", "*.MOV"),
