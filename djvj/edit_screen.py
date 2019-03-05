@@ -8,8 +8,7 @@ PARAMS = ""
 
 class EditShow():
     """Edit Show Class"""
-    param_printout = ""
-    parameter_prefix = "param_"
+
     attr_list = list()  # what the audio should listen for
     sign_list = list()  # <, >, =
     values_list = list()  # what threshold the change happens at
@@ -119,15 +118,21 @@ class EditShow():
             item = self.charbox.get(int(index))
             output = ("Parameters deleted: %s"%item)
             self.deleted_list.append(output)
+            self.attr_list.pop(index)
+            self.sign_list.pop(index)
+            self.values_list.pop(index)
+            self.vid_list.pop(index)
             self.charbox.delete(int(index))
+
 
     def edit_param(self):
         '''edit parameter content'''
+        item_list=""
         for index in self.charbox.curselection():
             item = self.charbox.get(int(index))
             item_list = item.split()
             self.charbox.delete(index)
-        self.add_param(item_list[1], item_list[2], item_list[3], item_list[5]).create
+        self.add_param(item_list[1], item_list[2], item_list[3], item_list[5])
         output = ("Parameters edited: %s"%item_list)
         self.edited_list.append(output)
 
@@ -135,7 +140,6 @@ class EditShow():
         '''save changes to file'''
 
         global PARAMS
-        PARAMS = ""
 
 
         size = (self.charbox.size())
@@ -147,7 +151,6 @@ class EditShow():
             PARAMS = PARAMS + "\n" + "If " + v_a \
             + " " + v_b + " " + v_c \
             + " play " + v_d
-        print(PARAMS)
 
         # lets user choose name/save location
         filename = filedialog.asksaveasfilename(initialdir="/home/Documents",
@@ -156,8 +159,10 @@ class EditShow():
                                                            ("all files", "*.*")))
         if filename != "":
             # adds to file
-            pickle.dump(PARAMS, open("%s.djvj" % filename, "wb"))
-            time.sleep(2)
+            temp =  open("%s.djvj" % filename, "wb")
+            pickle.dump(PARAMS, temp)
+            temp.close()
+            #time.sleep(2)
 
         #return(self.loaded_list, self.added_list, self.edited_list, self.deleted_list)
 
