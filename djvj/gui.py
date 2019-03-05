@@ -110,7 +110,7 @@ class IntroScreen(tk.Tk):
             single_mom = list()  # create a list of rules for this moment
             print(rule)
             if "Moment" in rule:   # switch to a new moment
-                if len(curr_mom) != 0:
+                if curr_mom:
                     moments.append(curr_mom)
                     curr_mom = list()   # clear the list
             else:
@@ -122,7 +122,8 @@ class IntroScreen(tk.Tk):
                     video_loc.append(attribute[5])
                 else:
                     messagebox.showerror("ERROR", "Error: File path %s does not exist.\n"
-                                                  "Please choose a file with valid file paths." % attribute[5])
+                                                  "Please choose a file with "
+                                                  "valid file paths." % attribute[5])
                     error = True
                     break
                 single_mom.append(attribute[1])
@@ -254,7 +255,8 @@ class CreateScreen(tk.Toplevel):
 
         global RULES
         if new_rule in RULES:
-            messagebox.showinfo("Error", "This rule exists in a moment. Please create a unique rule.")
+            messagebox.showinfo("Error", "This rule already exists in a moment. "
+                                         "Please create a unique rule.")
             self.target_value.delete(0, END)
             self.attr.set("          ")
             self.sign.set(" ")
@@ -302,7 +304,8 @@ class CreateScreen(tk.Toplevel):
     def choose_video(self):
         """ allows user to choose a video to play for a given rule """
         global VIDEO_PATH
-        VIDEO_PATH = filedialog.askopenfilename(initialdir="/home/Documents", title="Select video for current moment",
+        VIDEO_PATH = filedialog.askopenfilename(initialdir="/home/Documents",
+                                                title="Select video for current moment",
                                                 filetypes=(("mov files", "*.MOV"),
                                                            ("mp4 files", "*.mp4"),
                                                            ("all files", "*.*")))
