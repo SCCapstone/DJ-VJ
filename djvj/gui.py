@@ -248,10 +248,18 @@ class CreateScreen(tk.Toplevel):
             self.target_value.delete(0, END)
             return
 
-        global PARAMS
-        PARAMS = PARAMS + "\n" + "If\t" + self.attr.get() \
+        new_param = "If\t" + self.attr.get() \
             + "\t" + self.sign.get() + "\t" + self.target_value.get() \
-            + "\t play\t" + VIDEO_PATH
+            + "\t play\t"
+
+        global PARAMS
+        if new_param in PARAMS:
+            messagebox.showinfo("Error", "This rule exists in a moment. Please create a unique rule.")
+            self.target_value.delete(0, END)
+            self.attr.set("          ")
+            self.sign.set(" ")
+            return
+        PARAMS = PARAMS + "\n" + new_param + VIDEO_PATH
 
         self.params_added()
         # clears all the fields
