@@ -254,13 +254,6 @@ class CreateScreen(tk.Toplevel):
             + "\t play\t"
 
         global RULES
-        if new_rule in RULES:
-            messagebox.showinfo("Error", "This rule already exists in a moment. "
-                                         "Please create a unique rule.")
-            self.target_value.delete(0, END)
-            self.attr.set("          ")
-            self.sign.set(" ")
-            return
         RULES = RULES + "\n" + new_rule + VIDEO_PATH
 
         self.rule_added()
