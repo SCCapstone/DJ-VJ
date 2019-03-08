@@ -14,12 +14,6 @@ import os
 # global variables
 RULES = ""  # running string of all rules added
 moments = list()  # groups of rules for the show
-show = list()   # all moments in a list
-
-audio_attr = list()  # what the audio should listen for
-signs = list()  # <, >, =
-values = list()  # what threshold the change happens at
-video_loc = list()  # video path
 
 
 class SplashScreen(tk.Toplevel):
@@ -115,32 +109,24 @@ class IntroScreen(tk.Tk):
                     curr_mom = list()   # clear the list
             else:
                 attribute = rule.split("\t")
-                audio_attr.append(attribute[1])
-                signs.append(attribute[2])
-                values.append(attribute[3])
+
+                single_mom.append(attribute[1])
+                single_mom.append(attribute[2])
+                single_mom.append(attribute[3])
                 if os.path.exists(attribute[5]):
-                    video_loc.append(attribute[5])
+                    single_mom.append(attribute[5])
                 else:
                     messagebox.showerror("ERROR", "Error: File path %s does not exist.\n"
                                                   "Please choose a file with "
                                                   "valid file paths." % attribute[5])
                     error = True
                     break
-                single_mom.append(attribute[1])
-                single_mom.append(attribute[2])
-                single_mom.append(attribute[3])
-                single_mom.append(attribute[5])
+
                 curr_mom.append(single_mom)
 
         if error:
             self.load()
         else:
-            # appends all these lists to a larger list, used in main to send to show.py
-            show.append(audio_attr)
-            show.append(signs)
-            show.append(values)
-            show.append(video_loc)
-
             # right now, just for error checking
             messagebox.showinfo("Load Show", data)
             self.destroy()
