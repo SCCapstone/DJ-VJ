@@ -7,17 +7,13 @@ Create Show screen functionality is built out, more to come!
 import pickle
 import tkinter as tk
 from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage, \
-    StringVar, OptionMenu, Scrollbar, N, S, NW, END
+    StringVar, OptionMenu, NW, END
 import time
+import os
 
-# global variable params
-PARAMS = ""
-show = list()
-audio_attr = list()  # what the audio should listen for
-rules = list()  # <, >, =
-values = list()  # what threshold the change happens at
-video_loc = list()  # video path
-moments = list()  # groups of parameters for the show
+# global variables
+RULES = ""  # running string of all rules added
+moments = list()  # groups of rules for the show
 
 
 class SplashScreen(tk.Toplevel):
@@ -100,35 +96,40 @@ class IntroScreen(tk.Tk):
                                               filetypes=(("djvj files", "*.djvj"),
                                                          ("all files", "*.*")))
         data = pickle.load(open("%s" % filename, "rb"))
-        param_list = data.split("\n")
-        param_list.pop(0)
-        curr_mom = list()   # a list of the parameters in the current moment
-        for parameter in param_list:
-            blank = list()
-            if parameter == "Moment":   # switch to a new moment
-                moments.append(curr_mom)
-                curr_mom = list()   # clear the list
+        rule_list = data.split("\n")
+        error = False   # not a invalid path
+        rule_list.pop(0)
+        curr_mom = list()   # a list of the rules in the current moment
+        for rule in rule_list:
+            single_mom = list()  # create a list of rules for this moment
+            print(rule)
+            if "Moment" in rule:   # switch to a new moment
+                if curr_mom:
+                    moments.append(curr_mom)
+                    curr_mom = list()   # clear the list
             else:
-                attribute = parameter.split("\t")
-                audio_attr.append(attribute[1])
-                rules.append(attribute[2])
-                values.append(attribute[3])
-                video_loc.append(attribute[5])
-                blank.append(attribute[1])
-                blank.append(attribute[2])
-                blank.append(attribute[3])
-                blank.append(attribute[5])
-                curr_mom.append(blank)
+                attribute = rule.split("\t")
 
-        # appends all these lists to a larger list, used in main to send to show.py
-        show.append(audio_attr)
-        show.append(rules)
-        show.append(values)
-        show.append(video_loc)
+                single_mom.append(attribute[1])
+                single_mom.append(attribute[2])
+                single_mom.append(attribute[3])
+                if os.path.exists(attribute[5]):
+                    single_mom.append(attribute[5])
+                else:
+                    messagebox.showerror("ERROR", "Error: File path %s does not exist.\n"
+                                                  "Please choose a file with "
+                                                  "valid file paths." % attribute[5])
+                    error = True
+                    break
 
-        # right now, just for error checking
-        messagebox.showinfo("Load Show", data)
-        self.destroy()
+                curr_mom.append(single_mom)
+
+        if error:
+            self.load()
+        else:
+            # right now, just for error checking
+            messagebox.showinfo("Load Show", data)
+            self.destroy()
 
     def create(self):
         """ pulls up create screen """
@@ -141,7 +142,7 @@ class IntroScreen(tk.Tk):
 
 class CreateScreen(tk.Toplevel):
     """
-    Users can create a .djvj file by adding parameters and setting target values
+    Users can create a .djvj file by adding rules and setting target values
     They can also specify the file name/file save location when saving
     """
     VIDEO_PATH = ""
@@ -156,55 +157,44 @@ class CreateScreen(tk.Toplevel):
 
         Label(self, text="Create a Show!", bg="#212121",
               fg="#05F72D", font=("Courier", 48)).place(relx=.5, rely=.06, anchor="center")
-        Label(self, text="Add parameters to your show by filling out the form below.\n"
-                         "To add a parameter, select \"Add Param\""
-                         "\n Moments are groups of parameters "
+        Label(self, text="Add rules to your show by filling out the form below.\n"
+                         "To add a rules, select \"Add Rule\""
+                         "\n Moments are groups of rules "
                          "for the show to interpret together.\n"
                          "To add a new \"moment\" to your show, "
-                         "select \"Add Moment\", and then add parameters "
-                         "to that moment.\n Please ensure all parameters "
-                         "in a moment have the same video. \n When finished, "
+                         "select \"Add Moment\", and then add rules "
+                         "to that moment. \n When finished, "
                          "click \"Create Show\".", bg="#212121", fg="#05F72D",
               font=("Courier", 18)).place(relx=.5, rely=.17, anchor="center")
         Label(self, text="If", bg="#212121", fg="#05F72D",
-              font=("Courier", 36)).place(relx=.15, rely=.3, anchor="center")
+              font=("Courier", 36)).place(relx=.35, rely=.3, anchor="center")
         # the sound attribute being tracked
         self.attr = StringVar(self)
         self.attr.set("           ")  # default value
         self.set_attribute = OptionMenu(
             self, self.attr, "pitch", "tempo", "time")
-        self.set_attribute.place(relx=.22, rely=.3, anchor="center")
+        self.set_attribute.place(relx=.42, rely=.3, anchor="center")
         # the sign (ie greater than, less than, etc)
         self.sign = StringVar(self)
         self.sign.set(" ")  # default value
         self.set_sign = OptionMenu(self, self.sign, ">", "<", "=")
-        self.set_sign.place(relx=.3, rely=.3, anchor="center")
+        self.set_sign.place(relx=.5, rely=.3, anchor="center")
         # the target value
         self.target_value = Entry(self)
-        self.target_value.place(relx=.4, rely=.3, anchor="center")
+        self.target_value.place(relx=.6, rely=.3, anchor="center")
 
-        Label(self, text=", ", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
-            .place(relx=.45, rely=.3, anchor="center")
-
-        Label(self, text="play ", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
-            .place(relx=.5, rely=.3, anchor="center")
-
-        Button(self, text='Choose Video', fg="#000000", command=self.choose_video) \
-            .place(relx=.57, rely=.3, anchor="center")
-
-        self.video = StringVar(self)
-        Label(self, textvariable=self.video, bg="#212121", fg="#05F72D", font=("Courier", 24)) \
-            .place(relx=.8, rely=.3, anchor="center")
+        Label(self, text=":", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
+            .place(relx=.65, rely=.3, anchor="center")
 
         # buttons
-        Button(self, text='Add Param', fg="#000000", command=self.addition) \
-            .place(relx=.45, rely=.4, anchor="center")
-        Button(self, text='Remove Param', fg="#000000", command=self.remove) \
-            .place(relx=.55, rely=.4, anchor="center")
+        Button(self, text='Add Rule', fg="#000000", command=self.addition) \
+            .place(relx=.42, rely=.4, anchor="center")
+        Button(self, text='Remove Rule', fg="#000000", command=self.remove) \
+            .place(relx=.52, rely=.4, anchor="center")
         Button(self, text='Add Moment', fg="#000000", command=self.add_moment) \
-            .place(relx=.65, rely=.4, anchor="center")
+            .place(relx=.62, rely=.4, anchor="center")
         Button(self, text='Create File', fg="#000000", command=self.create_file) \
-            .place(relx=.5, rely=.47, anchor="center")
+            .place(relx=.52, rely=.47, anchor="center")
 
         # Allows for easy exit from Create Screen
         self.exit_button = Button(self, text="Back", bg='#05F72D', fg="#000000",
@@ -215,22 +205,26 @@ class CreateScreen(tk.Toplevel):
         self.w = Canvas(self, width=self.winfo_width(), height=1000)
         self.w.place(relx=.25, rely=.5)
 
-        # shows running params
+        # shows running rules
         self.display = Label(self.w, text="", bg="#212121",
                              fg="#05F72D", font=("Courier", 16))
         self.display.pack()
 
+        self.add_moment()
+
     def add_moment(self):
-        """ Separates groups of parameters """
-        global PARAMS
-        PARAMS = PARAMS + "\nMoment"
-        self.params_added()
+        """ Separates groups of rules """
+        global RULES
+        messagebox.showinfo("Add a Moment", "Please choose a video to associate with this moment.")
+        self.choose_video()
+        RULES = RULES + "\n Moment -- Video: " + VIDEO_PATH
+        self.rule_added()
 
     def addition(self):
-        """ lets users add parameters """
+        """ lets users add rules """
         # basic error checking
         if self.attr.get() == "" or self.sign.get() == "" \
-                or self.target_value.get() == "" or self.video.get() == "":
+                or self.target_value.get() == "":
             messagebox.showinfo("Error", "Please fill out all fields.")
             return
 
@@ -241,22 +235,23 @@ class CreateScreen(tk.Toplevel):
             self.target_value.delete(0, END)
             return
 
-        global PARAMS
-        PARAMS = PARAMS + "\n" + "If\t" + self.attr.get() \
+        new_rule = "If\t" + self.attr.get() \
             + "\t" + self.sign.get() + "\t" + self.target_value.get() \
-            + "\t play\t" + VIDEO_PATH
+            + "\t play\t"
 
-        self.params_added()
+        global RULES
+        RULES = RULES + "\n" + new_rule + VIDEO_PATH
+
+        self.rule_added()
         # clears all the fields
         self.target_value.delete(0, END)
         self.attr.set("          ")
         self.sign.set(" ")
-        self.video.set("")
 
     def create_file(self):
         """ creates the file once users are finished """
-        global PARAMS
-        PARAMS = PARAMS + "\nMoment"
+        global RULES
+        RULES = RULES + "\nMoment"
         # lets user choose name/save location
         filename = filedialog.asksaveasfilename(initialdir="/home/Documents",
                                                 title="Save file location",
@@ -264,38 +259,35 @@ class CreateScreen(tk.Toplevel):
                                                            ("all files", "*.*")))
         if filename != "":
             # adds to file
-            pickle.dump(PARAMS, open("%s.djvj" % filename, "wb"))
+            pickle.dump(RULES, open("%s.djvj" % filename, "wb"))
             time.sleep(2)
             self.destroy()
 
-    def params_added(self):
-        """ shows running total of params to be added """
-        global PARAMS
-        self.display.configure(text="%s" % PARAMS)
+    def rule_added(self):
+        """ shows running total of rules to be added """
+        global RULES
+        self.display.configure(text="%s" % RULES)
 
     def remove(self):
-        """ removes last parameter added """
-        global PARAMS
+        """ removes last rule added """
+        global RULES
         # basic error checking
-        if PARAMS == "":
-            messagebox.showinfo("Error", "Parameters are empty!")
-        idx = PARAMS.rfind("\n")
-        # take everything up until the second to last \n, which removes the last param
+        if RULES == "":
+            messagebox.showinfo("Error", "Rules are empty!")
+        idx = RULES.rfind("\n")
+        # take everything up until the second to last \n, which removes the last rule
         if idx >= 0:
-            PARAMS = PARAMS[:idx]
-        self.params_added()
+            RULES = RULES[:idx]
+        self.rule_added()
 
     def choose_video(self):
-        """ allows user to choose a video to play for a given parameter """
+        """ allows user to choose a video to play for a given rule """
         global VIDEO_PATH
-        VIDEO_PATH = filedialog.askopenfilename(initialdir="/home/Documents", title="Select file",
+        VIDEO_PATH = filedialog.askopenfilename(initialdir="/home/Documents",
+                                                title="Select video for current moment",
                                                 filetypes=(("mov files", "*.MOV"),
                                                            ("mp4 files", "*.mp4"),
                                                            ("all files", "*.*")))
-        video_list = VIDEO_PATH.split("/")
-        # shortens full path to just the video name
-        shortened_video = video_list[len(video_list) - 1]
-        self.video.set(shortened_video)
 
     def exit(self):
         """ Warns user about exiting without saving. """
