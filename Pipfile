@@ -10,6 +10,7 @@ aubio = "==0.4.8"
 numpy = "==1.15.4"
 opencv-python = "==3.4.4.19"
 PyAudio = "==0.2.11"
+pyinstaller = "==3.4"
 
 [requires]
 python_version = "3.7"

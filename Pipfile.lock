@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6a12e7d57f5cd22e588d322bae86b92a7299497b72a1763daf986e02751ac435"
+            "sha256": "db52b61a2d5d5f1874f2175ad5908b1246bd2f0b8c5b4290088689b82f172afc"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,12 +16,32 @@
         ]
     },
     "default": {
+        "altgraph": {
+            "hashes": [
+                "sha256:d6814989f242b2b43025cba7161fc1b8fb487a62cd49c49245d6fd01c18ac997",
+                "sha256:ddf5320017147ba7b810198e0b6619bd7b5563aa034da388cea8546b877f9b0c"
+            ],
+            "version": "==0.16.1"
+        },
         "aubio": {
             "hashes": [
                 "sha256:452fb2297b3aca0355ba1d56fe72593f7a930b5e7072c86f89a8f2eea3e0f94b"
             ],
             "index": "pypi",
             "version": "==0.4.8"
+        },
+        "future": {
+            "hashes": [
+                "sha256:67045236dcfd6816dc439556d009594abf643e5eb48992e36beac09c2ca659b8"
+            ],
+            "version": "==0.17.1"
+        },
+        "macholib": {
+            "hashes": [
+                "sha256:ac02d29898cf66f27510d8f39e9112ae00590adb4a48ec57b25028d6962b1ae1",
+                "sha256:c4180ffc6f909bf8db6cd81cff4b6f601d575568f4d5dee148c830e9851eb9db"
+            ],
+            "version": "==1.11"
         },
         "numpy": {
             "hashes": [
@@ -90,6 +110,12 @@
             "index": "pypi",
             "version": "==3.4.4.19"
         },
+        "pefile": {
+            "hashes": [
+                "sha256:4c5b7e2de0c8cb6c504592167acf83115cbbde01fe4a507c16a1422850e86cd6"
+            ],
+            "version": "==2018.8.8"
+        },
         "pyaudio": {
             "hashes": [
                 "sha256:0d92f6a294565260a282f7c9a0b0d309fc8cc988b5ee5b50645634ab9e2da7f7",
@@ -104,6 +130,13 @@
             ],
             "index": "pypi",
             "version": "==0.2.11"
+        },
+        "pyinstaller": {
+            "hashes": [
+                "sha256:a5a6e04a66abfcf8761e89a2ebad937919c6be33a7b8963e1a961b55cb35986b"
+            ],
+            "index": "pypi",
+            "version": "==3.4"
         }
     },
     "develop": {}
