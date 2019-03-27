@@ -1,30 +1,52 @@
 """
 video_player displays videos that are determined by interpreter.py
 
-__author__ = "Matthew J. Smith, Lorthrop Richards, Timothy Dyar"
+__author__ = "Matthew J. Smith, Lothrop Richards, Timothy Dyar"
 __email__ = "mjs10@email.sc.edu, lothropr@email.sc.edu, tdyar@email.sc.edu"
 """
 import os
 import cv2 as visual
-
+import djvj.show as show
+import djvj.audio_listener as audio
+import djvj.interpreter as interpreter
+import sys
 
 class VideoPlayer:
     """
     VideoPlayer is the primary class for playing videos
     It takes a Show
     """
-
     def __init__(self, show):
         self.curr_video = ""
         self.show = show
         self.window_x = 700
         self.window_y = 900
+        self.switch = False
 
     def play_video(self):
         """
         play_video checks if the Show's current video has been updated and plays
         the current video
         """
+        def pause():
+            # release current video 
+            cap.release()
+            # closes playing window
+            visual.destroyAllWindows()
+            # gives file paths
+            my_path = os.path.abspath(os.path.dirname(__file__))
+            # saves path for black image
+            black_image = os.path.join(my_path, "../test/test_assets/black.jpg")
+            # reads image
+            image = visual.imread(black_image)
+            # display image
+            visual.imshow("black image", image)
+            while True:
+                #if r key is clicked exit out of black image and display current playing video
+                if visual.waitKey(1) & 0xFF == ord('r'):
+                    visual.destroyAllWindows()
+                    break
+            return
 
         # update video loop
         while True:
@@ -80,6 +102,19 @@ class VideoPlayer:
                 except:
                     cap.release()
                     pass
+                #pause if condition
+                if visual.waitKey(1) & 0xFF == ord('p'):
+                    pause()
+                    cap = visual.VideoCapture(video)
+                #exit program if condition
+                if visual.waitKey(1) & 0xFF == ord('k'):
+                    #ends audio thread within the audio_listener.py file
+                    audio.Off()
+                    #ends interpreter thread within the interpreter file
+                    interpreter.Off()
+                    #closes existing window
+                    visual.destroyAllWindows()
+                    sys.exit()
 
-                if visual.waitKey(1) & 0xFF == ord('q'):
-                    break
+                    
+
