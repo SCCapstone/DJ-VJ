@@ -13,10 +13,11 @@ import time
 import djvj.audio_listener as audio
 import djvj.interpreter as interpreter
 import djvj.video_player as video_player
+import sys
+import cv2
 # import djvj.visual as video
 # from djvj.visual import play_video
 # from djvj.visual import Visual
-
 
 class Show:
     """
@@ -53,6 +54,8 @@ class Show:
         """
         start() starts the show
         """
+        global audio_thread
+        global interpreter_thread
 
         try:
             # start audio_listener thread
@@ -74,3 +77,7 @@ class Show:
 
         except KeyboardInterrupt:
             pass
+
+
+
+        

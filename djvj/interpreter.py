@@ -19,6 +19,8 @@ class Interpreter:
     """
 
     def __init__(self, show):
+        global Switch
+        Switch = True 
         self.show = show  # the show Interpreter is interpreting
         self.sleep = .1  # sleep in between current video updates
 
@@ -39,7 +41,8 @@ class Interpreter:
         requires each Moment to only have one video
         """
         # main interpreter loop
-        while True:
+        global Switch
+        while Switch == True:
             # possible moments
             possible_moments = {}
             # for each moment
@@ -86,3 +89,7 @@ class Interpreter:
             self.show.curr_video = moment.video
             # delay next interpret to save processing power
             time.sleep(self.sleep)
+
+def Off():
+    global Switch
+    Switch = False

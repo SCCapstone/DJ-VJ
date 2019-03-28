@@ -21,6 +21,8 @@ class AudioListener:
     """
 
     def __init__(self, show):
+        global Switch
+        Switch = True
         self.audio_input = Microphone()
         self.window_size = 4096  # needed for pyaudio and aubio
         self.hop_size = 512  # needed for pyaudio and aubio
@@ -55,6 +57,8 @@ class AudioListener:
         self.audio_input.pyaudio_instance.terminate()
 
     def analyze(self, show):
+        global Switch
+
         """
         analyze() is the main loop for analyzing audio
         """
@@ -62,7 +66,7 @@ class AudioListener:
         if 'time' in self.listen_params:
             start_time = time.time()
 
-        while True:
+        while Switch == True :
             try:
                 # get next sample
                 audiobuffer = self.audio_input.stream.read(
@@ -125,3 +129,7 @@ class Microphone:  # pylint: disable=too-few-public-methods
                                                  frames_per_buffer=self.buffer_size)
         self.outputsink = None
         self.record_duration = None
+
+def Off():
+    global Switch
+    Switch = False
