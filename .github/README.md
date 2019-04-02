@@ -14,7 +14,7 @@ DJ-VJ is an easy to use video jockey software that listens to nearby audio input
 
 ## Build
 - [PyInstaller](https://www.pyinstaller.org/) is used to build a binary executable and and .app file on macOS
-- both files are saved to ./dist
+- both files are saved to `dist/`
 `pipenv run pyinstaller --onefile --windowed main.py`
 
 Note: name of executable files is based on the name of `main.py`. If you'd like it to be named `DJ-VJ`, change the name of `main.py` to `DJ-VJ.py`
