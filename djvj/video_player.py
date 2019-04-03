@@ -29,7 +29,7 @@ class VideoPlayer:
         the current video
         """
         def pause():
-            # release current video 
+            # release current video
             cap.release()
             # closes playing window
             visual.destroyAllWindows()
