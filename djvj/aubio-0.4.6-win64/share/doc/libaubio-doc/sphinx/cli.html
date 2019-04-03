@@ -1,0 +1,1191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Command line tools &#8212; aubio 0.4.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="aubio 0.4.6 documentation" href="index.html" />
+    <link rel="next" title="Developping with aubio" href="develop.html" />
+    <link rel="prev" title="Python module" href="python_module.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head>
+  <body role="document">
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="develop.html" title="Developping with aubio"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="python_module.html" title="Python module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">aubio 0.4.6 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="command-line-tools">
+<span id="manpages"></span><h1>Command line tools<a class="headerlink" href="#command-line-tools" title="Permalink to this headline">¶</a></h1>
+<p>The python module comes with the following tools:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">aubio</span></code> estimate and extract descriptors from sound files</li>
+<li><code class="docutils literal"><span class="pre">aubiocut</span></code> slices sound files at onset or beat timestamps</li>
+</ul>
+</div></blockquote>
+<p>More command line tools are included along with the library.</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">aubioonset</span></code> outputs the time stamp of detected note onsets</li>
+<li><code class="docutils literal"><span class="pre">aubiopitch</span></code> attempts to identify a fundamental frequency, or pitch, for
+each frame of the input sound</li>
+<li><code class="docutils literal"><span class="pre">aubiomfcc</span></code> computes Mel-frequency Cepstrum Coefficients</li>
+<li><code class="docutils literal"><span class="pre">aubiotrack</span></code> outputs the time stamp of detected beats</li>
+<li><code class="docutils literal"><span class="pre">aubionotes</span></code> emits midi-like notes, with an onset, a pitch, and a duration</li>
+<li><code class="docutils literal"><span class="pre">aubioquiet</span></code> extracts quiet and loud regions</li>
+</ul>
+</div></blockquote>
+<div class="section" id="aubio">
+<h2><code class="docutils literal"><span class="pre">aubio</span></code><a class="headerlink" href="#aubio" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre><span></span>NAME
+  aubio - a command line tool to extract information from sound files
+
+SYNOPSIS
+
+  aubio [-h] [-V] &lt;command&gt; ...
+
+COMMANDS
+
+  The general syntax is &quot;aubio &lt;command&gt; &lt;soundfile&gt; [options]&quot;. The following
+  commands are available:
+
+  onset        get onset times
+  pitch        extract fundamental frequency
+  beat         get locations of beats
+  tempo        get overall tempo in bpm
+  notes        get midi-like notes
+  mfcc         extract mel-frequency cepstrum coefficients
+  melbands     extract mel-frequency energies per band
+
+  For a list of available commands, use &quot;aubio -h&quot;. For more info about each
+  command, use &quot;aubio &lt;command&gt; --help&quot;.
+
+GENERAL OPTIONS
+
+  These options can be used before any command has been specified.
+
+  -h, --help  show help message and exit
+
+  -V, --version  show version
+
+COMMON OPTIONS
+
+  The following options can be used with all commands:
+
+  &lt;source_uri&gt;, -i &lt;source_uri&gt;, --input &lt;source_uri&gt;  input sound file to
+  analyse (required)
+
+  -r &lt;freq&gt;, --samplerate &lt;freq&gt;  samplerate at which the file should be
+  represented (default: 0, e.g. samplerate of the input sound)
+
+  -H &lt;size&gt;, --hopsize &lt;size&gt;  overlap size, number of samples between two
+  consecutive analysis (default: 256)
+
+  -B &lt;size&gt;, --bufsize &lt;size&gt;  buffer size, number of samples used for each
+  analysis, (e.g. FFT length, default: 512)
+
+  -h, --help  show help message and exit
+
+  -T format, --time-format format  select time values output format (samples,
+  ms, seconds) (default: seconds)
+
+  -v, --verbose  be verbose (increment verbosity by 1, default: 1)
+
+  -q, --quiet  be quiet (set verbosity to 0)
+
+ONSET
+
+  The following additional options can be used with the &quot;onset&quot; subcommand.
+
+  -m &lt;method&gt;, --method &lt;method&gt;  onset novelty function
+  &lt;default|energy|hfc|complex|phase|specdiff|kl|mkl|specflux&gt; (default:
+  default)
+
+  -t &lt;threshold&gt;, --threshold &lt;threshold&gt;  threshold (default: unset)
+
+  -s &lt;value&gt;, --silence &lt;value&gt;  silence threshold, in dB (default: -70)
+
+  -M &lt;value&gt;, --minioi &lt;value&gt;  minimum Inter-Onset Interval (default: 12ms)
+
+PITCH
+
+  The following additional options can be used with the &quot;pitch&quot; subcommand.
+
+  -m &lt;method&gt;, --method &lt;method&gt;  pitch detection method
+  &lt;default|yinfft|yin|mcomb|fcomb|schmitt&gt; (default: default, e.g. yinfft)
+
+  -t &lt;threshold&gt;, --threshold &lt;threshold&gt;  tolerance (default: unset)
+
+  -s &lt;value&gt;, --silence &lt;value&gt;  silence threshold, in dB (default: -70)
+
+  The default buffer size for the beat algorithm is 2048. The default hop size
+  is 256.
+
+BEAT
+
+  The &quot;beat&quot; command accepts all common options and no additional options.
+
+  The default buffer size for the beat algorithm is 1024. The default hop size
+  is 512.
+
+TEMPO
+
+  The &quot;tempo&quot; command accepts all common options and no additional options.
+
+  The default buffer size for the beat algorithm is 1024. The default hop size
+  is 512.
+
+NOTES
+
+  The &quot;note&quot; command accepts all common options and no additional options.
+
+MFCC
+
+  The &quot;mfcc&quot; command accepts all common options and no additional options.
+
+MELBANDS
+
+  The &quot;melbands&quot; command accepts all common options and no additional options.
+
+EXAMPLES
+
+  Extract onsets using a minimum inter-onset interval of 30ms:
+
+    aubio onset /path/to/input_file -M 30ms
+
+  Extract pitch with method &quot;mcomb&quot; and a silence threshold of -90dB:
+
+    aubio pitch /path/to/input_file -m mcomb -s -90.0
+
+  Extract MFCC using the standard Slaney implementation:
+
+    aubio mfcc /path/to/input_file -r 44100
+
+
+SEE ALSO
+
+  aubiocut(1)
+
+AUTHOR
+
+  This manual page was written by Paul Brossier &lt;piem@aubio.org&gt;. Permission is
+  granted to copy, distribute and/or modify this document under the terms of
+  the GNU General Public License as published by the Free Software Foundation,
+  either version 3 of the License, or (at your option) any later version.
+</pre></div>
+</div>
+</div>
+<div class="section" id="aubiocut">
+<h2><code class="docutils literal"><span class="pre">aubiocut</span></code><a class="headerlink" href="#aubiocut" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre><span></span>NAME
+  aubiocut - a command line tool to slice sound files at onset or beat timestamps
+
+SYNOPSIS
+
+  aubiocut source
+  aubiocut [[-i] source]
+           [-r rate] [-B win] [-H hop]
+           [-O method] [-t thres]
+           [-b] [-c]
+           [-v] [-q] [-h]
+
+OPTIONS
+
+  This program follows the usual GNU command line syntax, with long options
+  starting with two dashes (--). A summary of options is included below.
+
+  -i, --input source  Run analysis on this audio file. Most uncompressed and
+  compressed are supported, depending on how aubio was built.
+
+  -r, --samplerate rate  Fetch the input source, resampled at the given
+  sampling rate. The rate should be specified in Hertz as an integer. If set
+  to 0, the sampling rate of the original source will be used. Defaults to 0.
+
+  -B, --bufsize win  The size of the buffer to analyze, that is the length
+  of the window used for spectral and temporal computations. Defaults to 512.
+
+  -H, --hopsize hop  The number of samples between two consecutive analysis.
+  Defaults to 256.
+
+  -O, --onset method  The onset detection method to use. See ONSET METHODS
+  below. Defaults to &#39;default&#39;.
+
+  -b, --beat  Use beat locations instead of onset locations.
+
+  -t, --onset-threshold thres  Set the threshold value for the onset peak
+  picking. Values are typically in the range [0.001, 0.900]. Lower threshold
+  values imply more onsets detected. Increasing this threshold should reduce
+  the number of incorrect detections. Defaults to 0.3.
+
+  -c, --cut  Cut input sound file at detected labels. A new sound files for
+  each slice will be created in the current directory.
+
+  -o, --output directory  Specify the directory path where slices of the
+  original source should be created.
+
+  --cut-until-nsamples n  How many extra samples should be added at the end of
+  each slice (default 0).
+
+  --cut-until-nslices n  How many extra slices should be added at the end of
+  each slice (default 0).
+
+  -h, --help  Print a short help message and exit.
+
+  -v, --verbose  Be verbose.
+
+  -q, --quiet  Be quiet.
+
+
+ONSET METHODS
+
+  Available methods: default, energy, hfc, complex, phase, specdiff, kl, mkl,
+  specflux.
+
+  See aubioonset(1) for details about these methods.
+
+
+SEE ALSO
+
+  aubioonset(1),
+  aubiopitch(1),
+  aubiotrack(1),
+  aubionotes(1),
+  aubioquiet(1),
+  and
+  aubiomfcc(1).
+
+AUTHOR
+
+  This manual page was written by Paul Brossier &lt;piem@aubio.org&gt;. Permission is
+  granted to copy, distribute and/or modify this document under the terms of
+  the GNU General Public License as published by the Free Software Foundation,
+  either version 3 of the License, or (at your option) any later version.
+</pre></div>
+</div>
+</div>
+<div class="section" id="aubioonset">
+<h2><code class="docutils literal"><span class="pre">aubioonset</span></code><a class="headerlink" href="#aubioonset" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre><span></span>NAME
+  aubioonset - a command line tool to extract musical onset times
+
+SYNOPSIS
+
+  aubioonset source
+  aubioonset [[-i] source] [-o sink]
+             [-r rate] [-B win] [-H hop]
+             [-O method] [-t thres]
+             [-T time-format]
+             [-s sil] [-m] [-f]
+             [-j] [-N miditap-note] [-V miditap-velo]
+             [-v] [-h]
+
+DESCRIPTION
+
+  aubioonset attempts to detect onset times, the beginning of discrete sound
+  events, in audio signals.
+
+  When started with an input source (-i/--input), the detected onset times are
+  given on the console, in seconds.
+
+  When started without an input source, or with the jack option (-j/--jack),
+  aubioonset starts in jack mode.
+
+OPTIONS
+
+  This program follows the usual GNU command line syntax, with long options
+  starting with two dashes (--). A summary of options is included below.
+
+  -i, --input source  Run analysis on this audio file. Most uncompressed and
+  compressed are supported, depending on how aubio was built.
+
+  -o, --output sink  Save results in this file. The file will be created on
+  the model of the input file. Onset times are marked by a short wood-block
+  like sound.
+
+  -r, --samplerate rate  Fetch the input source, resampled at the given
+  sampling rate. The rate should be specified in Hertz as an integer. If 0,
+  the sampling rate of the original source will be used. Defaults to 0.
+
+  -B, --bufsize win  The size of the buffer to analyze, that is the length
+  of the window used for spectral and temporal computations. Defaults to 512.
+
+  -H, --hopsize hop  The number of samples between two consecutive analysis.
+  Defaults to 256.
+
+  -O, --onset method  The onset detection method to use. See ONSET METHODS
+  below. Defaults to &#39;default&#39;.
+
+  -t, --onset-threshold thres  Set the threshold value for the onset peak
+  picking. Values are typically in the range [0.001, 0.900]. Lower threshold
+  values imply more onsets detected. Increasing this threshold should reduce
+  the number of incorrect detections. Defaults to 0.3.
+
+  -M, --minioi value  Set the minimum inter-onset interval, in seconds, the
+  shortest interval between two consecutive onsets. Defaults to 0.020
+
+  -s, --silence sil  Set the silence threshold, in dB, under which the onset
+  will not be detected. A value of -20.0 would eliminate most onsets but the
+  loudest ones. A value of -90.0 would select all onsets. Defaults to -90.0.
+
+  -T, --timeformat format  Set time format (samples, ms, seconds). Defaults to
+  seconds.
+
+  -m, --mix-input  Mix source signal to the output signal before writing to
+  sink.
+
+  -f, --force-overwrite  Overwrite output file if it already exists.
+
+  -j, --jack  Use Jack input/output. You will need a Jack connection
+  controller to feed aubio some signal and listen to its output.
+
+  -N, --miditap-note  Override note value for MIDI tap. Defaults to 69.
+
+  -V, --miditap-velop  Override velocity value for MIDI tap. Defaults to 65.
+
+  -h, --help  Print a short help message and exit.
+
+  -v, --verbose  Be verbose.
+
+ONSET METHODS
+
+  Available methods are:
+
+  default  Default distance, currently hfc
+
+  Default: &#39;default&#39; (currently set to hfc)
+
+  energy  Energy based distance
+
+  This function calculates the local energy of the input spectral frame.
+
+  hfc  High-Frequency content
+
+  This method computes the High Frequency Content (HFC) of the input
+  spectral frame. The resulting function is efficient at detecting
+  percussive onsets.
+
+  Paul Masri. Computer modeling of Sound for Transformation and Synthesis of
+  Musical Signal. PhD dissertation, University of Bristol, UK, 1996.
+
+  complex  Complex domain onset detection function
+
+  This function uses information both in frequency and in phase to determine
+  changes in the spectral content that might correspond to musical onsets.
+  It is best suited for complex signals such as polyphonic recordings.
+
+  Christopher Duxbury, Mike E. Davies, and Mark B. Sandler.  Complex domain
+  onset detection for musical signals. In Proceedings of the Digital Audio
+  Effects Conference, DAFx-03, pages 90-93, London, UK, 2003.
+
+  phase  Phase based onset detection function
+
+  This function uses information both in frequency and in phase to determine
+  changes in the spectral content that might correspond to musical onsets. It
+  is best suited for complex signals such as polyphonic recordings.
+
+  Juan-Pablo Bello, Mike P. Davies, and Mark B. Sandler.  Phase-based note
+  onset detection for music signals. In Proceedings of the IEEE International
+  Conference on Acoustics Speech and Signal Processing, pages 441­444,
+  Hong-Kong, 2003.
+
+  specdiff  Spectral difference onset detection function
+
+  Jonhatan Foote and Shingo Uchihashi. The beat spectrum: a new approach to
+  rhythm analysis. In IEEE International Conference on Multimedia and Expo
+  (ICME 2001), pages 881­884, Tokyo, Japan, August 2001.
+
+  kl  Kulback-Liebler onset detection function
+
+  Stephen Hainsworth and Malcom Macleod. Onset detection in music audio
+  signals. In Proceedings of the International Computer Music Conference
+  (ICMC), Singapore, 2003.
+
+  mkl  Modified Kulback-Liebler onset detection function
+
+  Paul Brossier, ``Automatic annotation of musical audio for interactive
+  systems&#39;&#39;, Chapter 2, Temporal segmentation, PhD thesis, Centre for
+  Digital music, Queen Mary University of London, London, UK, 2006.
+
+  specflux  Spectral flux
+
+  Simon Dixon, Onset Detection Revisited, in ``Proceedings of the 9th
+  International Conference on Digital Audio Effects&#39;&#39; (DAFx-06), Montreal,
+  Canada, 2006.
+
+SEE ALSO
+
+  aubiopitch(1),
+  aubiotrack(1),
+  aubionotes(1),
+  aubioquiet(1),
+  aubiomfcc(1),
+  and
+  aubiocut(1).
+
+AUTHOR
+
+  This manual page was written by Paul Brossier &lt;piem@aubio.org&gt;. Permission is
+  granted to copy, distribute and/or modify this document under the terms of
+  the GNU General Public License as published by the Free Software Foundation,
+  either version 3 of the License, or (at your option) any later version.
+</pre></div>
+</div>
+</div>
+<div class="section" id="aubiopitch">
+<h2><code class="docutils literal"><span class="pre">aubiopitch</span></code><a class="headerlink" href="#aubiopitch" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre><span></span>NAME
+  aubiopitch - a command line tool to extract musical pitch
+
+SYNOPSIS
+
+  aubiopitch source
+  aubiopitch [[-i] source] [-o sink]
+             [-r rate] [-B win] [-H hop]
+             [-p method] [-u unit] [-l thres]
+             [-T time-format]
+             [-s sil] [-f]
+             [-v] [-h] [-j]
+
+DESCRIPTION
+
+  aubiopitch attempts to detect the pitch, the perceived height of a musical
+  note.
+
+  When started with an input source (-i/--input), the detected pitch are
+  printed on the console, prefixed by a timestamp in seconds. If no pitch
+  candidate is found, the output is 0.
+
+  When started without an input source, or with the jack option (-j/--jack),
+  aubiopitch starts in jack mode.
+
+OPTIONS
+
+  This program follows the usual GNU command line syntax, with long options
+  starting with two dashes (--). A summary of options is included below.
+
+  -i, --input source  Run analysis on this audio file. Most uncompressed and
+  compressed are supported, depending on how aubio was built.
+
+  -o, --output sink  Save results in this file. The file will be created on
+  the model of the input file. The detected frequency is played at the
+  detected loudness.
+
+  -r, --samplerate rate  Fetch the input source, resampled at the given
+  sampling rate. The rate should be specified in Hertz as an integer. If 0,
+  the sampling rate of the original source will be used. Defaults to 0.
+
+  -B, --bufsize win  The size of the buffer to analyze, that is the length
+  of the window used for spectral and temporal computations. Defaults to 2048.
+
+  -H, --hopsize hop  The number of samples between two consecutive analysis.
+  Defaults to 256.
+
+  -p, --pitch method  The pitch detection method to use. See PITCH METHODS
+  below. Defaults to &#39;default&#39;.
+
+  -u, --pitch-unit unit  The unit to be used to print frequencies. Possible
+  values include midi, bin, cent, and Hz. Defaults to &#39;Hz&#39;.
+
+  -l, --pitch-tolerance thres  Set the tolerance for the pitch detection
+  algorithm. Typical values range between 0.2 and 0.9. Pitch candidates found
+  with a confidence less than this threshold will not be selected. The higher
+  the threshold, the more confidence in the candidates. Defaults to unset.
+
+  -s, --silence sil  Set the silence threshold, in dB, under which the onset
+  will not be detected. A value of -20.0 would eliminate most onsets but the
+  loudest ones. A value of -90.0 would select all onsets. Defaults to -90.0.
+
+  -T, --timeformat format  Set time format (samples, ms, seconds). Defaults to
+  seconds.
+
+  -m, --mix-input  Mix source signal to the output signal before writing to
+  sink.
+
+  -f, --force-overwrite  Overwrite output file if it already exists.
+
+  -j, --jack  Use Jack input/output. You will need a Jack connection
+  controller to feed aubio some signal and listen to its output.
+
+  -h, --help  Print a short help message and exit.
+
+  -v, --verbose  Be verbose.
+
+PITCH METHODS
+
+  Available methods are:
+
+  default  use the default method
+
+  Currently, the default method is set to yinfft.
+
+  schmitt  Schmitt trigger
+
+  This pitch extraction method implements a Schmitt trigger to estimate the
+  period of a signal. It is computationally very inexpensive, but also very
+  sensitive to noise.
+
+  fcomb  a fast harmonic comb filter
+
+  This pitch extraction method implements a fast harmonic comb filter to
+  determine the fundamental frequency of a harmonic sound.
+
+  mcomb  multiple-comb filter
+
+  This fundamental frequency estimation algorithm implements spectral
+  flattening, multi-comb filtering and peak histogramming.
+
+  specacf  Spectral auto-correlation function
+
+  yin  YIN algorithm
+
+  This algorithm was developed by A. de Cheveigne and H. Kawahara and
+  was first published in:
+
+  De Cheveigné, A., Kawahara, H. (2002) &quot;YIN, a fundamental frequency
+  estimator for speech and music&quot;, J. Acoust. Soc. Am. 111, 1917-1930.
+
+  yinfft  Yinfft algorithm
+
+  This algorithm was derived from the YIN algorithm. In this implementation, a
+  Fourier transform is used to compute a tapered square difference function,
+  which allows spectral weighting. Because the difference function is tapered,
+  the selection of the period is simplified.
+
+  Paul Brossier, Automatic annotation of musical audio for interactive systems,
+  Chapter 3, Pitch Analysis, PhD thesis, Centre for Digital music, Queen Mary
+  University of London, London, UK, 2006.
+
+SEE ALSO
+
+  aubioonset(1),
+  aubiotrack(1),
+  aubionotes(1),
+  aubioquiet(1),
+  aubiomfcc(1),
+  and
+  aubiocut(1).
+
+AUTHOR
+
+  This manual page was written by Paul Brossier &lt;piem@aubio.org&gt;. Permission is
+  granted to copy, distribute and/or modify this document under the terms of
+  the GNU General Public License as published by the Free Software Foundation,
+  either version 3 of the License, or (at your option) any later version.
+</pre></div>
+</div>
+</div>
+<div class="section" id="aubiomfcc">
+<h2><code class="docutils literal"><span class="pre">aubiomfcc</span></code><a class="headerlink" href="#aubiomfcc" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre><span></span>NAME
+  aubiomfcc - a command line tool to compute Mel-Frequency Cepstrum Coefficients
+
+SYNOPSIS
+
+  aubiomfcc source
+  aubiomfcc [[-i] source]
+            [-r rate] [-B win] [-H hop]
+            [-T time-format]
+            [-v] [-h]
+
+DESCRIPTION
+
+  aubiomfcc compute the Mel-Frequency Cepstrum Coefficients (MFCC).
+
+  MFCCs are coefficients that make up for the mel-frequency spectrum, a
+  representation of the short-term power spectrum of a sound. By default, 13
+  coefficients are computed using 40 filters.
+
+  When started with an input source (-i/--input), the coefficients are given on
+  the console, prefixed by their timestamps in seconds.
+
+OPTIONS
+
+  This program follows the usual GNU command line syntax, with long options
+  starting with two dashes (--). A summary of options is included below.
+
+  -i, --input source  Run analysis on this audio file. Most uncompressed and
+  compressed are supported, depending on how aubio was built.
+
+  -r, --samplerate rate  Fetch the input source, resampled at the given
+  sampling rate. The rate should be specified in Hertz as an integer. If 0,
+  the sampling rate of the original source will be used. Defaults to 0.
+
+  -B, --bufsize win  The size of the buffer to analyze, that is the length
+  of the window used for spectral and temporal computations. Defaults to 512.
+
+  -H, --hopsize hop  The number of samples between two consecutive analysis.
+  Defaults to 256.
+
+  -T, --timeformat format  Set time format (samples, ms, seconds). Defaults to
+  seconds.
+
+  -h, --help  Print a short help message and exit.
+
+  -v, --verbose  Be verbose.
+
+REFERENCES
+
+  Using the default parameters, the filter coefficients will be computed
+  according to Malcolm Slaney&#39;s Auditory Toolbox, available at the following
+  url:
+
+  http://cobweb.ecn.purdue.edu/~malcolm/interval/1998-010/ (see file mfcc.m)
+
+SEE ALSO
+
+  aubioonset(1),
+  aubiopitch(1),
+  aubiotrack(1),
+  aubionotes(1),
+  aubioquiet(1),
+  and
+  aubiocut(1).
+
+AUTHOR
+
+  This manual page was written by Paul Brossier &lt;piem@aubio.org&gt;. Permission is
+  granted to copy, distribute and/or modify this document under the terms of
+  the GNU General Public License as published by the Free Software Foundation,
+  either version 3 of the License, or (at your option) any later version.
+</pre></div>
+</div>
+</div>
+<div class="section" id="aubiotrack">
+<h2><code class="docutils literal"><span class="pre">aubiotrack</span></code><a class="headerlink" href="#aubiotrack" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre><span></span>NAME
+  aubiotrack - a command line tool to extract musical beats from audio signals
+
+SYNOPSIS
+
+  aubiotrack source
+  aubiotrack [[-i] source] [-o sink]
+             [-r rate] [-B win] [-H hop]
+             [-T time-format]
+             [-s sil] [-m]
+             [-j] [-N miditap-note] [-V miditap-velo]
+             [-v] [-h]
+
+DESCRIPTION
+
+  aubiotrack attempts to detect beats, the time where one would intuitively be
+  tapping his foot.
+
+  When started with an input source (-i/--input), the detected beats are given
+  on the console, in seconds.
+
+  When started without an input source, or with the jack option (-j/--jack),
+  aubiotrack starts in jack mode.
+
+OPTIONS
+
+  This program follows the usual GNU command line syntax, with long options
+  starting with two dashes (--). A summary of options is included below.
+
+  -i, --input source  Run analysis on this audio file. Most uncompressed and
+  compressed are supported, depending on how aubio was built.
+
+  -o, --output sink  Save results in this file. The file will be created on the
+  model of the input file. Beats are marked by a short wood-block like sound.
+
+  -r, --samplerate rate  Fetch the input source, resampled at the given
+  sampling rate. The rate should be specified in Hertz as an integer. If 0,
+  the sampling rate of the original source will be used. Defaults to 0.
+
+  -B, --bufsize win  The size of the buffer to analyze, that is the length
+  of the window used for spectral and temporal computations. Defaults to 512.
+
+  -H, --hopsize hop  The number of samples between two consecutive analysis.
+  Defaults to 256.
+
+  -s, --silence sil  Set the silence threshold, in dB, under which the pitch
+  will not be detected. A value of -20.0 would eliminate most onsets but the
+  loudest ones. A value of -90.0 would select all onsets. Defaults to -90.0.
+
+  -m, --mix-input  Mix source signal to the output signal before writing to
+  sink.
+
+  -f, --force-overwrite  Overwrite output file if it already exists.
+
+  -j, --jack  Use Jack input/output. You will need a Jack connection
+  controller to feed aubio some signal and listen to its output.
+
+  -N, --miditap-note  Override note value for MIDI tap. Defaults to 69.
+
+  -V, --miditap-velop  Override velocity value for MIDI tap. Defaults to 65.
+
+  -T, --timeformat format  Set time format (samples, ms, seconds). Defaults to
+  seconds.
+
+  -h, --help  Print a short help message and exit.
+
+  -v, --verbose  Be verbose.
+
+BEAT TRACKING METHODS
+
+  Aubio currently implements one the causal beat tracking algorithm designed by
+  Matthew Davies and described in the following articles:
+
+  Matthew E. P. Davies and Mark D. Plumbley. Causal tempo tracking of audio.
+  In Proceedings of the International Symposium on Music Information Retrieval
+  (ISMIR), pages 164­169, Barcelona, Spain, 2004.
+
+  Matthew E. P. Davies, Paul Brossier, and Mark D. Plumbley. Beat tracking
+  towards automatic musical accompaniment. In Proceedings of the Audio
+  Engineering Society 118th Convention, Barcelona, Spain, May 2005.
+
+SEE ALSO
+
+  aubioonset(1),
+  aubiopitch(1),
+  aubionotes(1),
+  aubioquiet(1),
+  aubiomfcc(1),
+  and
+  aubiocut(1).
+
+AUTHOR
+
+  This manual page was written by Paul Brossier &lt;piem@aubio.org&gt;. Permission is
+  granted to copy, distribute and/or modify this document under the terms of
+  the GNU General Public License as published by the Free Software Foundation,
+  either version 3 of the License, or (at your option) any later version.
+</pre></div>
+</div>
+</div>
+<div class="section" id="aubionotes">
+<h2><code class="docutils literal"><span class="pre">aubionotes</span></code><a class="headerlink" href="#aubionotes" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre><span></span>NAME
+  aubionotes - a command line tool to extract musical notes
+
+SYNOPSIS
+
+  aubionotes source
+  aubionotes [[-i] source]
+             [-r rate] [-B win] [-H hop]
+             [-O method] [-t thres]
+             [-p method] [-u unit] [-l thres]
+             [-T time-format]
+             [-s sil]
+             [-j] [-v] [-h]
+
+DESCRIPTION
+
+  aubionotes attempts to detect notes by looking for note onsets and pitches.
+  Consecutive events are segmented using onset detection, while a fundamental
+  frequency extraction algorithm determines their pitch.
+
+  When started with an input source (-i/--input), the detected notes are
+  printed on standard output, in seconds and midi note number.
+
+  When started without an input source, or with the jack option (-j/--jack),
+  aubionotes starts in jack mode.
+
+OPTIONS
+
+  This program follows the usual GNU command line syntax, with long options
+  starting with two dashes (--). A summary of options is included below.
+
+  -i, --input source  Run analysis on this audio file. Most uncompressed and
+  compressed are supported, depending on how aubio was built.
+
+  -r, --samplerate rate  Fetch the input source, resampled at the given
+  sampling rate. The rate should be specified in Hertz as an integer. If 0,
+  the sampling rate of the original source will be used. Defaults to 0.
+
+  -B, --bufsize win  The size of the buffer to analyze, that is the length
+  of the window used for spectral and temporal computations. Defaults to 512.
+
+  -H, --hopsize hop  The number of samples between two consecutive analysis.
+  Defaults to 256.
+
+  -O, --onset method  The onset detection method to use. See ONSET METHODS
+  below. Defaults to &#39;default&#39;.
+
+  -t, --onset-threshold thres  Set the threshold value for the onset peak
+  picking. Typical values are typically within 0.001 and 0.900. Defaults to
+  0.1. Lower threshold values imply more onsets detected. Try 0.5 in case of
+  over-detections. Defaults to 0.3.
+
+  -M, --minioi value  Set the minimum inter-onset interval, in seconds, the
+  shortest interval between two consecutive notes. Defaults to 0.030
+
+  -p, --pitch method  The pitch detection method to use. See PITCH METHODS
+  below. Defaults to &#39;default&#39;.
+
+  -u, --pitch-unit unit  The unit to be used to print frequencies. Possible
+  values include midi, bin, cent, and Hz. Defaults to &#39;Hz&#39;.
+
+  -l, --pitch-tolerance thres  Set the tolerance for the pitch detection
+  algorithm. Typical values range between 0.2 and 0.9. Pitch candidates found
+  with a confidence less than this threshold will not be selected. The higher
+  the threshold, the more confidence in the candidates. Defaults to unset.
+
+  -s, --silence sil  Set the silence threshold, in dB, under which the pitch
+  will not be detected. A value of -20.0 would eliminate most onsets but the
+  loudest ones. A value of -90.0 would select all onsets. Defaults to -90.0.
+
+  -T, --timeformat format  Set time format (samples, ms, seconds). Defaults to
+  seconds.
+
+  -j, --jack  Use Jack input/output. You will need a Jack connection
+  controller to feed aubio some signal and listen to its output.
+
+  -h, --help  Print a short help message and exit.
+
+  -v, --verbose  Be verbose.
+
+ONSET METHODS
+
+  Available methods: default, energy, hfc, complex, phase, specdiff, kl, mkl,
+  specflux.
+
+  See aubioonset(1) for details about these methods.
+
+PITCH METHODS
+
+  Available methods: default, schmitt, fcomb, mcomb, specacf, yin, yinfft.
+
+  See aubiopitch(1) for details about these methods.
+
+SEE ALSO
+
+  aubioonset(1),
+  aubiopitch(1),
+  aubiotrack(1),
+  aubioquiet(1),
+  aubiomfcc(1),
+  and
+  aubiocut(1).
+
+AUTHOR
+
+  This manual page was written by Paul Brossier &lt;piem@aubio.org&gt;. Permission is
+  granted to copy, distribute and/or modify this document under the terms of
+  the GNU General Public License as published by the Free Software Foundation,
+  either version 3 of the License, or (at your option) any later version.
+</pre></div>
+</div>
+</div>
+<div class="section" id="aubioquiet">
+<h2><code class="docutils literal"><span class="pre">aubioquiet</span></code><a class="headerlink" href="#aubioquiet" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text"><div class="highlight"><pre><span></span>NAME
+  aubioquiet - a command line tool to extracts quiet and loud regions from a file
+
+SYNOPSIS
+
+  aubioquiet source
+  aubioquiet [[-i] source]
+             [-r rate] [-B win] [-H hop]
+             [-T time-format]
+             [-s sil]
+             [-v] [-h]
+
+DESCRIPTION
+
+  aubioquiet will print a timestamp each time it detects a new silent region or
+  a new loud region in a sound file.
+
+  When started with an input source (-i/--input), the detected timestamps are
+  printed on the console, in seconds.
+
+OPTIONS
+
+  This program follows the usual GNU command line syntax, with long options
+  starting with two dashes (--). A summary of options is included below.
+
+  -i, --input source  Run analysis on this audio file. Most uncompressed and
+  compressed are supported, depending on how aubio was built.
+
+  -r, --samplerate rate  Fetch the input source, resampled at the given
+  sampling rate. The rate should be specified in Hertz as an integer. If 0,
+  the sampling rate of the original source will be used. Defaults to 0.
+
+  -B, --bufsize win  The size of the buffer to analyze, that is the length
+  of the window used for spectral and temporal computations. Defaults to 512.
+
+  -H, --hopsize hop  The number of samples between two consecutive analysis.
+  Defaults to 256.
+
+  -s, --silence sil  Set the silence threshold, in dB, under which the pitch
+  will not be detected. Defaults to -90.0.
+
+  -T, --timeformat format  Set time format (samples, ms, seconds). Defaults to
+  seconds.
+
+  -h, --help  Print a short help message and exit.
+
+  -v, --verbose  Be verbose.
+
+EXAMPLE OUTPUT
+
+  NOISY: 28.775330
+
+  QUIET: 28.914648
+
+
+SEE ALSO
+
+  aubioonset(1),
+  aubiopitch(1),
+  aubiotrack(1),
+  aubionotes(1),
+  aubiomfcc(1),
+  and
+  aubiocut(1).
+
+AUTHOR
+
+  This manual page was written by Paul Brossier &lt;piem@aubio.org&gt;. Permission
+  is granted to copy, distribute and/or modify this document under the terms
+  of the GNU General Public License, Version 3 any later version published
+  by the Free Software Foundation.
+</pre></div>
+</div>
+</div>
+<div class="section" id="command-line-features">
+<h2>Command line features<a class="headerlink" href="#command-line-features" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="9%" />
+<col width="9%" />
+<col width="8%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="8%" />
+<col width="23%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">feat vs. prg</th>
+<th class="head">onset</th>
+<th class="head">pitch</th>
+<th class="head">mfcc</th>
+<th class="head">track</th>
+<th class="head">notes</th>
+<th class="head">quiet</th>
+<th class="head">cut1</th>
+<th class="head">short options</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>input</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>-i</td>
+</tr>
+<tr class="row-odd"><td>output</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+<td>Y!1</td>
+<td>-o,-m,-f</td>
+</tr>
+<tr class="row-even"><td>Hz/buf/hop</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y!2</td>
+<td>Y</td>
+<td>-r,-B-,H</td>
+</tr>
+<tr class="row-odd"><td>jack</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+<td>Y</td>
+<td>Y</td>
+<td>N!3</td>
+<td>N</td>
+<td>-j</td>
+</tr>
+<tr class="row-even"><td>onset</td>
+<td>Y</td>
+<td>N</td>
+<td>N</td>
+<td>Y!8</td>
+<td>Y!6</td>
+<td>N</td>
+<td>Y</td>
+<td>-O,-t,-M</td>
+</tr>
+<tr class="row-odd"><td>pitch</td>
+<td>N</td>
+<td>Y</td>
+<td>N</td>
+<td>N</td>
+<td>Y!6</td>
+<td>N</td>
+<td>N!5</td>
+<td>-p,-u,-l</td>
+</tr>
+<tr class="row-even"><td>silence</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+<td>Y</td>
+<td>Y!7</td>
+<td>Y</td>
+<td>N!4</td>
+<td>-s</td>
+</tr>
+<tr class="row-odd"><td>timefmt</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>!</td>
+<td>-T</td>
+</tr>
+<tr class="row-even"><td>help</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>-h</td>
+</tr>
+<tr class="row-odd"><td>verbose</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+<td>-v</td>
+</tr>
+</tbody>
+</table>
+<ol class="arabic simple">
+<li><code class="docutils literal"><span class="pre">aubiocut</span> <span class="pre">--output</span></code> is used to specify a directory, not a file.</li>
+<li>Option <code class="docutils literal"><span class="pre">--bufsize</span></code> is useless for <code class="docutils literal"><span class="pre">aubioquiet</span></code></li>
+<li><code class="docutils literal"><span class="pre">aubioquiet</span></code> could have a jack output</li>
+<li>Regression, re-add slicing at silences to <code class="docutils literal"><span class="pre">aubiocut</span></code></li>
+<li><code class="docutils literal"><span class="pre">aubiocut</span></code> could cut on notes</li>
+<li><code class="docutils literal"><span class="pre">aubionotes</span></code> needs onset/pitch setters.</li>
+<li>Silence was different for pitch and onset, test.</li>
+<li>Some <code class="docutils literal"><span class="pre">aubiotrack</span></code> options should be disabled (minioi, threshold).</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Command line tools</a><ul>
+<li><a class="reference internal" href="#aubio"><code class="docutils literal"><span class="pre">aubio</span></code></a></li>
+<li><a class="reference internal" href="#aubiocut"><code class="docutils literal"><span class="pre">aubiocut</span></code></a></li>
+<li><a class="reference internal" href="#aubioonset"><code class="docutils literal"><span class="pre">aubioonset</span></code></a></li>
+<li><a class="reference internal" href="#aubiopitch"><code class="docutils literal"><span class="pre">aubiopitch</span></code></a></li>
+<li><a class="reference internal" href="#aubiomfcc"><code class="docutils literal"><span class="pre">aubiomfcc</span></code></a></li>
+<li><a class="reference internal" href="#aubiotrack"><code class="docutils literal"><span class="pre">aubiotrack</span></code></a></li>
+<li><a class="reference internal" href="#aubionotes"><code class="docutils literal"><span class="pre">aubionotes</span></code></a></li>
+<li><a class="reference internal" href="#aubioquiet"><code class="docutils literal"><span class="pre">aubioquiet</span></code></a></li>
+<li><a class="reference internal" href="#command-line-features">Command line features</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="python_module.html"
+                        title="previous chapter">Python module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="develop.html"
+                        title="next chapter">Developping with aubio</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="develop.html" title="Developping with aubio"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="python_module.html" title="Python module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">aubio 0.4.6 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Paul Brossier.
+    </div>
+  </body>
+</html>

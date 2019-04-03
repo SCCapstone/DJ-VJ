@@ -9,10 +9,10 @@ __email__ = "mjs10@email.sc.edu"
 import time
 import pyaudio
 import numpy
-import djvj.pitch as pitch
-import djvj.tempo as tempo
-from djvj.Averager import Averager
-from djvj.Averager import Avgs
+import pitch as pitch
+import tempo as tempo
+from Averager import Averager
+from Averager import Avgs
 
 
 class AudioListener:

@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Developping with aubio &#8212; aubio 0.4.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="aubio 0.4.6 documentation" href="index.html" />
+    <link rel="next" title="About" href="about.html" />
+    <link rel="prev" title="Command line tools" href="cli.html" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head>
+  <body role="document">
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="about.html" title="About"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cli.html" title="Command line tools"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">aubio 0.4.6 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="developping-with-aubio">
+<span id="develop"></span><h1>Developping with aubio<a class="headerlink" href="#developping-with-aubio" title="Permalink to this headline">¶</a></h1>
+<p>Here is a brief overview of the C library.</p>
+<p>For a more detailed list of available functions, see the <a class="reference external" href="https://aubio.org/doc/latest/">API documentation</a>.</p>
+<p>To report issues, ask questions, and request new features, use <a class="reference external" href="https://github.com/aubio/aubio/issues">Github Issues</a></p>
+<div class="section" id="design-basics">
+<h2>Design Basics<a class="headerlink" href="#design-basics" title="Permalink to this headline">¶</a></h2>
+<p>The library is written in C and is optimised for speed and portability.</p>
+<p>All memory allocations take place in the <cite>new_</cite> methods. Each successful call
+to <cite>new_</cite> should have a matching call to <cite>del_</cite> to deallocate the object.</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="c1">// new_ to create an object foobar</span>
+<span class="n">aubio_foobar_t</span> <span class="o">*</span> <span class="nf">new_aubio_foobar</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span> <span class="n">args</span><span class="p">);</span>
+<span class="c1">// del_ to delete foobar</span>
+<span class="kt">void</span> <span class="nf">del_aubio_foobar</span> <span class="p">(</span><span class="n">aubio_foobar_t</span> <span class="o">*</span> <span class="n">foobar</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The main computations are done in the <cite>_do</cite> methods.</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="c1">// _do to process output = foobar(input)</span>
+<span class="n">audio_foobar_do</span> <span class="p">(</span><span class="n">aubio_foobar_t</span> <span class="o">*</span> <span class="n">foobar</span><span class="p">,</span> <span class="n">fvec_t</span> <span class="o">*</span> <span class="n">input</span><span class="p">,</span> <span class="n">cvec_t</span> <span class="o">*</span> <span class="n">output</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Most parameters can be read and written at any time:</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="c1">// _get_param to get foobar.param</span>
+<span class="n">smpl_t</span> <span class="nf">aubio_foobar_get_a_parameter</span> <span class="p">(</span><span class="n">aubio_foobar_t</span> <span class="o">*</span> <span class="n">foobar</span><span class="p">);</span>
+<span class="c1">// _set_param to set foobar.param</span>
+<span class="n">uint_t</span> <span class="nf">aubio_foobar_set_a_parameter</span> <span class="p">(</span><span class="n">aubio_foobar_t</span> <span class="o">*</span> <span class="n">foobar</span><span class="p">,</span> <span class="n">smpl_t</span> <span class="n">a_parameter</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>In some case, more functions are available:</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="c1">// non-real time functions</span>
+<span class="n">uint_t</span> <span class="nf">aubio_foobar_reset</span><span class="p">(</span><span class="n">aubio_foobar_t</span> <span class="o">*</span> <span class="n">t</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="basic-types">
+<h2>Basic Types<a class="headerlink" href="#basic-types" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="c1">// integers</span>
+<span class="n">uint_t</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>                 <span class="c1">// unsigned</span>
+<span class="n">sint_t</span> <span class="n">delay</span> <span class="o">=</span> <span class="o">-</span><span class="mi">90</span><span class="p">;</span>            <span class="c1">// signed</span>
+
+<span class="c1">// float</span>
+<span class="n">smpl_t</span> <span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mf">90.</span><span class="p">;</span>               <span class="c1">// simple precision</span>
+<span class="n">lsmp_t</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0.024</span><span class="p">;</span>              <span class="c1">// double precision</span>
+
+<span class="c1">// vector of floats (simple precision)</span>
+<span class="n">fvec_t</span> <span class="o">*</span> <span class="n">vec</span> <span class="o">=</span> <span class="n">new_fvec</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+<span class="n">vec</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">vec</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">vec</span><span class="o">-&gt;</span><span class="n">length</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">;</span> <span class="c1">// vec-&gt;data has n elements</span>
+<span class="n">fvec_print</span><span class="p">(</span><span class="n">vec</span><span class="p">);</span>
+<span class="n">del_fvec</span><span class="p">(</span><span class="n">vec</span><span class="p">);</span>
+
+<span class="c1">// complex data</span>
+<span class="n">cvec_t</span> <span class="o">*</span> <span class="n">fftgrain</span> <span class="o">=</span> <span class="n">new_cvec</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+<span class="n">vec</span><span class="o">-&gt;</span><span class="n">norm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">;</span>             <span class="c1">// vec-&gt;norm has n/2+1 elements</span>
+<span class="n">vec</span><span class="o">-&gt;</span><span class="n">phas</span><span class="p">[</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">3.1415</span><span class="p">;</span>       <span class="c1">// vec-&gt;phas as well</span>
+<span class="n">del_cvec</span><span class="p">(</span><span class="n">fftgrain</span><span class="p">);</span>
+
+<span class="c1">// matrix</span>
+<span class="n">fmat_t</span> <span class="o">*</span> <span class="n">mat</span> <span class="o">=</span> <span class="n">new_fmat</span> <span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">length</span><span class="p">);</span>
+<span class="n">mat</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">height</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>    <span class="c1">// mat-&gt;data has height rows</span>
+<span class="n">mat</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">length</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>   <span class="c1">// mat-&gt;data[0] has length columns</span>
+<span class="n">del_fmat</span><span class="p">(</span><span class="n">mat</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="reading-a-sound-file">
+<h2>Reading a sound file<a class="headerlink" href="#reading-a-sound-file" title="Permalink to this headline">¶</a></h2>
+<p>In this example, <a class="reference external" href="https://aubio.org/doc/latest/source_8h.html">aubio_source</a>
+is used to read a media file.</p>
+<p>First, define a few variables and allocate some memory.</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span>  <span class="n">uint_t</span> <span class="n">samplerate</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">uint_t</span> <span class="n">hop_size</span> <span class="o">=</span> <span class="mi">256</span><span class="p">;</span>
+  <span class="n">uint_t</span> <span class="n">n_frames</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">read</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+  <span class="n">aubio_source_t</span><span class="o">*</span> <span class="n">s</span> <span class="o">=</span>
+    <span class="n">new_aubio_source</span><span class="p">(</span><span class="n">source_path</span><span class="p">,</span> <span class="n">samplerate</span><span class="p">,</span> <span class="n">hop_size</span><span class="p">);</span>
+  <span class="n">fvec_t</span> <span class="o">*</span><span class="n">vec</span> <span class="o">=</span> <span class="n">new_fvec</span><span class="p">(</span><span class="n">hop_size</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">With <code class="docutils literal"><span class="pre">samplerate</span> <span class="pre">=</span> <span class="pre">0</span></code>, <code class="docutils literal"><span class="pre">aubio_source</span></code> will be created with the file&#8217;s
+original samplerate.</p>
+</div>
+<p>Now for the processing loop:</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span>  <span class="k">do</span> <span class="p">{</span>
+    <span class="n">aubio_source_do</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">vec</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">read</span><span class="p">);</span>
+    <span class="n">fvec_print</span> <span class="p">(</span><span class="n">vec</span><span class="p">);</span>
+    <span class="n">n_frames</span> <span class="o">+=</span> <span class="n">read</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">while</span> <span class="p">(</span> <span class="n">read</span> <span class="o">==</span> <span class="n">hop_size</span> <span class="p">);</span>
+</pre></div>
+</div>
+<p>At the end of the processing loop, memory is deallocated:</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span>  <span class="n">del_fvec</span> <span class="p">(</span><span class="n">vec</span><span class="p">);</span>
+  <span class="n">del_aubio_source</span> <span class="p">(</span><span class="n">s</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>See the complete example: <a class="reference download internal" href="_downloads/test-source.c" download=""><code class="xref download docutils literal"><span class="pre">test-source.c</span></code></a>.</p>
+</div>
+<div class="section" id="computing-a-spectrum">
+<h2>Computing a spectrum<a class="headerlink" href="#computing-a-spectrum" title="Permalink to this headline">¶</a></h2>
+<p>Now let&#8217;s create a phase vocoder:</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span>  <span class="n">uint_t</span> <span class="n">win_s</span> <span class="o">=</span> <span class="mi">32</span><span class="p">;</span> <span class="c1">// window size</span>
+  <span class="n">uint_t</span> <span class="n">hop_s</span> <span class="o">=</span> <span class="n">win_s</span> <span class="o">/</span> <span class="mi">4</span><span class="p">;</span> <span class="c1">// hop size</span>
+
+  <span class="n">fvec_t</span> <span class="o">*</span> <span class="n">in</span> <span class="o">=</span> <span class="n">new_fvec</span> <span class="p">(</span><span class="n">hop_s</span><span class="p">);</span> <span class="c1">// input buffer</span>
+  <span class="n">cvec_t</span> <span class="o">*</span> <span class="n">fftgrain</span> <span class="o">=</span> <span class="n">new_cvec</span> <span class="p">(</span><span class="n">win_s</span><span class="p">);</span> <span class="c1">// fft norm and phase</span>
+  <span class="n">fvec_t</span> <span class="o">*</span> <span class="n">out</span> <span class="o">=</span> <span class="n">new_fvec</span> <span class="p">(</span><span class="n">hop_s</span><span class="p">);</span> <span class="c1">// output buffer</span>
+</pre></div>
+</div>
+<p>The processing loop could now look like:</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span>  <span class="k">while</span> <span class="p">(</span> <span class="n">n</span><span class="o">--</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// get some fresh input data</span>
+    <span class="c1">// ..</span>
+
+    <span class="c1">// execute phase vocoder</span>
+    <span class="n">aubio_pvoc_do</span> <span class="p">(</span><span class="n">pv</span><span class="p">,</span><span class="n">in</span><span class="p">,</span><span class="n">fftgrain</span><span class="p">);</span>
+
+    <span class="c1">// do something with fftgrain</span>
+    <span class="c1">// ...</span>
+    <span class="n">cvec_print</span> <span class="p">(</span><span class="n">fftgrain</span><span class="p">);</span>
+
+    <span class="c1">// optionally rebuild the signal</span>
+    <span class="n">aubio_pvoc_rdo</span><span class="p">(</span><span class="n">pv</span><span class="p">,</span><span class="n">fftgrain</span><span class="p">,</span><span class="n">out</span><span class="p">);</span>
+
+    <span class="c1">// and do something with the result</span>
+    <span class="c1">// ...</span>
+    <span class="n">fvec_print</span> <span class="p">(</span><span class="n">out</span><span class="p">);</span>
+  <span class="p">}</span>
+</pre></div>
+</div>
+<p>Time to clean up the previously allocated memory:</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span>  <span class="c1">// clean up</span>
+  <span class="n">del_fvec</span><span class="p">(</span><span class="n">in</span><span class="p">);</span>
+  <span class="n">del_cvec</span><span class="p">(</span><span class="n">fftgrain</span><span class="p">);</span>
+  <span class="n">del_fvec</span><span class="p">(</span><span class="n">out</span><span class="p">);</span>
+  <span class="n">del_aubio_pvoc</span><span class="p">(</span><span class="n">pv</span><span class="p">);</span>
+  <span class="n">aubio_cleanup</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>See the complete example: <a class="reference download internal" href="_downloads/test-phasevoc.c" download=""><code class="xref download docutils literal"><span class="pre">test-phasevoc.c</span></code></a>.</p>
+</div>
+<div class="section" id="doxygen-documentation">
+<span id="id1"></span><h2>Doxygen documentation<a class="headerlink" href="#doxygen-documentation" title="Permalink to this headline">¶</a></h2>
+<p>The latest version of the API documentation is built using <a class="reference external" href="http://www.doxygen.org/">Doxygen</a> and is available at:</p>
+<blockquote>
+<div><a class="reference external" href="https://aubio.org/doc/latest/">https://aubio.org/doc/latest/</a></div></blockquote>
+</div>
+<div class="section" id="contribute">
+<h2>Contribute<a class="headerlink" href="#contribute" title="Permalink to this headline">¶</a></h2>
+<p>Please report any issue and feature request at the <a class="reference external" href="https://github.com/aubio/aubio/issues">Github issue tracker</a>. Patches and pull-requests welcome!</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Developping with aubio</a><ul>
+<li><a class="reference internal" href="#design-basics">Design Basics</a></li>
+<li><a class="reference internal" href="#basic-types">Basic Types</a></li>
+<li><a class="reference internal" href="#reading-a-sound-file">Reading a sound file</a></li>
+<li><a class="reference internal" href="#computing-a-spectrum">Computing a spectrum</a></li>
+<li><a class="reference internal" href="#doxygen-documentation">Doxygen documentation</a></li>
+<li><a class="reference internal" href="#contribute">Contribute</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cli.html"
+                        title="previous chapter">Command line tools</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="about.html"
+                        title="next chapter">About</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="about.html" title="About"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cli.html" title="Command line tools"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">aubio 0.4.6 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Paul Brossier.
+    </div>
+  </body>
+</html>
