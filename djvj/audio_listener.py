@@ -58,11 +58,12 @@ class AudioListener:
         self.audio_input.pyaudio_instance.terminate()
 
     def analyze(self, show):
-        global Switch
-
         """
         analyze() is the main loop for analyzing audio
         """
+
+        global Switch
+
         # get show start time
         if 'time' in self.listen_params:
             start_time = time.time()
