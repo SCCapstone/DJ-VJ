@@ -15,24 +15,26 @@ class Bugger:
             ">": operator.gt,
             '=': operator.eg,
         }
-
+        #error counter 
         self.strike = 0
-
+        #main moment that will be used in the show class
         self.official_momment = official_momment
 
 	def momment_check(self):
-		# if momment is empty
+		# if the main momment is empty
 		if official_momment != True:
 			return True
 
 		## iterates through main momments 
 		for x in self.official_momment:
-			# iterates through conditions in momments
+			# iterates through momemnts in momments
 			for y in x:
 				# compare current momment param to existing momment param 
 				if t_param == y[1]:
+					# if current momment meets the condition of any existing momments, flag it
 					if self.ops[y[2]](self.value, y[3]):
 						self.strike += 1
+			# if the value is found to be in between two existing condition, return false
 			if self.strike >= 2:
 				return False
 
