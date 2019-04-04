@@ -10,6 +10,7 @@ from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoI
     StringVar, OptionMenu, NW, END
 import time
 import os
+import djvj.Bugger as bugger 
 
 # global variables
 RULES = ""  # running string of all rules added
@@ -109,11 +110,14 @@ class IntroScreen(tk.Tk):
                     curr_mom = list()   # clear the list
             else:
                 attribute = rule.split("\t")
-
+                #type
                 single_mom.append(attribute[1])
+                #sign
                 single_mom.append(attribute[2])
+                #value
                 single_mom.append(attribute[3])
                 if os.path.exists(attribute[5]):
+                    #video
                     single_mom.append(attribute[5])
                 else:
                     messagebox.showerror("ERROR", "Error: File path %s does not exist.\n"
@@ -122,7 +126,12 @@ class IntroScreen(tk.Tk):
                     error = True
                     break
 
-                curr_mom.append(single_mom)
+                bugger = bugger(single_mom, curr_mom)
+                if bugger == True:
+
+                    curr_mom.append(single_mom)
+                else:
+
 
         if error:
             self.load()
