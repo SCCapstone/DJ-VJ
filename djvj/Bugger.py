@@ -24,17 +24,37 @@ class Bugger:
 		# if the main momment is empty
 		if official_momment != True:
 			return True
-
-		## iterates through main momments 
+		'''
+		Iterates through the lists within the list
+		  List1.   List2    List2
+		[[A,B,C], [D,E,F], [G,H,I]]
+		'''
 		for x in self.official_momment:
-			# iterates through momemnts in momments
+			'''
+			Iterates through the objects within a single list
+			 Object1 Object2 Object3
+			[A,      B,      C]
+			'''
 			for y in x:
-				# compare current momment param to existing momment param 
+				'''
+				compare current momment param to existing momment param
+				ex:
+				Pitch = Pitch 
+				''' 
 				if t_param == y[1]:
-					# if current momment meets the condition of any existing momments, flag it
+					'''
+					if current momment meets the condition of any existing momments, flag it
+					ex:
+					t_value = 3
+					y[3] = 5
+
+					if tvalue < y[3]
+					flag this as a possible collision 
+					'''
 					if self.ops[y[2]](self.value, y[3]):
 						self.strike += 1
-			# if the value is found to be in between two existing condition, return false
+			
+			# if the value is found to be in between two existing condition (strike is equal 2), return false
 			if self.strike >= 2:
 				return False
 
