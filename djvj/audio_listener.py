@@ -21,8 +21,6 @@ class AudioListener:
     """
 
     def __init__(self, show):
-        global Switch
-        Switch = True
         self.audio_input = Microphone()
         self.window_size = 4096  # needed for pyaudio and aubio
         self.hop_size = 512  # needed for pyaudio and aubio
@@ -60,8 +58,6 @@ class AudioListener:
         self.audio_input.pyaudio_instance.terminate()
 
     def analyze(self, show):
-        global Switch
-
         """
         analyze() is the main loop for analyzing audio
         """
