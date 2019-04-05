@@ -6,9 +6,9 @@ __email__ = "mjs10@email.sc.edu, lothropr@email.sc.edu, tdyar@email.sc.edu"
 """
 import os
 import cv2 as visual
-import show as show
-import audio_listener as audio
-import interpreter as interpreter
+import djvj.show as show
+import dvjv.audio_listener as audio
+import dvjv.interpreter as interpreter
 import sys
 
 class VideoPlayer:
@@ -54,7 +54,7 @@ class VideoPlayer:
         # update video loop
         while True:
             # initialze current video
-            self.curr_video = self.show
+            self.curr_video = self.show.curr_video
             # get current path
             my_path = os.path.abspath(os.path.dirname(__file__))
             # add video path to current path
@@ -66,7 +66,7 @@ class VideoPlayer:
             # main playback loop - plays the video
             while cap.isOpened():
                 # check if current video has been updated
-                if self.curr_video != self.show:
+                if self.curr_video != self.show.curr_video:
                     break  # if so, break to update player current video
 
                 # get next frame: returns bool, image

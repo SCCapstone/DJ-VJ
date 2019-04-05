@@ -10,9 +10,9 @@ __email__ = "mjs10@email.sc.edu"
 import threading
 import os
 import time
-import audio_listener as audio
-import interpreter as interpreter
-import video_player as video_player
+import djvj.audio_listener as audio
+import djvj.interpreter as interpreter
+import dvjv.video_player as video_player
 import sys
 import cv2
 # import djvj.visual as video
