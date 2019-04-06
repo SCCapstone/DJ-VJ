@@ -131,6 +131,7 @@ class IntroScreen(tk.Tk):
 
                     curr_mom.append(single_mom)
                 else:
+                    print("There was a error found within using this param")
 
 
         if error:
