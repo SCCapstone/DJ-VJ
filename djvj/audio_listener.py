@@ -9,6 +9,7 @@ __email__ = "mjs10@email.sc.edu"
 import time
 import pyaudio
 import numpy
+from aubio import db_spl
 import djvj.pitch as pitch
 import djvj.tempo as tempo
 from djvj.Averager import Averager
@@ -61,10 +62,11 @@ class AudioListener:
         """
         analyze() is the main loop for analyzing audio
         """
-        #
+
         # get show start time
         if 'time' in self.listen_params:
             start_time = time.time()
+
 
         while not self.kill:
             try:
@@ -93,8 +95,12 @@ class AudioListener:
 
                 if 'volume' in self.listen_params:
                     # analyze sample for volume and update current value
-                    show.curr_param_values['volume'] = int(
-                        (numpy.sum(sample**2) / len(sample)) * 60000)
+                    # show.curr_param_values['volume'] = int(
+                        # (numpy.sum(sample**2) / len(sample)) * 60000)
+
+                    # analyze sample for spl (measured in dB)
+                    show.curr_param_values['volume'] = db_spl(sample)
+                    # print(show.curr_param_values['volume'])
 
                 if 'time' in self.listen_params:
                     # find elapsed timed
@@ -129,3 +135,4 @@ class Microphone:  # pylint: disable=too-few-public-methods
                                                  frames_per_buffer=self.buffer_size)
         self.outputsink = None
         self.record_duration = None
+
