@@ -7,8 +7,8 @@ __email__ = "mjs10@email.sc.edu, lothropr@email.sc.edu, tdyar@email.sc.edu"
 import os
 import cv2 as visual
 import djvj.show as show
-import dvjv.audio_listener as audio
-import dvjv.interpreter as interpreter
+import djvj.audio_listener as audio
+import djvj.interpreter as interpreter
 import sys
 
 class VideoPlayer:

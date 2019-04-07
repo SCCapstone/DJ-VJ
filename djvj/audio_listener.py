@@ -11,8 +11,8 @@ import pyaudio
 import numpy
 import djvj.pitch as pitch
 import djvj.tempo as tempo
-from Averager import Averager
-from Averager import Avgs
+from djvj.Averager import Averager
+from djvj.Averager import Avgs
 
 
 class AudioListener:
