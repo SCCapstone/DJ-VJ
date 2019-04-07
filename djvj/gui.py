@@ -126,9 +126,9 @@ class IntroScreen(tk.Tk):
                     error = True
                     break
 
-                bug = bugger(single_mom, curr_mom)
-                rangeb = bug.momment_check()
-                dublicate = bug.momment_check2()
+                bugger = bugger(single_mom, curr_mom)
+                rangeb = bugger.momment_check()
+                dublicate = bugger.momment_check2()
                 
                 if bbool == True and dublicate == True:
 
