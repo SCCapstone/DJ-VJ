@@ -127,8 +127,10 @@ class IntroScreen(tk.Tk):
                     break
 
                 bugger = bugger(single_mom, curr_mom)
-                bbool = bugger.momment_check()
-                if bbool == True:
+                rangeb = bugger.momment_check()
+                dublicate = bugger.momment_check2()
+                
+                if bbool == True or dublicate == True:
 
                     curr_mom.append(single_mom)
                 else:

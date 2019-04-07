@@ -11,7 +11,8 @@ class Test:
         #test int
         self.testval = 15
         #test lists of list
-        self.templist = [[['<', '30'], ['>', '0']],[['<','80' ], ['>','50']]]
+        self.testlist = ['<', '20']
+        self.templist = [[['<', '30'], ['<', '0']],[['<','80' ], ['>','50']]]
         self.templist2 = [[['<', '80'], ['>', '50']],[['<','30' ], ['>','0']]]
         self.templist3 = [[['<', '300'], ['>', '100']],[['<','800' ], ['>','500']]]
 
@@ -29,7 +30,14 @@ class Test:
                     print("ERROR at ", x)
       
             self.strike = 0
+    def check2(self):
+        for x in self.templist:
+            for y in x:
+                if y[0] == self.testlist[0]:
+                    if self.ops[y[0]](int(self.testlist[1]), int(y[1])) or self.ops[y[0]](int(y[1]), int(self.testlist[1])):
+                        print("Flag on", y)
+
 
 
 Test = Test()
-Test.check()
+Test.check2()

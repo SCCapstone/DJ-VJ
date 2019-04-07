@@ -1,4 +1,4 @@
-
+import operator
 
 class Bugger:
 
@@ -8,7 +8,9 @@ class Bugger:
         #sign
         self.t_sign = temp_momment[2]
         #value
-        self.t_value = temp_momment[3]
+        self.t_value = int(temp_momment[3])
+
+        self.official_momment = official_momment
 
         self.ops = {
             "<": operator.le,
@@ -22,7 +24,7 @@ class Bugger:
 
     def momment_check(self):
 		# if the main momment is empty
-        if official_momment != True:
+        if self.official_momment != True:
             return True
         '''
 		Iterates through the lists within the list
@@ -51,7 +53,7 @@ class Bugger:
 					if tvalue < y[3]
 					flag this as a possible collision 
 					'''
-                    if self.ops[y[2]](self.value, int(y[3])):
+                    if self.ops[y[2]](self.t_value, int(y[3])):
                         self.strike += 1
 			
 			# if the value is found to be in between two existing condition (strike is equal 2), return false
@@ -62,7 +64,18 @@ class Bugger:
 
         return True
 
-			#counter that iterates through existing moments 
+			#counter that iterates through existing moments
+    def momemment_check2(self):
+        for x in self.official_momment:
+            for y in x:
+                if self.t_param == y[1]:
+                    if self.t_sign == y[2]:
+                        if self.ops[y[2]](self.t_value, int(y[3])) or self.ops[y[2]](int(y[3]), self.t_value):
+                            return False
+        return True
+
+
+
 
 
 
