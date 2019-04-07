@@ -10,15 +10,16 @@ DJ-VJ is an easy to use video jockey software that listens to nearby audio input
 
 ## Virtual Environment
 `pipenv install`  
-`pipenv run python main.py`  
+`pipenv run python3 main.py`  
 
-#### Note
-We've been running into issues with the pipenv environment, as it's difficult to hard-install PortAudio, which is necessary for pyaudio to run. If the pipenv file does not work, you can still run our program by running the following commands:  
-`pip install aubio`  
-`pip install pyaudio (for Mac OSX brew install portaudio then pip install pyaudio, for Linux sudo apt-get portaudio)`  
-`pip install open-cv`  
-`pip install numpy`  
-`python3 main.py`
+## Build
+- [PyInstaller](https://www.pyinstaller.org/) is used to build a binary executable and and .app file on macOS
+- both files are saved to `dist/`
+
+`pipenv run pyinstaller --onefile --windowed main.py`
+
+Note: name of executable files is based on the name of `main.py`. If you'd like it to be named `DJ-VJ`, change the name of `main.py` to `DJ-VJ.py`
+
 
 ## Tests
 ### Unit Testing
@@ -28,13 +29,13 @@ Unit tests are located in `test/`
 To perform all unit tests:    
     `git clone git@github.com:SCCapstone/DJ-VJ.git`    
     `cd DJ-VJ`    
-    `python3 -m unittest discover` or `pipenv run python3 -m unittest discover` for virtual environment    
+    `pipenv run python3 -m unittest discover` for virtual environment    
 
 To perform individual unit test:    
     `git clone git@github.com:SCCapstone/DJ-VJ.git`    
     `cd DJ-VJ`    
-    `python3 -m unittest test.<module_name>`    
-    ie `python3 -m unittest test.test_freq_to_note`    
+    `pipenv run python3 -m unittest test.<module_name>`    
+    ie `pipenv run python3 -m unittest test.test_freq_to_note`    
 
 ### Behavioral Testing
 To run behavioral test, navigate to the central repository, type `python3 create_screen_behavioral.py` and watch as the program loads, the splash screen is displayed, and the main screen appears.
