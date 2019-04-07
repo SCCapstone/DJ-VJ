@@ -122,7 +122,7 @@ class VideoPlayer:
         """
 
         # get relative path for black.jpg
-        black_image = resource_path("../test/test_assets/black.jpg")
+        black_image = resource_path("black.jpg")
         # reads image
         image = visual.imread(black_image)
         # display image
