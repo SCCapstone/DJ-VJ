@@ -19,7 +19,7 @@ for d in a.datas:
    if 'pyconfig' in d[0]:
        a.datas.remove(d)
        break
-a.datas += [('dj-vj.gif', './djvj/dj-vj.gif', 'Data')]
+a.datas += [('dj-vj.gif', './djvj/dj-vj.gif', 'Data'), ('black.jpg', './djvj/black.jpg', 'Data')]
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
