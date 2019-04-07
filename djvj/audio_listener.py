@@ -9,6 +9,7 @@ __email__ = "mjs10@email.sc.edu"
 import time
 import pyaudio
 import numpy
+from aubio import db_spl
 import djvj.pitch as pitch
 import djvj.tempo as tempo
 from djvj.Averager import Averager
@@ -21,8 +22,6 @@ class AudioListener:
     """
 
     def __init__(self, show):
-        global Switch
-        Switch = True
         self.audio_input = Microphone()
         self.window_size = 4096  # needed for pyaudio and aubio
         self.hop_size = 512  # needed for pyaudio and aubio
@@ -51,22 +50,25 @@ class AudioListener:
         # self.averager = averager.Averager(self.max_samples)
         self.averager = Avgs()
 
+        # signals
+        self.kill = False
+
     def __del__(self):
         self.audio_input.stream.stop_stream()
         self.audio_input.stream.close()
         self.audio_input.pyaudio_instance.terminate()
 
     def analyze(self, show):
-        global Switch
-
         """
         analyze() is the main loop for analyzing audio
         """
+
         # get show start time
         if 'time' in self.listen_params:
             start_time = time.time()
 
-        while Switch == True :
+
+        while not self.kill:
             try:
                 # get next sample
                 audiobuffer = self.audio_input.stream.read(
@@ -93,8 +95,12 @@ class AudioListener:
 
                 if 'volume' in self.listen_params:
                     # analyze sample for volume and update current value
-                    show.curr_param_values['volume'] = int(
-                        (numpy.sum(sample**2) / len(sample)) * 60000)
+                    # show.curr_param_values['volume'] = int(
+                        # (numpy.sum(sample**2) / len(sample)) * 60000)
+
+                    # analyze sample for spl (measured in dB)
+                    show.curr_param_values['volume'] = db_spl(sample)
+                    # print(show.curr_param_values['volume'])
 
                 if 'time' in self.listen_params:
                     # find elapsed timed
@@ -130,6 +136,3 @@ class Microphone:  # pylint: disable=too-few-public-methods
         self.outputsink = None
         self.record_duration = None
 
-def Off():
-    global Switch
-    Switch = False
