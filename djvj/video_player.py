@@ -103,9 +103,10 @@ class VideoPlayer:
         by pressing 'p'
         """
 
-        # saves path for black image
+        # create numpy array of the size of the screen
         black_image = np.zeros(
             [self.window_x, self.window_y, 3], dtype=np.uint8)
+        # fill with zeros for black pixels
         black_image.fill(0)
 
         # create window
@@ -115,6 +116,7 @@ class VideoPlayer:
             "window", visual.WND_PROP_FULLSCREEN, visual.WINDOW_FULLSCREEN)
         # display image
         visual.imshow("window", black_image)
+        # while showing black
         while True:
             # get waitKey value
             key = visual.waitKey(1)
