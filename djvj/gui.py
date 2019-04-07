@@ -130,7 +130,7 @@ class IntroScreen(tk.Tk):
                 rangeb = bugger.momment_check()
                 dublicate = bugger.momment_check2()
                 
-                if bbool == True or dublicate == True:
+                if bbool == True and dublicate == True:
 
                     curr_mom.append(single_mom)
                 else:
