@@ -103,19 +103,16 @@ class VideoPlayer:
         by pressing 'p'
         """
 
-        # saves path for black image
-        black_image = np.zeros(
+      # saves path for black image
+      black_image = np.zeros(
             [self.window_x, self.window_y, 3], dtype=np.uint8)
-        black_image.fill(0)
+       black_image.fill(0)
 
         # create window
         visual.namedWindow("window", visual.WND_PROP_FULLSCREEN)
         # make window full screen
         visual.setWindowProperty(
             "window", visual.WND_PROP_FULLSCREEN, visual.WINDOW_FULLSCREEN)
-        # display image
-        visual.imshow("window", black_image)
-        while True:
             # get waitKey value
             key = visual.waitKey(1)
             # if r key is clicked exit out of black image and display current playing video
@@ -128,3 +125,18 @@ class VideoPlayer:
                 self.kill = True
                 return
         return
+
+
+def resource_path(relative_path):
+    """
+    Get absolute path to resource, works for dev and for PyInstaller
+
+    src: https://stackoverflow.com/questions/31836104/pyinstaller-and-onefile-how-to-include-an-image-in-the-exe-file
+    """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
