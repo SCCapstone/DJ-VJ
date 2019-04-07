@@ -127,10 +127,12 @@ class IntroScreen(tk.Tk):
                     break
 
                 bugger = bugger(single_mom, curr_mom)
-                if bugger == True:
+                bbool = bugger.momment_check()
+                if bbool == True:
 
                     curr_mom.append(single_mom)
                 else:
+                    single_mom.clear()
                     print("There was a error found within using this param")
 
 

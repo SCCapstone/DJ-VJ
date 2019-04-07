@@ -51,7 +51,7 @@ class Bugger:
 					if tvalue < y[3]
 					flag this as a possible collision 
 					'''
-                    if self.ops[y[2]](self.value, y[3]):
+                    if self.ops[y[2]](self.value, int(y[3])):
                         self.strike += 1
 			
 			# if the value is found to be in between two existing condition (strike is equal 2), return false
