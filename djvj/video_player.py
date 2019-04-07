@@ -5,6 +5,7 @@ __author__ = "Matthew J. Smith, Lothrop Richards, Timothy Dyar"
 __email__ = "mjs10@email.sc.edu, lothropr@email.sc.edu, tdyar@email.sc.edu"
 """
 import os
+import sys
 import cv2 as visual
 
 
@@ -120,11 +121,8 @@ class VideoPlayer:
         by pressing 'p'
         """
 
-        # gives file paths
-        my_path = os.path.abspath(os.path.dirname(__file__))
-        # saves path for black image
-        black_image = os.path.join(
-            my_path, "../test/test_assets/black.jpg")
+        # get relative path for black.jpg
+        black_image = resource_path("../test/test_assets/black.jpg")
         # reads image
         image = visual.imread(black_image)
         # display image
@@ -142,3 +140,18 @@ class VideoPlayer:
                 self.kill = True
                 return
         return
+
+
+def resource_path(relative_path):
+    """
+    Get absolute path to resource, works for dev and for PyInstaller
+
+    src: https://stackoverflow.com/questions/31836104/pyinstaller-and-onefile-how-to-include-an-image-in-the-exe-file
+    """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
