@@ -29,6 +29,7 @@ class SplashScreen(tk.Toplevel):
         canvas.place(x=0, y=0, relwidth=1, relheight=1)
         # get relative path for splash screen file
         splash = resource_path("dj-vj.gif")
+        # print(splash)
         img = PhotoImage(file=splash)
 
         canvas.create_image(30, 120, anchor=NW, image=img)
@@ -315,7 +316,7 @@ def resource_path(relative_path):
         # PyInstaller creates a temp folder and stores path in _MEIPASS
         base_path = sys._MEIPASS
     except Exception:
-        base_path = os.path.abspath(".")
+        base_path = os.path.abspath("./djvj")
 
     return os.path.join(base_path, relative_path)
 
