@@ -64,10 +64,11 @@ class VideoPlayer:
             queue_thread.start()
 
             # main playback loop - plays the video
-            while self.cap.isOpened():
+            while True:
                 # check signals
                 # if pause
                 if self.pause:
+                    self.switched = True
                     # release current video
                     self.cap.release()
                     # closes playing window
@@ -117,7 +118,6 @@ class VideoPlayer:
         pause_video displays a black image when the user pauses the show
         by pressing 'p'
         """
-
         # create numpy array of the size of the screen
         black_image = np.zeros(
             [self.window_x, self.window_y, 3], dtype=np.uint8)
@@ -151,7 +151,14 @@ def queue_frames(video_player):
         if video_player.queue.full():
             continue
         # get frame
-        _, frame = video_player.cap.read()
+        ret, frame = video_player.cap.read()
+        # if no return (meaning at end of video)
+        if not ret:
+            # close video
+            video_player.cap.release()
+            # reopen video
+            video_player.cap = visual.VideoCapture(video_player.curr_video)
+            continue
         # resize the frame
         frame = visual.resize(
             frame, (video_player.window_y, video_player.window_x))
