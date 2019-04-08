@@ -35,6 +35,12 @@ class VideoPlayer:
         the current video
         """
 
+        # create main window for video playback
+        visual.namedWindow("window", visual.WND_PROP_FULLSCREEN)
+        # make window full screen
+        visual.setWindowProperty(
+            "window", visual.WND_PROP_FULLSCREEN, visual.WINDOW_FULLSCREEN)
+
         # update video loop
         while True:
             # initialze current video
@@ -54,7 +60,6 @@ class VideoPlayer:
                     # release current video
                     cap.release()
                     # closes playing window
-                    visual.destroyAllWindows()
                     # pause the video
                     self.pause_video()
                     # after unpausing, open video
@@ -77,11 +82,7 @@ class VideoPlayer:
                 # resize the frame
                 frame = visual.resize(
                     frame, (self.window_y, self.window_x))
-                # create window
-                visual.namedWindow("window", visual.WND_PROP_FULLSCREEN)
-                # make window full screen
-                visual.setWindowProperty(
-                    "window", visual.WND_PROP_FULLSCREEN, visual.WINDOW_FULLSCREEN)
+
                 # show the frame
                 visual.imshow('window', frame)
 
@@ -123,7 +124,6 @@ class VideoPlayer:
             # if r key is clicked exit out of black image and display current playing video
             if key & 0xFF == ord('r'):
                 self.pause = False
-                visual.destroyAllWindows()
                 break
             # if k is pressed, kill program
             elif key & 0xFF == ord('k'):
