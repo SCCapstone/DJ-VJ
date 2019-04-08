@@ -110,11 +110,6 @@ class VideoPlayer:
         # fill with zeros for black pixels
         black_image.fill(0)
 
-        # create window
-        visual.namedWindow("window", visual.WND_PROP_FULLSCREEN)
-        # make window full screen
-        visual.setWindowProperty(
-            "window", visual.WND_PROP_FULLSCREEN, visual.WINDOW_FULLSCREEN)
         # display image
         visual.imshow("window", black_image)
         # while showing black
