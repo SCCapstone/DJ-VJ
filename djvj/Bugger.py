@@ -22,10 +22,15 @@ class Bugger:
         #main moment that will be used in the show class
         self.official_momment = official_momment
 
+
     def momment_check(self):
+        print("Getting here?")
 		# if the main momment is empty
-        if self.official_momment != True:
+        print(self.official_momment)
+        if not self.official_momment:
+            print("first moment")
             return True
+
         '''
 		Iterates through the lists within the list
 		  List1.   List2    List2
@@ -43,7 +48,7 @@ class Bugger:
 				ex:
 				Pitch = Pitch 
 				''' 
-                if t_param == y[0]:
+                if self.t_param == y[0]:
                     '''
 					if current momment meets the condition of any existing momments, flag it
 					ex:
@@ -54,24 +59,35 @@ class Bugger:
 					flag this as a possible collision 
 					'''
                     if self.ops[y[1]](self.t_value, int(y[2])):
+                        print("getting strike")
+                        print(self.ops[y[1]])
+                        print(self.t_value)
+                        print(int(y[2]))
                         self.strike += 1
 			
 			# if the value is found to be in between two existing condition (strike is equal 2), return false
             if self.strike >= 2:
+                print("returning false in part 1")
                 return False
 
             self.strike = 0
-
+        print("About to return")
         return True
 
 			#counter that iterates through existing moments
-    def momemment_check2(self):
+    def moment_check2(self):
+        print("Getting part 2")
         for x in self.official_momment:
             for y in x:
+                print(self.t_param)
+                print(y[0])
                 if self.t_param == y[0]:
+                    print("Getting inside nested part 1")
                     if self.t_sign == y[1]:
+                        print("Getting inside nested part 2")
                         if self.ops[y[1]](self.t_value, int(y[2])) or self.ops[y[1]](int(y[2]), self.t_value):
                             return False
+        print("returning part 2")
         return True
 
 

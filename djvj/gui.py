@@ -15,7 +15,8 @@ import djvj.Bugger as bugger
 # global variables
 RULES = ""  # running string of all rules added
 moments = list()  # groups of rules for the show
-
+current_mom = list()
+existing_mom = list()
 
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
@@ -225,8 +226,7 @@ class CreateScreen(tk.Toplevel):
     def addition(self):
         """ lets users add rules """
         # basic error checking
-        current_mom = list()
-        existing_mom = list()
+
 
         if self.attr.get() == "" or self.sign.get() == "" \
                 or self.target_value.get() == "":
@@ -250,17 +250,13 @@ class CreateScreen(tk.Toplevel):
 
         bug = bugger.Bugger(current_mom, existing_mom)
         rangeb = bug.momment_check()
-        dublicate = bug.momment_check2()
-                
-        if bbool == True and dublicate == True:
+        dublicate = bug.moment_check2()
 
-            curr_mom.append(existing_mom)
+        if rangeb and dublicate:
+            existing_mom.append(current_mom)
         else:
-            single_mom.clear()
-            print("There was a error found within using this param")
-
-
-
+            current_mom.clear()
+            print("Error: conflicting moments.")
         global RULES
         RULES = RULES + "\n" + new_rule + VIDEO_PATH
 
