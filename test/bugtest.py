@@ -22,7 +22,7 @@ class Test:
             for y in x:
                 print(y)
                 #if test value is true in comapared to list int, flag it
-                if self.ops[y[0]](self.testval, y[1]):
+                if self.ops[y[0]](self.testval, int(y[1])):
                     print(y[1])
                     self.strike += 1
 
@@ -34,7 +34,7 @@ class Test:
         for x in self.templist:
             for y in x:
                 if y[0] == self.testlist[0]:
-                    if self.ops[y[0]](self.testlist[1], y[1]) or self.ops[y[0]](y[1], self.testlist[1]):
+                    if self.ops[y[0]](int(self.testlist[1]), int(y[1])) or self.ops[y[0]](int(y[1]), int(self.testlist[1])):
                         print("Flag on", y)
 
 
