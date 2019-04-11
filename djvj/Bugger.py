@@ -24,7 +24,7 @@ class Bugger:
 
     def momment_check(self):
 		# if the main momment is empty
-        if self.official_momment != True:
+        if self.official_momment == []:
             return True
         '''
 		Iterates through the lists within the list
@@ -43,7 +43,7 @@ class Bugger:
 				ex:
 				Pitch = Pitch 
 				''' 
-                if t_param == y[0]:
+                if self.t_param == y[0]:
                     '''
 					if current momment meets the condition of any existing momments, flag it
 					ex:
