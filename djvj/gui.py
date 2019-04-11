@@ -126,18 +126,6 @@ class IntroScreen(tk.Tk):
                     error = True
                     break
 
-                bug = bugger.Bugger(single_mom, curr_mom)
-                rangeb = bug.momment_check()
-                dublicate = bug.momment_check2()
-                
-                if bbool == True and dublicate == True:
-
-                    curr_mom.append(single_mom)
-                else:
-                    single_mom.clear()
-                    print("There was a error found within using this param")
-
-
         if error:
             self.load()
         else:
@@ -237,6 +225,9 @@ class CreateScreen(tk.Toplevel):
     def addition(self):
         """ lets users add rules """
         # basic error checking
+        current_mom = list()
+        existing_mom = list()
+
         if self.attr.get() == "" or self.sign.get() == "" \
                 or self.target_value.get() == "":
             messagebox.showinfo("Error", "Please fill out all fields.")
@@ -252,6 +243,23 @@ class CreateScreen(tk.Toplevel):
         new_rule = "If\t" + self.attr.get() \
             + "\t" + self.sign.get() + "\t" + self.target_value.get() \
             + "\t play\t"
+
+        current_mom.append(self.attr.get())
+        current_mom.append(self.sign.get())
+        current_mom.append(self.target_value.get())
+
+        bug = bugger.Bugger(current_mom, existing_mom)
+        rangeb = bug.momment_check()
+        dublicate = bug.momment_check2()
+                
+        if bbool == True and dublicate == True:
+
+            curr_mom.append(existing_mom)
+        else:
+            single_mom.clear()
+            print("There was a error found within using this param")
+
+
 
         global RULES
         RULES = RULES + "\n" + new_rule + VIDEO_PATH

@@ -15,7 +15,7 @@ class Bugger:
         self.ops = {
             "<": operator.le,
             ">": operator.gt,
-            '=': operator.eg,
+            '=': operator.eq,
         }
         #error counter 
         self.strike = 0
