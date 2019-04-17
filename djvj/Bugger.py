@@ -1,20 +1,27 @@
 import operator
+"""
+Rule
+temp_momment = ['pitch', '<', 40]
+Single momment
+momment = [['pitch', '<', 40]],['pitch', '>', 20]]
+Main momment 
+main momment = [[['pitch', '<', 40]],['pitch', '>', 20]], [['tempo', '<', 40]],['tempo', '>', 20]]]
+"""
+conditional_momment = []
+official_list = []
+pending_list = False
 
 class Bugger:
 
     def __init__(self, temp_momment, official_momment):
         #current param
         self.t_param = temp_momment[0]
-        print("init param: ", self.t_param)
         #sign
         self.t_sign = temp_momment[1]
-        print("init sign: ", self.t_sign)
         #value
         self.t_value = int(temp_momment[2])
-        print("init t_value: ", self.t_value)
 
         self.official_momment = official_momment
-        print("init official momment: ", self.official_momment)
 
         self.ops = {
             "<": operator.le,
@@ -23,70 +30,56 @@ class Bugger:
         }
         #error counter 
         self.strike = 0
-        #main moment that will be used in the show class
-        self.official_momment = official_momment
-        
-    def momment_check(self):
-        # if the main momment is empty
+
+    def  rule_check_in_list(self):
         if self.official_momment == []:
-            print("Nothing in momment Part 1")
+            return True
+        else:
+            for x in self.official_momment:
+                self.strike = 0
+                for y in x:
+                    if y[0] == self.t_param:
+                        if self.ops[y[1]](self.t_value, int(y[2])):
+                            self.strike += 1
+                if self.strike >= 2:
+                    return False
             return True
 
-        '''
-        Iterates through the lists within the list
-          List1.   List2    List2
-        [[A,B,C], [D,E,F], [G,H,I]]
-        '''
-        for x in self.official_momment:
-            '''
-            Iterates through the objects within a single list
-             Object1 Object2 Object3
-            [A,      B,      C]
-            '''
-            for y in x:
-                '''
-                compare current momment param to existing momment param
-                ex:
-                Pitch = Pitch 
-                ''' 
-                if self.t_param == y[0]:
-                    '''
-                    if current momment meets the condition of any existing momments, flag it
-                    ex:
-                    t_value = 3
-                    y[3] = 5
+    def rule_check_in_momment(self):
+        global conditional_momment
 
-                    if tvalue < y[3]
-                    flag this as a possible collision 
-                    '''
-                    if self.ops[y[1]](self.t_value, int(y[2])):
-                        self.strike += 1
-            
-            # if the value is found to be in between two existing condition (strike is equal 2), return false
-            if self.strike >= 2:
-                return False
+        if conditional_momment == []:
+            return True
+        else:
+            for x in conditional_momment:
+                if self.t_param == x[0]:
+                    if self.t_sign == x[1]:
+                        if self.ops[x[1]](self.t_value, int(x[2])):
+                            print("Collision detected this momment will not be added")
+                            return False
 
-            self.strike = 0
-        return True
+            return True
 
-            #counter that iterates through existing moments
-    def moment_check2(self):
-        # if self.official_momment == []:
-        #     print("Nothing in momment Part 2")
-        #     return True
+def add_rule_to_momment(rule):
+    global conditional_momment
+    global pending_list
 
-        #for x in self.official_momment:
-            #for y in x:
-                
-                #if y == self.t_param:
+    rule = rule.copy()
+    conditional_momment.append(rule)
+    pending_list = True
 
-            # print("X is equal to :", x)
-            # for y in x:
-            #     print("if", self.t_param, "is equal to", y[0])
-            #     if self.t_param == y[0]:
-            #         print("Getting inside nested part 1")
-            #         if self.t_sign == y[1]:
-            #             print("Getting inside nested part 2")
-            #             if self.ops[y[1]](self.t_value, int(y[2])) or self.ops[y[1]](int(y[2]), self.t_value):
-            #                 return False
-        return True
+def add_momment_to_momment():
+    global conditional_momment
+    global official_list
+
+    conditional_momment = conditional_momment.copy()
+    official_list_copy = conditional_momment.copy()
+    return conditional_momment
+
+def clear_momment_list():
+    global conditional_momment
+
+    conditional_momment.clear()
+
+def list_status():
+    return pending_list

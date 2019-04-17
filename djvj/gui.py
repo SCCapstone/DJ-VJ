@@ -16,8 +16,8 @@ import djvj.Bugger as bugger
 RULES = ""  # running string of all rules added
 moments = list()  # groups of rules for the show
 current_mom = list()
-existing_mom = list()
-moment_list = list()
+momment_list = list()
+momment_case = False
 
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
@@ -219,19 +219,31 @@ class CreateScreen(tk.Toplevel):
     def add_moment(self):
         """ Separates groups of rules """
         global RULES
+        global momment_list
+
         messagebox.showinfo("Add a Moment", "Please choose a video to associate with this moment.")
         self.choose_video()
         RULES = RULES + "\n Moment -- Video: " + VIDEO_PATH
         self.rule_added()
 
-        global existing_mom
 
-        print("The existing_mom list is equal to: ", existing_mom)
-        
-        moment_list.append(existing_mom)
-        existing_mom.clear()
 
-        print("The official list is equal to :", moment_list)
+
+
+        incoming_list = bugger.list_status()
+        if incoming_list == True:
+            momment_copy = bugger.add_momment_to_momment()
+            momment_copy = momment_copy.copy()
+            momment_list.append(momment_copy)
+            bugger.clear_momment_list()
+
+
+
+
+
+
+
+
 
     def addition(self):
         """ lets users add rules """
@@ -254,27 +266,41 @@ class CreateScreen(tk.Toplevel):
             + "\t" + self.sign.get() + "\t" + self.target_value.get() \
             + "\t play\t"
 
-        global existing_mom
 
+
+
+
+
+
+
+        global momment_list
+        global momment_case
+
+        #appends attribute to list 
         current_mom.append(self.attr.get())
+        #append sign to list 
         current_mom.append(self.sign.get())
+        #append value to list 
         current_mom.append(self.target_value.get())
-
-        bug = bugger.Bugger(current_mom, existing_mom)
-        #rangeb = bug.momment_check()
-        rangeb = True
-        dublicate = bug.moment_check2()
-
-        print("current_mom is equal to: ", current_mom)
-
-        if rangeb and dublicate:
-            print("The current_mom part1 is equal to :", current_mom)
-            existing_mom.append(current_mom)
-            print("The existing_mom part1 is equal to :", existing_mom)
+        #inititalize  
+        bug = bugger.Bugger(current_mom, momment_list)
+        #checks list for collisions
+        list_case = bug.rule_check_in_list()
+        #checks current momment for collision 
+        momment_case = bug.rule_check_in_momment() 
+        if momment_case == True and list_case == True:
+            bugger.add_rule_to_momment(current_mom)
             current_mom.clear()
+            momment_case = False
         else:
-            current_mom.clear()
-            print("Error: conflicting moments.")
+            print("this momment have been skipped")
+
+
+
+
+
+
+
         global RULES
         RULES = RULES + "\n" + new_rule + VIDEO_PATH
 
