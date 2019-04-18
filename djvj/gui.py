@@ -16,8 +16,8 @@ import djvj.Bugger as bugger
 RULES = ""  # running string of all rules added
 moments = list()  # groups of rules for the show
 current_mom = list()
-momment_list = list()
-momment_case = False
+moment_list = list()
+moment_case = False
 
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
@@ -219,7 +219,7 @@ class CreateScreen(tk.Toplevel):
     def add_moment(self):
         """ Separates groups of rules """
         global RULES
-        global momment_list
+        global moment_list
 
         messagebox.showinfo("Add a Moment", "Please choose a video to associate with this moment.")
         self.choose_video()
@@ -231,11 +231,12 @@ class CreateScreen(tk.Toplevel):
 
 
         incoming_list = bugger.list_status()
-        if incoming_list == True:
-            momment_copy = bugger.add_momment_to_momment()
-            momment_copy = momment_copy.copy()
-            momment_list.append(momment_copy)
-            bugger.clear_momment_list()
+        last_check = bugger.moment_to_list_comapare(moment_list)
+        if incoming_list == True and last_check == True:
+            moment_copy = bugger.add_moment_to_moment()
+            moment_copy = moment_copy.copy()
+            moment_list.append(moment_copy)
+            bugger.clear_moment_list()
 
 
 
@@ -273,8 +274,8 @@ class CreateScreen(tk.Toplevel):
 
 
 
-        global momment_list
-        global momment_case
+        global moment_list
+        global moment_case
 
         #appends attribute to list 
         current_mom.append(self.attr.get())
@@ -283,17 +284,17 @@ class CreateScreen(tk.Toplevel):
         #append value to list 
         current_mom.append(self.target_value.get())
         #inititalize  
-        bug = bugger.Bugger(current_mom, momment_list)
+        bug = bugger.Bugger(current_mom, moment_list)
         #checks list for collisions
         list_case = bug.rule_check_in_list()
-        #checks current momment for collision 
-        momment_case = bug.rule_check_in_momment() 
-        if momment_case == True and list_case == True:
-            bugger.add_rule_to_momment(current_mom)
+        #checks current moment for collision 
+        moment_case = bug.rule_check_in_moment() 
+        if moment_case == True and list_case == True:
+            bugger.add_rule_to_moment(current_mom)
             current_mom.clear()
-            momment_case = False
+            moment_case = False
         else:
-            print("this momment have been skipped")
+            print("this moment have been skipped")
 
 
 
