@@ -20,17 +20,17 @@ class Bugger:
         self.ops = {
             "<": operator.le,
             ">": operator.gt,
-            '=': operator.eq,
+            "=": operator.eq,
         }
         #error counter 
         self.strike = 0
-        self.strike2 = 0
 
     def  rule_check_in_list(self):
+        """ checks if moment is empty"""
         if self.official_moment == []:
             return True
         else:
-
+            """ checks if rule can be found within a range ex: Rule1 < Rule2 < Rule1 = Error"""
             for x in self.official_moment:
                 self.strike = 0
                 for y in x:
@@ -38,35 +38,59 @@ class Bugger:
                         if self.ops[y[1]](self.t_value, int(y[2])):
                             self.strike += 1
                 if self.strike >= 2:
+                    self.t_temp_moment.clear()
                     return False
 
             return True
 
     def rule_check_in_moment(self):
         global conditional_moment
-
         if conditional_moment == []:
             return True
         else:
+            """ checks for overlapping conditions within a single moment"""
             for x in conditional_moment:
                 if self.t_param == x[0]:
                     if self.t_sign == x[1]:
-                        if self.ops[x[1]](self.t_value, int(x[2])):
-                            print("Collision detected this moment will not be added")
+                        if self.ops[x[1]](self.t_value, int(x[2])) or self.ops[x[1]](int(x[2]), self.t_value):
+                            self.t_temp_moment.clear()
                             return False
-
             return True
 
 def moment_to_list_comapare(mlist):
     global conditional_moment
 
+    print(mlist)
+
+    operation = {
+        "<": operator.le,
+        ">": operator.gt,
+        "=": operator.eq,
+    }
+
+    num_of_rule = 0
+    num_of_error = 0
+
+    num_of_rule = len(conditional_moment)
+
     if mlist == []:
         return True
     else:
+        """ compares the created momment with existising momments """
         for x in mlist:
             if x == conditional_moment:
-                print("there is a momment like this that already exist")
                 return False
+        for x in mlist:
+            for y in x:
+
+                for z in conditional_moment:
+                    if y[0] == z[0]:
+                        if y[1] == z[1]:
+                            if operation[y[1]](int(z[2]), int(y[2])):
+                                num_of_error += 1
+            if num_of_error == num_of_rule:
+                return False
+
         return True
 
 def add_rule_to_moment(rule):
@@ -90,5 +114,8 @@ def clear_moment_list():
 
     conditional_moment.clear()
 
-def list_status():
-    return pending_list
+def remove_rule():
+    global conditional_moment
+    #removes rule from moment
+    length = len(conditional_moment)
+    conditional_moment.remove(conditional_moment[length - 1])
