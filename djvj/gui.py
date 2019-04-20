@@ -225,7 +225,6 @@ class CreateScreen(tk.Toplevel):
             moment_copy = bugger.add_moment_to_moment()
             moment_copy = moment_copy.copy()
             moment_list.append(moment_copy)
-            print("The list holds ",moment_list)
             bugger.clear_moment_list()
             self.add_moment()
         else:
@@ -280,7 +279,7 @@ class CreateScreen(tk.Toplevel):
         #checks list for collisions
         list_case = bug.rule_check_in_list()
         #checks current moment for collision 
-        print(current_mom)
+        temp_cm = current_mom.copy()
         moment_case = bug.rule_check_in_moment() 
         if moment_case == True and list_case == True:
             bugger.add_rule_to_moment(current_mom)
@@ -294,8 +293,7 @@ class CreateScreen(tk.Toplevel):
 
 
         else:
-            print(current_mom)
-            message = str(current_mom) + " collides with rule " + str(bugger.give_list_of_error()) 
+            message = str(temp_cm) + " collides with rule: " + str(bugger.give_list_of_error()) 
             messagebox.showerror("Error", message)
 
     def create_file(self):

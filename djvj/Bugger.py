@@ -68,8 +68,6 @@ def moment_to_list_comapare(mlist):
     global conditional_moment
     global error_list
 
-    print(mlist)
-
     operation = {
         "<": operator.le,
         ">": operator.gt,
