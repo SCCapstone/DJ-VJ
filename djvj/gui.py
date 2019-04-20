@@ -229,10 +229,9 @@ class CreateScreen(tk.Toplevel):
             bugger.clear_moment_list()
             self.add_moment()
         else:
-            message = ("The moment ''if " + str(reason_for_moment_error) +
-                + " conflicts whith the already added moment if "+
-                str(bugger.conditional_moment) + " Please enter a different moment. ")
-            messagebox.showinfo(message)
+
+            message = str(bugger.give_current_moment()) + " Collides with moment "+ str(reason_for_moment_error)
+            messagebox.showerror("Error", message)
 
 
 
@@ -281,6 +280,7 @@ class CreateScreen(tk.Toplevel):
         #checks list for collisions
         list_case = bug.rule_check_in_list()
         #checks current moment for collision 
+        print(current_mom)
         moment_case = bug.rule_check_in_moment() 
         if moment_case == True and list_case == True:
             bugger.add_rule_to_moment(current_mom)
@@ -294,9 +294,9 @@ class CreateScreen(tk.Toplevel):
 
 
         else:
-            reason_for_error = bugger.give_list_of_error()
-            message = "The rule if " + str(reason_for_error) + " conflicts whith the already added rule if " + str(current_mom) + " Please enter a different rule. "
-            messagebox.showinfo(message)
+            print(current_mom)
+            message = str(current_mom) + " collides with rule " + str(bugger.give_list_of_error()) 
+            messagebox.showerror("Error", message)
 
     def create_file(self):
         """ creates the file once users are finished """
