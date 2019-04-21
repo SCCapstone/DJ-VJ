@@ -8,16 +8,10 @@ __email__ = "mjs10@email.sc.edu"
 """
 
 import threading
-import os
-import time
 import djvj.audio_listener as audio
 import djvj.interpreter as interpreter
 import djvj.video_player as video_player
-import sys
-import cv2
-# import djvj.visual as video
-# from djvj.visual import play_video
-# from djvj.visual import Visual
+
 
 class Show:
     """
@@ -56,8 +50,6 @@ class Show:
         """
         start() starts the show
         """
-        global audio_thread
-        global interpreter_thread
 
         try:
             # start audio_listener thread
@@ -66,7 +58,7 @@ class Show:
                 target=self.audio_listener.analyze, args=(self,))
             audio_thread.start()
 
-            # make video decision
+            # start interpreter thread
             # updates show.curr_video
             interpreter_thread = threading.Thread(
                 target=self.interpreter.interpret)
@@ -77,9 +69,11 @@ class Show:
             # updates accordingly
             self.video_player.play_video()
 
+            # make threads return
+            self.audio_listener.kill = True
+            self.interpreter.kill = True
+
+            return
+
         except KeyboardInterrupt:
             pass
-
-
-
-        

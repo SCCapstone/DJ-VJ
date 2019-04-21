@@ -15,16 +15,9 @@ import djvj.show as show
 
 # # initialize GUI
 gui.init()
-# # # print(gui.moments)
+
+# print(gui.moments)
 MOMENTS = moment.create_moments(gui.moments)
-
-# gui_moments_list = [[['pitch', '<', '500', '/Users/omaririchards/Dropbox/Uni/Semesters/Spring 2019/Capstone2/DJ-VJ/test/test_assets/video1.MOV'], ['time', '<', '10', '/Users/omaririchards/Dropbox/Uni/Semesters/Spring 2019/Capstone2/DJ-VJ/test/test_assets/video1.MOV']], [['pitch', '>', '500', 'Users/omaririchards/Dropbox/Uni/Semesters/Spring 2019/Capstone2/DJ-VJ/test/test_assets/video2.mp4'], ['time', '<', '10', '/Users/omaririchards/Dropbox/Uni/Semesters/Spring 2019/Capstone2/DJ-VJ/test/test_assets/video2.mp4']],
-#                     [['pitch', '<', '500', '/Users/omaririchards/Dropbox/Uni/Semesters/Spring 2019/Capstone2/DJ-VJ/test/test_assets/video2.mp4'], ['time', '>', '10', '/Users/omaririchards/Dropbox/Uni/Semesters/Spring 2019/Capstone2/DJ-VJ/test/test_assets/video2.mp4']], [['pitch', '>', '500', 'Users/omaririchards/Dropbox/Uni/Semesters/Spring 2019/Capstone2/DJ-VJ/test/test_assets/video1.MOV'], ['time', '>', '10', '/Users/omaririchards/Dropbox/Uni/Semesters/Spring 2019/Capstone2/DJ-VJ/test/test_assets/video1.MOV']], []]
-
-# MOMENTS = moment.create_moments(gui_moments_list)
-
-# for x in MOMENTS:
-# 	print(vars(MOMENTS))
 
 # initialize show
 SHOW = show.Show(MOMENTS)

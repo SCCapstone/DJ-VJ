@@ -3,7 +3,7 @@ Runs the GUI for the DJ-VJ app.
 Displays a splash screen, then Create and Load Show buttons
 Create Show screen functionality is built out, more to come!
 """
-
+import sys
 import pickle
 import tkinter as tk
 from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage, \
@@ -30,7 +30,11 @@ class SplashScreen(tk.Toplevel):
         # this lets an image be used as the background
         canvas = Canvas(self, bg="#212121", width=730, height=450)
         canvas.place(x=0, y=0, relwidth=1, relheight=1)
-        img = PhotoImage(file="./djvj/dj-vj.gif")
+        # get relative path for splash screen file
+        splash = resource_path("dj-vj.gif")
+        # print(splash)
+        img = PhotoImage(file=splash)
+
         canvas.create_image(30, 120, anchor=NW, image=img)
         # adds the "loading" label that makes it splash-screenish
         self.label = Label(self, text="Loading....", bg="#212121",
@@ -142,6 +146,7 @@ class IntroScreen(tk.Tk):
     def exit(self):
         """ exits screen """
         self.destroy()
+        sys.exit()
 
 
 class CreateScreen(tk.Toplevel):
@@ -237,8 +242,10 @@ class CreateScreen(tk.Toplevel):
     def add_moment(self):
         """ Separates groups of rules """
         global RULES
-
-        messagebox.showinfo("Add a Moment", "Please choose a video to associate with this moment.")
+        
+        messagebox.showinfo(
+            "Add a Moment", "Please choose a video to associate with this moment.")
+        
         self.choose_video()
         RULES = RULES + "\n Moment -- Video: " + VIDEO_PATH
         self.rule_added()
@@ -348,6 +355,21 @@ class CreateScreen(tk.Toplevel):
                                       "Select \"No\" to return to the show screen to save.")
         if unsaved:
             self.destroy()
+
+
+def resource_path(relative_path):
+    """
+    Get absolute path to resource, works for dev and for PyInstaller
+
+    src: https://stackoverflow.com/questions/31836104/pyinstaller-and-onefile-how-to-include-an-image-in-the-exe-file
+    """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath("./djvj")
+
+    return os.path.join(base_path, relative_path)
 
 
 def init():
