@@ -99,7 +99,12 @@ class IntroScreen(tk.Tk):
         filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
                                               filetypes=(("djvj files", "*.djvj"),
                                                          ("all files", "*.*")))
-        data = pickle.load(open("%s" % filename, "rb"))
+        try:
+            data = pickle.load(open("%s" % filename, "rb"))
+        except:
+            messagebox.showerror("ERROR", "Error: Corrupt .djvj file. Please select a valid file.")
+            self.load()
+
         rule_list = data.split("\n")
         error = False   # not a invalid path
         rule_list.pop(0)
@@ -183,13 +188,13 @@ class CreateScreen(tk.Toplevel):
         self.sign = StringVar(self)
         self.sign.set(" ")  # default value
         self.set_sign = OptionMenu(self, self.sign, ">", "<", "=")
-        self.set_sign.place(relx=.5, rely=.3, anchor="center")
+        self.set_sign.place(relx=.48, rely=.3, anchor="center")
         # the target value
         self.target_value = Entry(self)
         self.target_value.place(relx=.6, rely=.3, anchor="center")
 
         Label(self, text=":", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
-            .place(relx=.65, rely=.3, anchor="center")
+            .place(relx=.68, rely=.3, anchor="center")
 
         # buttons
         Button(self, text='Add Rule', fg="#000000", command=self.addition) \
@@ -223,6 +228,7 @@ class CreateScreen(tk.Toplevel):
         messagebox.showinfo(
             "Add a Moment", "Please choose a video to associate with this moment.")
         self.choose_video()
+
         RULES = RULES + "\n Moment -- Video: " + VIDEO_PATH
         self.rule_added()
 
@@ -304,6 +310,8 @@ class CreateScreen(tk.Toplevel):
                                       "Select \"Yes\" to exit without saving.\n "
                                       "Select \"No\" to return to the show screen to save.")
         if unsaved:
+            global RULES
+            RULES = ""
             self.destroy()
 
 
