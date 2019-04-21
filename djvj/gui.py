@@ -10,11 +10,14 @@ from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoI
     StringVar, OptionMenu, NW, END
 import time
 import os
+import djvj.Bugger as bugger 
 
 # global variables
 RULES = ""  # running string of all rules added
 moments = list()  # groups of rules for the show
-
+current_mom = list()
+moment_list = list()
+moment_case = False
 
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
@@ -113,11 +116,14 @@ class IntroScreen(tk.Tk):
                     curr_mom = list()   # clear the list
             else:
                 attribute = rule.split("\t")
-
+                #type
                 single_mom.append(attribute[1])
+                #sign
                 single_mom.append(attribute[2])
+                #value
                 single_mom.append(attribute[3])
                 if os.path.exists(attribute[5]):
+                    #video
                     single_mom.append(attribute[5])
                 else:
                     messagebox.showerror("ERROR", "Error: File path %s does not exist.\n"
@@ -125,8 +131,6 @@ class IntroScreen(tk.Tk):
                                                   "valid file paths." % attribute[5])
                     error = True
                     break
-
-                curr_mom.append(single_mom)
 
         if error:
             self.load()
@@ -196,7 +200,7 @@ class CreateScreen(tk.Toplevel):
             .place(relx=.42, rely=.4, anchor="center")
         Button(self, text='Remove Rule', fg="#000000", command=self.remove) \
             .place(relx=.52, rely=.4, anchor="center")
-        Button(self, text='Add Moment', fg="#000000", command=self.add_moment) \
+        Button(self, text='Add Moment', fg="#000000", command=self.moment_check) \
             .place(relx=.62, rely=.4, anchor="center")
         Button(self, text='Create File', fg="#000000", command=self.create_file) \
             .place(relx=.52, rely=.47, anchor="center")
@@ -217,11 +221,31 @@ class CreateScreen(tk.Toplevel):
 
         self.add_moment()
 
+    def moment_check(self):
+        global moment_list
+        reason_for_moment_error = bugger.give_list_of_error()
+
+        last_check = bugger.moment_to_list_comapare(moment_list)
+        if last_check == True:
+            moment_copy = bugger.add_moment_to_moment()
+            moment_copy = moment_copy.copy()
+            moment_list.append(moment_copy)
+            bugger.clear_moment_list()
+            self.add_moment()
+        else:
+
+            message = str(bugger.give_current_moment()) + " Collides with moment "+ str(reason_for_moment_error)
+            messagebox.showerror("Error", message)
+
+
+
     def add_moment(self):
         """ Separates groups of rules """
         global RULES
+        
         messagebox.showinfo(
             "Add a Moment", "Please choose a video to associate with this moment.")
+        
         self.choose_video()
         RULES = RULES + "\n Moment -- Video: " + VIDEO_PATH
         self.rule_added()
@@ -229,6 +253,8 @@ class CreateScreen(tk.Toplevel):
     def addition(self):
         """ lets users add rules """
         # basic error checking
+
+
         if self.attr.get() == "" or self.sign.get() == "" \
                 or self.target_value.get() == "":
             messagebox.showinfo("Error", "Please fill out all fields.")
@@ -245,14 +271,37 @@ class CreateScreen(tk.Toplevel):
             + "\t" + self.sign.get() + "\t" + self.target_value.get() \
             + "\t play\t"
 
+        global moment_list
+        global moment_case
         global RULES
-        RULES = RULES + "\n" + new_rule + VIDEO_PATH
 
-        self.rule_added()
-        # clears all the fields
-        self.target_value.delete(0, END)
-        self.attr.set("          ")
-        self.sign.set(" ")
+        #appends attribute to list 
+        current_mom.append(self.attr.get())
+        #append sign to list 
+        current_mom.append(self.sign.get())
+        #append value to list 
+        current_mom.append(self.target_value.get())
+        #inititalize  
+        bug = bugger.Bugger(current_mom, moment_list)
+        #checks list for collisions
+        list_case = bug.rule_check_in_list()
+        #checks current moment for collision 
+        temp_cm = current_mom.copy()
+        moment_case = bug.rule_check_in_moment() 
+        if moment_case == True and list_case == True:
+            bugger.add_rule_to_moment(current_mom)
+            current_mom.clear()
+            moment_case = False
+            RULES = RULES + "\n" + new_rule + VIDEO_PATH
+            self.rule_added()
+            self.target_value.delete(0, END)
+            self.attr.set("          ")
+            self.sign.set(" ")
+
+
+        else:
+            message = str(temp_cm) + " collides with rule: " + str(bugger.give_list_of_error()) 
+            messagebox.showerror("Error", message)
 
     def create_file(self):
         """ creates the file once users are finished """
@@ -277,6 +326,7 @@ class CreateScreen(tk.Toplevel):
     def remove(self):
         """ removes last rule added """
         global RULES
+        bugger.remove_rule()
         # basic error checking
         if RULES == "":
             messagebox.showinfo("Error", "Rules are empty!")
