@@ -23,12 +23,14 @@ class Show:
         """
         moments = list of Moments class
         """
+        #print("Moments = ", moments.video)
         # list of Moments
         self.moments = moments
         # get listening params
         self.params = []
         for moment in moments:
             self.params += moment.params
+        #print("SHOW CLASS", self.params)
 
         # initialize list of current audio values at a given moment of time
         # populated in audio_listener

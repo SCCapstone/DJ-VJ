@@ -51,8 +51,10 @@ def create_moments(show_params):
             if moment.video != rule[3]:
                 print("moment video error")
             moment.video = rule[3]  # add the video
-        # print(vars(moment))
+            #print(vars(moment))
 
         # add Moment to list of Moments
         moments.append(moment)
+
+    #print(vars(moments))
     return moments
