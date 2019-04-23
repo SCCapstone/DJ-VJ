@@ -34,6 +34,9 @@ class Pitch:  # pylint: disable=too-few-public-methods
         self.pitch_analyzer = pitch(
             "default", self.window_size, self.hop_size, self.input.samplerate)
 
+        # keep up with last pitch in case of 0
+        self.lastFreq = 0
+
     def analyze_pitch(self, sample):
         """
         analyze_pitch analyzes the pitch of a given audio sample
@@ -41,7 +44,10 @@ class Pitch:  # pylint: disable=too-few-public-methods
         freq = self.pitch_analyzer(sample)[0]
         # confidence = self.pitch_analyzer.get_confidence()
 
-        return freq
+        if freq != 0:
+            self.lastFreq = freq
+            return freq
+        return self.lastFreq
 
 
 def get_pitch(freq):
