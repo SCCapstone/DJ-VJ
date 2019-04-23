@@ -142,6 +142,7 @@ class IntroScreen(tk.Tk):
     def exit(self):
         """ exits screen """
         self.destroy()
+        sys.exit()
 
 
 class CreateScreen(tk.Toplevel):
