@@ -141,7 +141,10 @@ class IntroScreen(tk.Tk):
             self.load()
         else:
             # right now, just for error checking
-            messagebox.showinfo("Load Show", data)
+            messagebox.showinfo("Load Show", "The rules for this video are:\n" + data)
+            messagebox.showinfo("Video Controls", "To pause the video, press \"p\""
+                                                  "\nTo resume the paused video, press \"r\""
+                                                  "\nTo end the program, press \"k\"")
             self.destroy()
 
     def create(self):
