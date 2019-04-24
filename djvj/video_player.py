@@ -77,9 +77,12 @@ class VideoPlayer:
                     break  # if so, break to update player current video
 
                 # get next frame: returns bool, image
-                _, frame = cap.read()
+                hasFrame, frame = cap.read()
 
                 # resize the frame
+                if not hasFrame:
+                    break
+
                 frame = visual.resize(
                     frame, (self.window_y, self.window_x))
 
