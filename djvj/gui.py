@@ -96,6 +96,8 @@ class IntroScreen(tk.Tk):
         parses the data into audio_attr, rules, values, and videos
         and appends these lists to the show list that is used by main.py
         """
+        messagebox.showinfo(
+            "Load a Show", "Please load a .djvj file to start the show!")
         filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
                                               filetypes=(("djvj files", "*.djvj"),
                                                          ("all files", "*.*")))
