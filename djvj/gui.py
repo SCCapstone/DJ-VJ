@@ -96,44 +96,56 @@ class IntroScreen(tk.Tk):
         parses the data into audio_attr, rules, values, and videos
         and appends these lists to the show list that is used by main.py
         """
+        data = ""
+        messagebox.showinfo(
+            "Load a Show", "Please load a .djvj file to start the show!")
         filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
                                               filetypes=(("djvj files", "*.djvj"),
                                                          ("all files", "*.*")))
-        data = pickle.load(open("%s" % filename, "rb"))
-        rule_list = data.split("\n")
-        error = False   # not a invalid path
-        rule_list.pop(0)
-        curr_mom = list()   # a list of the rules in the current moment
-        for rule in rule_list:
-            single_mom = list()  # create a list of rules for this moment
-            print(rule)
-            if "Moment" in rule:   # switch to a new moment
-                if curr_mom:
-                    moments.append(curr_mom)
-                    curr_mom = list()   # clear the list
-            else:
-                attribute = rule.split("\t")
-
-                single_mom.append(attribute[1])
-                single_mom.append(attribute[2])
-                single_mom.append(attribute[3])
-                if os.path.exists(attribute[5]):
-                    single_mom.append(attribute[5])
+        try:
+            data = pickle.load(open("%s" % filename, "rb"))
+        except pickle.UnpicklingError:
+            messagebox.showerror("ERROR", "Error: Corrupt .djvj file. Please select a valid file.")
+        except FileNotFoundError:
+            messagebox.showerror("ERROR", "No .djvj file selected")
+        if data != "":
+            rule_list = data.split("\n")
+            error = False   # not a invalid path
+            rule_list.pop(0)
+            curr_mom = list()   # a list of the rules in the current moment
+            for rule in rule_list:
+                single_mom = list()  # create a list of rules for this moment
+                print(rule)
+                if "Moment" in rule:   # switch to a new moment
+                    if curr_mom:
+                        moments.append(curr_mom)
+                        curr_mom = list()   # clear the list
                 else:
-                    messagebox.showerror("ERROR", "Error: File path %s does not exist.\n"
-                                                  "Please choose a file with "
-                                                  "valid file paths." % attribute[5])
-                    error = True
-                    break
+                    attribute = rule.split("\t")
 
-                curr_mom.append(single_mom)
+                    single_mom.append(attribute[1])
+                    single_mom.append(attribute[2])
+                    single_mom.append(attribute[3])
+                    if os.path.exists(attribute[5]):
+                        single_mom.append(attribute[5])
+                    else:
+                        messagebox.showerror("ERROR", "Error: File path %s does not exist.\n"
+                                                      "Please choose a file with "
+                                                      "valid file paths." % attribute[5])
+                        error = True
+                        break
 
-        if error:
-            self.load()
-        else:
-            # right now, just for error checking
-            messagebox.showinfo("Load Show", data)
-            self.destroy()
+                    curr_mom.append(single_mom)
+
+            if error:
+                self.load()
+            else:
+                # right now, just for error checking
+                messagebox.showinfo("Load Show", "The rules for this video are:\n" + data)
+                messagebox.showinfo("Video Controls", "To pause the video, press \"p\""
+                                                      "\nTo resume the paused video, press \"r\""
+                                                      "\nTo end the program, press \"k\"")
+                self.destroy()
 
     def create(self):
         """ pulls up create screen """
@@ -183,13 +195,13 @@ class CreateScreen(tk.Toplevel):
         self.sign = StringVar(self)
         self.sign.set(" ")  # default value
         self.set_sign = OptionMenu(self, self.sign, ">", "<", "=")
-        self.set_sign.place(relx=.5, rely=.3, anchor="center")
+        self.set_sign.place(relx=.48, rely=.3, anchor="center")
         # the target value
         self.target_value = Entry(self)
         self.target_value.place(relx=.6, rely=.3, anchor="center")
 
         Label(self, text=":", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
-            .place(relx=.65, rely=.3, anchor="center")
+            .place(relx=.68, rely=.3, anchor="center")
 
         # buttons
         Button(self, text='Add Rule', fg="#000000", command=self.addition) \
@@ -222,9 +234,25 @@ class CreateScreen(tk.Toplevel):
         global RULES
         messagebox.showinfo(
             "Add a Moment", "Please choose a video to associate with this moment.")
-        self.choose_video()
-        RULES = RULES + "\n Moment -- Video: " + VIDEO_PATH
-        self.rule_added()
+
+        global VIDEO_PATH
+
+        smideo_path = filedialog.askopenfilename(initialdir="/home/Documents",
+                                                title="Select video for current moment",
+                                                filetypes=(("mov files", "*.MOV"),
+                                                           ("mp4 files", "*.mp4"),
+                                                           ("all files", "*.*")))
+
+        if smideo_path == "":
+            if RULES == "":
+                messagebox.showerror("Error", "No video selected for first moment.")
+                self.destroy()
+            else:
+                messagebox.showerror("Error", "No video selected. Staying in current moment.")
+        else:
+            VIDEO_PATH = smideo_path
+            RULES = RULES + "\n Moment -- Video: " + VIDEO_PATH
+            self.rule_added()
 
     def addition(self):
         """ lets users add rules """
@@ -260,9 +288,7 @@ class CreateScreen(tk.Toplevel):
         RULES = RULES + "\nMoment"
         # lets user choose name/save location
         filename = filedialog.asksaveasfilename(initialdir="/home/Documents",
-                                                title="Save file location",
-                                                filetypes=(("djvj files", "*.djvj"),
-                                                           ("all files", "*.*")))
+                                                title="Save file location")
         if filename != "":
             # adds to file
             pickle.dump(RULES, open("%s.djvj" % filename, "wb"))
@@ -286,15 +312,6 @@ class CreateScreen(tk.Toplevel):
             RULES = RULES[:idx]
         self.rule_added()
 
-    def choose_video(self):
-        """ allows user to choose a video to play for a given rule """
-        global VIDEO_PATH
-        VIDEO_PATH = filedialog.askopenfilename(initialdir="/home/Documents",
-                                                title="Select video for current moment",
-                                                filetypes=(("mov files", "*.MOV"),
-                                                           ("mp4 files", "*.mp4"),
-                                                           ("all files", "*.*")))
-
     def exit(self):
         """ Warns user about exiting without saving. """
         # if user selects "Yes", unsaved = true
@@ -304,6 +321,8 @@ class CreateScreen(tk.Toplevel):
                                       "Select \"Yes\" to exit without saving.\n "
                                       "Select \"No\" to return to the show screen to save.")
         if unsaved:
+            global RULES
+            RULES = ""
             self.destroy()
 
 
