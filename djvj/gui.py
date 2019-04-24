@@ -105,7 +105,6 @@ class IntroScreen(tk.Tk):
         curr_mom = list()   # a list of the rules in the current moment
         for rule in rule_list:
             single_mom = list()  # create a list of rules for this moment
-            print(rule)
             if "Moment" in rule:   # switch to a new moment
                 if curr_mom:
                     moments.append(curr_mom)
@@ -127,6 +126,7 @@ class IntroScreen(tk.Tk):
                                                   "valid file paths." % attribute[5])
                     error = True
                     break
+                curr_mom.append(single_mom)
 
         if error:
             self.load()
