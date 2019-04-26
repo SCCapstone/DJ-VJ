@@ -16,7 +16,6 @@ import djvj.show as show
 # # initialize GUI
 gui.init()
 
-# print(gui.moments)
 MOMENTS = moment.create_moments(gui.moments)
 
 # initialize show
