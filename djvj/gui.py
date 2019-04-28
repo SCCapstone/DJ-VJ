@@ -104,8 +104,6 @@ class IntroScreen(tk.Tk):
         filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
                                               filetypes=(("djvj files", "*.djvj"),
                                                          ("all files", "*.*")))
-        messagebox.showinfo(
-            "Load a Show", "Loading the DJ-VJ show contents....")
         try:
             data = pickle.load(open("%s" % filename, "rb"))
         except pickle.UnpicklingError:
@@ -113,6 +111,8 @@ class IntroScreen(tk.Tk):
         except FileNotFoundError:
             messagebox.showerror("ERROR", "No .djvj file selected")
         if data != "":
+            messagebox.showinfo(
+                "Load a Show", "Loading the DJ-VJ show contents....")
             rule_list = data.split("\n")
             error = False   # not a invalid path
             rule_list.pop(0)
