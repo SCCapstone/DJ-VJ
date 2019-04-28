@@ -13,8 +13,10 @@ import os
 
 # global variables
 RULES = ""  # running string of all rules added
+DISPLAY = ""
 moments = list()  # groups of rules for the show
-
+rules_in_mom = 0
+moment_path = ""
 
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
@@ -102,6 +104,8 @@ class IntroScreen(tk.Tk):
         filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
                                               filetypes=(("djvj files", "*.djvj"),
                                                          ("all files", "*.*")))
+        messagebox.showinfo(
+            "Load a Show", "Loading the DJ-VJ show contents....")
         try:
             data = pickle.load(open("%s" % filename, "rb"))
         except pickle.UnpicklingError:
@@ -231,11 +235,11 @@ class CreateScreen(tk.Toplevel):
 
     def add_moment(self):
         """ Separates groups of rules """
-        global RULES
+        global RULES, DISPLAY
         messagebox.showinfo(
             "Add a Moment", "Please choose a video to associate with this moment.")
 
-        global VIDEO_PATH
+        global VIDEO_PATH, moment_path, rules_in_mom
 
         smideo_path = filedialog.askopenfilename(initialdir="/home/Documents",
                                                 title="Select video for current moment",
@@ -250,8 +254,11 @@ class CreateScreen(tk.Toplevel):
             else:
                 messagebox.showerror("Error", "No video selected. Staying in current moment.")
         else:
+            rules_in_mom = 0
             VIDEO_PATH = smideo_path
             RULES = RULES + "\n Moment -- Video: " + VIDEO_PATH
+            DISPLAY = DISPLAY + "\n Moment -- Video: " + VIDEO_PATH
+            moment_path = "\n Moment -- Video: " + VIDEO_PATH
             self.rule_added()
 
     def addition(self):
@@ -273,8 +280,19 @@ class CreateScreen(tk.Toplevel):
             + "\t" + self.sign.get() + "\t" + self.target_value.get() \
             + "\t play\t"
 
+        new_display = "If\t" + self.attr.get() \
+            + "\t" + self.sign.get() + "\t" + self.target_value.get()
+
+        print("Adding: " + new_rule + VIDEO_PATH)
+
+        global rules_in_mom
+        rules_in_mom = rules_in_mom + 1
+
         global RULES
         RULES = RULES + "\n" + new_rule + VIDEO_PATH
+
+        global DISPLAY
+        DISPLAY = DISPLAY + "\n" + new_display
 
         self.rule_added()
         # clears all the fields
@@ -297,19 +315,31 @@ class CreateScreen(tk.Toplevel):
 
     def rule_added(self):
         """ shows running total of rules to be added """
-        global RULES
-        self.display.configure(text="%s" % RULES)
+        global DISPLAY
+        self.display.configure(text="%s" % DISPLAY)
 
     def remove(self):
         """ removes last rule added """
-        global RULES
+        global RULES, VIDEO_PATH, DISPLAY, rules_in_mom, moment_path
         # basic error checking
         if RULES == "":
             messagebox.showinfo("Error", "Rules are empty!")
-        idx = RULES.rfind("\n")
+
+        rules_idx = RULES.rfind("\n")
+        disp_idx = DISPLAY.rfind("\n")
+
         # take everything up until the second to last \n, which removes the last rule
-        if idx >= 0:
-            RULES = RULES[:idx]
+        if rules_idx >= 0:
+            RULES = RULES[:rules_idx]
+            DISPLAY = DISPLAY[:disp_idx]
+            rules_in_mom = rules_in_mom - 1
+            if rules_in_mom < 0:
+                print("Deleting a moment!")
+                RULES = RULES.replace(moment_path, "")
+                del_vidpath = RULES[RULES.rfind("play"):].replace("play\t", "")
+                print(del_vidpath)
+                VIDEO_PATH = del_vidpath
+
         self.rule_added()
 
     def exit(self):
@@ -321,8 +351,8 @@ class CreateScreen(tk.Toplevel):
                                       "Select \"Yes\" to exit without saving.\n "
                                       "Select \"No\" to return to the show screen to save.")
         if unsaved:
-            global RULES
-            RULES = ""
+            global RULES, DISPLAY
+            RULES = DISPLAY = ""
             self.destroy()
 
 
