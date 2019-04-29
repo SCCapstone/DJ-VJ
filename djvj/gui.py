@@ -14,10 +14,13 @@ import djvj.Bugger as bugger
 
 # global variables
 RULES = ""  # running string of all rules added
+DISPLAY = ""
 moments = list()  # groups of rules for the show
 current_mom = list()
 moment_list = list()
 moment_case = False
+rules_in_mom = 0
+moment_path = ""
 
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
@@ -112,6 +115,8 @@ class IntroScreen(tk.Tk):
         except FileNotFoundError:
             messagebox.showerror("ERROR", "No .djvj file selected")
         if data != "":
+            messagebox.showinfo(
+                "Load a Show", "Loading the DJ-VJ show contents....")
             rule_list = data.split("\n")
             error = False   # not a invalid path
             rule_list.pop(0)
@@ -250,11 +255,11 @@ class CreateScreen(tk.Toplevel):
 
     def add_moment(self):
         """ Separates groups of rules """
-        global RULES
+        global RULES, DISPLAY
         messagebox.showinfo(
             "Add a Moment", "Please choose a video to associate with this moment.")
 
-        global VIDEO_PATH
+        global VIDEO_PATH, moment_path, rules_in_mom
 
         smideo_path = filedialog.askopenfilename(initialdir="/home/Documents",
                                                 title="Select video for current moment",
@@ -269,8 +274,11 @@ class CreateScreen(tk.Toplevel):
             else:
                 messagebox.showerror("Error", "No video selected. Staying in current moment.")
         else:
+            rules_in_mom = 0
             VIDEO_PATH = smideo_path
             RULES = RULES + "\n Moment -- Video: " + VIDEO_PATH
+            DISPLAY = DISPLAY + "\n Moment -- Video: " + VIDEO_PATH
+            moment_path = "\n Moment -- Video: " + VIDEO_PATH
             self.rule_added()
 
     def addition(self):
@@ -291,6 +299,14 @@ class CreateScreen(tk.Toplevel):
         new_rule = "If\t" + self.attr.get() \
             + "\t" + self.sign.get() + "\t" + self.target_value.get() \
             + "\t play\t"
+
+        new_display = "If\t" + self.attr.get() \
+            + "\t" + self.sign.get() + "\t" + self.target_value.get()
+
+        print("Adding: " + new_rule + VIDEO_PATH)
+
+        global rules_in_mom
+        rules_in_mom = rules_in_mom + 1
 
         global RULES
         global moment_list
@@ -314,12 +330,13 @@ class CreateScreen(tk.Toplevel):
             current_mom.clear()
             moment_case = False
             RULES = RULES + "\n" + new_rule + VIDEO_PATH
+            global DISPLAY
+            DISPLAY = DISPLAY + "\n" + new_display
+
             self.rule_added()
             self.target_value.delete(0, END)
             self.attr.set("          ")
             self.sign.set(" ")
-
-
         else:
             message = str(temp_cm) + " collides with rule: " + str(bugger.give_list_of_error()) 
             messagebox.showerror("Error", message)
@@ -339,19 +356,31 @@ class CreateScreen(tk.Toplevel):
 
     def rule_added(self):
         """ shows running total of rules to be added """
-        global RULES
-        self.display.configure(text="%s" % RULES)
+        global DISPLAY
+        self.display.configure(text="%s" % DISPLAY)
 
     def remove(self):
         """ removes last rule added """
-        global RULES
+        global RULES, VIDEO_PATH, DISPLAY, rules_in_mom, moment_path
         # basic error checking
         if RULES == "":
             messagebox.showinfo("Error", "Rules are empty!")
-        idx = RULES.rfind("\n")
+
+        rules_idx = RULES.rfind("\n")
+        disp_idx = DISPLAY.rfind("\n")
+
         # take everything up until the second to last \n, which removes the last rule
-        if idx >= 0:
-            RULES = RULES[:idx]
+        if rules_idx >= 0:
+            RULES = RULES[:rules_idx]
+            DISPLAY = DISPLAY[:disp_idx]
+            rules_in_mom = rules_in_mom - 1
+            if rules_in_mom < 0:
+                print("Deleting a moment!")
+                RULES = RULES.replace(moment_path, "")
+                del_vidpath = RULES[RULES.rfind("play"):].replace("play\t", "")
+                print(del_vidpath)
+                VIDEO_PATH = del_vidpath
+
         self.rule_added()
 
     def exit(self):
@@ -363,8 +392,8 @@ class CreateScreen(tk.Toplevel):
                                       "Select \"Yes\" to exit without saving.\n "
                                       "Select \"No\" to return to the show screen to save.")
         if unsaved:
-            global RULES
-            RULES = ""
+            global RULES, DISPLAY
+            RULES = DISPLAY = ""
             self.destroy()
 
 
