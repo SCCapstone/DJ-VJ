@@ -366,6 +366,7 @@ class CreateScreen(tk.Toplevel):
         if RULES == "":
             messagebox.showinfo("Error", "Rules are empty!")
 
+        bugger.remove_rule()
         rules_idx = RULES.rfind("\n")
         disp_idx = DISPLAY.rfind("\n")
 
