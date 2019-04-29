@@ -147,3 +147,10 @@ def give_list_of_error():
 def give_current_moment():
     global conditional_moment
     return conditional_moment
+
+def clear_lists():
+    global conditional_moment, official_list, error_list, pending_list
+    pending_list = False
+    conditional_moment = []
+    official_list = []
+    error_list = []

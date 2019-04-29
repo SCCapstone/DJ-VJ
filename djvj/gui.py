@@ -394,6 +394,7 @@ class CreateScreen(tk.Toplevel):
         if unsaved:
             global RULES, DISPLAY
             RULES = DISPLAY = ""
+            bugger.clear_lists()
             self.destroy()
 
 
