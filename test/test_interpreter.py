@@ -4,7 +4,6 @@
 
 import unittest
 import threading
-import time
 import djvj.moment as moment
 import djvj.show as show
 import djvj.interpreter as interpreter
