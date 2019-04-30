@@ -5,6 +5,7 @@ test_interpreter tests interpter.py
 
 import unittest
 import threading
+import time
 import djvj.moment as moment
 import djvj.show as show
 import djvj.interpreter as interpreter
@@ -30,10 +31,7 @@ class TestInterpreter(unittest.TestCase):
         """
         print('\n')
 
-    def test_1(self):
-        """
-        test_1 creates moments with
-        """
+    def setUp(self):
         # set up list of Moments
         gui_moments = [[['pitch', '<', '500', './test/test_assets/video1.MOV']],
                        [['pitch', '>', '500', './test/test_assets/video2.mp4']]]
@@ -44,22 +42,37 @@ class TestInterpreter(unittest.TestCase):
         # set up interpreter
         self.test_interpreter = interpreter.Interpreter(self.test_show_1)
 
-        # test_1 show parameter values
-        self.test_show_1.curr_param_values = {
-            'pitch': 400
-        }
-
         # start interpreter
         interpreter_thread = threading.Thread(
             target=self.test_interpreter.interpret)
         interpreter_thread.start()
 
+    def tearDown(self):
+        self.test_interpreter.kill = True
+
+    def test_1(self):
+        """
+        test_1 sets show params to < 500
+        """
+
+        # test_1 show parameter values
+        self.test_show_1.curr_param_values = {
+            'pitch': 400
+        }
+        time.sleep(1)
         self.assertEqual(self.test_show_1.curr_video,
                          './test/test_assets/video1.MOV')
 
+    def test_2(self):
+        """
+        test_2 sets show params to > 500
+        """
         self.test_show_1.curr_param_values = {
             'pitch': 600
         }
+        time.sleep(1)
+        self.assertEqual(self.test_show_1.curr_video,
+                         './test/test_assets/video2.mp4')
 
         self.test_interpreter.kill = True
 
