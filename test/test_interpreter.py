@@ -1,4 +1,5 @@
 """
+test_interpreter tests interpter.py
 """
 
 
@@ -10,19 +11,32 @@ import djvj.interpreter as interpreter
 
 
 class TestInterpreter(unittest.TestCase):
+    """
+    interpreter testing class
+    """
 
     @classmethod
     def setUpClass(cls):
+        """
+        sets up test class
+        """
+
         print("Unit Test: interpreter")
 
     @classmethod
     def tearDownClass(cls):
+        """
+        deconstructs test class
+        """
         print('\n')
 
     def test_1(self):
+        """
+        test_1 creates moments with
+        """
         # set up list of Moments
-        gui_moments = [[['pitch', '<', '500', '/Users/matt/Desktop/Demo/mario theme.mp4']],
-                       [['pitch', '>', '500', '/Users/matt/Desktop/Demo/luigi.mp4']]]
+        gui_moments = [[['pitch', '<', '500', './test/test_assets/video1.MOV']],
+                       [['pitch', '>', '500', './test/test_assets/video2.mp4']]]
         show_moments = moment.create_moments(gui_moments)
 
         # set up show
@@ -41,7 +55,7 @@ class TestInterpreter(unittest.TestCase):
         interpreter_thread.start()
 
         self.assertEqual(self.test_show_1.curr_video,
-                         '/Users/matt/Desktop/Demo/mario theme.mp4')
+                         './test/test_assets/video1.MOV')
 
         self.test_show_1.curr_param_values = {
             'pitch': 600
