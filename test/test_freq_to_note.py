@@ -17,6 +17,13 @@ class TestFreqToNote(unittest.TestCase):
     def setUpClass(cls):
         print("Unit Test: freq_to_note")
 
+    @classmethod
+    def tearDownClass(cls):
+        """
+        deconstructs test class
+        """
+        print('\n')
+
     def setUp(self):
         # values referenced from here: http://pages.mtu.edu/~suits/notefreqs.html
         self.test_1 = 440  # A4
