@@ -22,7 +22,7 @@ class TestInterpreter(unittest.TestCase):
         sets up test class
         """
 
-        print("Unit Test: interpreter")
+        print("Unit Test: interpreter basic pitch")
 
     @classmethod
     def tearDownClass(cls):
@@ -73,8 +73,6 @@ class TestInterpreter(unittest.TestCase):
         time.sleep(1)
         self.assertEqual(self.test_show_1.curr_video,
                          './test/test_assets/video2.mp4')
-
-        self.test_interpreter.kill = True
 
 
 if __name__ == '__main__':
