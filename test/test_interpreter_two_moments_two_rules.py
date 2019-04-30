@@ -1,5 +1,8 @@
 """
 test_interpreter tests interpter.py
+
+__author__ = "Matthew J. Smith"
+__email__ = "mjs10@email.sc.edu"
 """
 
 

@@ -2,6 +2,9 @@
 This test file tests the get_pitch function found in the Pitch class
 which takes in a frequency in Hz and converts it to its musical
 note representation
+
+__author__ = "Matthew J. Smith"
+__email__ = "mjs10@email.sc.edu"
 """
 
 import unittest
