@@ -5,6 +5,7 @@ Create Show screen functionality is built out, more to come!
 """
 import sys
 import pickle
+import djvj.edit_show as editor
 import tkinter as tk
 from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage, \
     StringVar, OptionMenu, NW, END
@@ -17,6 +18,7 @@ DISPLAY = ""
 moments = list()  # groups of rules for the show
 rules_in_mom = 0
 moment_path = ""
+
 
 class SplashScreen(tk.Toplevel):
     """ Displays the splash screen with the DJ-VJ loading screen """
@@ -64,16 +66,20 @@ class IntroScreen(tk.Tk):
         # sets it in the middle of the screen, about 1/4 of the way down
         self.label.place(relx=.5, rely=.25, anchor="center")
 
-        # creates the buttons for create, load, and use default show
         self.create_button = Button(self, text="Create\nShow", bg='#05F72D', fg="#000000",
                                     highlightbackground='#05F72D', font=("Courier", 48),
                                     height=5, width=10, command=self.create)
-        self.create_button.place(relx=.33, rely=.75, anchor="center")
+        self.create_button.place(relx=.2, rely=.75, anchor="center")
+
+        self.edit_button = Button(self, text="Edit\nShow", bg='#05F72D', fg="#000000",
+                                  highlightbackground='#05F72D', font=("Courier", 48),
+                                  height=5, width=10, command=self.edit)
+        self.edit_button.place(relx=.5, rely=.75, anchor="center")
 
         self.load_button = Button(self, text="Load\nShow", bg='#05F72D', fg="#000000",
                                   highlightbackground='#05F72D', font=("Courier", 48),
                                   height=5, width=10, command=self.load)
-        self.load_button.place(relx=.66, rely=.75, anchor="center")
+        self.load_button.place(relx=.8, rely=.75, anchor="center")
 
         # Allows for easy exit from Intro Screen
         self.exit_button = Button(self, text="X", bg='#05F72D', fg="#000000",
@@ -93,11 +99,13 @@ class IntroScreen(tk.Tk):
         self.deiconify()
 
     def load(self):
+
         """
         loads the user's chosen file, reads data,
         parses the data into audio_attr, rules, values, and videos
         and appends these lists to the show list that is used by main.py
         """
+
         data = ""
         messagebox.showinfo(
             "Load a Show", "Please load a .djvj file to start the show!")
@@ -151,9 +159,61 @@ class IntroScreen(tk.Tk):
                                                       "\nTo end the program, press \"k\"")
                 self.destroy()
 
+
     def create(self):
         """ pulls up create screen """
         CreateScreen(self)
+
+    def edit(self):
+        """ allows user to select file they want to edit and sends editor current moments"""
+
+        data = ""
+        filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
+                                              filetypes=(("djvj files", "*.djvj"),
+                                                         ("all files", "*.*")))
+        try:
+            data = pickle.load(open("%s" % filename, "rb"))
+        except pickle.UnpicklingError:
+            messagebox.showerror("ERROR", "Error: Corrupt .djvj file. Please select a valid file.")
+        except FileNotFoundError:
+            messagebox.showerror("ERROR", "No .djvj file selected")
+        if data != "":
+            messagebox.showinfo(
+                "Edit a Show", "Loading the DJ-VJ show contents....")
+            rule_list = data.split("\n")
+            error = False   # not a invalid path
+            rule_list.pop(0)
+            curr_mom = list()   # a list of the rules in the current moment
+            for rule in rule_list:
+                single_mom = list()  # create a list of rules for this moment
+                print(rule)
+                if "Moment" in rule:   # switch to a new moment
+                    if curr_mom:
+                        moments.append(curr_mom)
+                        curr_mom = list()   # clear the list
+                else:
+                    attribute = rule.split("\t")
+
+                    single_mom.append(attribute[1])
+                    single_mom.append(attribute[2])
+                    single_mom.append(attribute[3])
+                    if os.path.exists(attribute[5]):
+                        single_mom.append(attribute[5])
+                    else:
+                        messagebox.showerror("ERROR", "Error: File path %s does not exist.\n"
+                                                      "Please choose a file with "
+                                                      "valid file paths." % attribute[5])
+                        error = True
+                        break
+
+                    curr_mom.append(single_mom)
+            moments_copy = moments.copy()
+            moments.clear()
+            if error:
+                print("error")
+            else:
+                print(moments)
+                e = editor.EditShow(self, moments_copy)
 
     def exit(self):
         """ exits screen """
@@ -223,7 +283,7 @@ class CreateScreen(tk.Toplevel):
                                   height=1, width=5, command=self.exit)
         self.exit_button.place(relx=.9, rely=.1, anchor="center")
 
-        self.w = Canvas(self, width=self.winfo_width(), height=1000)
+        self.w = Canvas(self, width=self.winfo_width(), height=1000, scrollregion=(0,0,300,1000))
         self.w.place(relx=.25, rely=.5)
 
         # shows running rules
