@@ -3,18 +3,21 @@ Runs the GUI for the DJ-VJ app.
 Displays a splash screen, then Create and Load Show buttons
 Create Show screen functionality is built out, more to come!
 """
-
+import sys
 import pickle
+import djvj.edit_show as editor
 import tkinter as tk
 from tkinter import filedialog, messagebox, Button, Label, Entry, Canvas, PhotoImage, \
     StringVar, OptionMenu, NW, END
 import time
 import os
-import djvj.edit_show as e_screen
 
 # global variables
 RULES = ""  # running string of all rules added
+DISPLAY = ""
 moments = list()  # groups of rules for the show
+rules_in_mom = 0
+moment_path = ""
 
 
 class SplashScreen(tk.Toplevel):
@@ -28,7 +31,11 @@ class SplashScreen(tk.Toplevel):
         # this lets an image be used as the background
         canvas = Canvas(self, bg="#212121", width=730, height=450)
         canvas.place(x=0, y=0, relwidth=1, relheight=1)
-        img = PhotoImage(file="./djvj/dj-vj.gif")
+        # get relative path for splash screen file
+        splash = resource_path("dj-vj.gif")
+        # print(splash)
+        img = PhotoImage(file=splash)
+
         canvas.create_image(30, 120, anchor=NW, image=img)
         # adds the "loading" label that makes it splash-screenish
         self.label = Label(self, text="Loading....", bg="#212121",
@@ -42,7 +49,7 @@ class IntroScreen(tk.Tk):
     """
     The main navigation screen, which has the "Create Screen" and "Load Screen" buttons
     """
-    # TODO fix layout
+
     def __init__(self):
         tk.Tk.__init__(self)
         # sets title bar
@@ -59,7 +66,6 @@ class IntroScreen(tk.Tk):
         # sets it in the middle of the screen, about 1/4 of the way down
         self.label.place(relx=.5, rely=.25, anchor="center")
 
-        # creates the buttons for create, load, and use default show
         self.create_button = Button(self, text="Create\nShow", bg='#05F72D', fg="#000000",
                                     highlightbackground='#05F72D', font=("Courier", 48),
                                     height=5, width=10, command=self.create)
@@ -93,122 +99,126 @@ class IntroScreen(tk.Tk):
         self.deiconify()
 
     def load(self):
+
         """
         loads the user's chosen file, reads data,
         parses the data into audio_attr, rules, values, and videos
         and appends these lists to the show list that is used by main.py
         """
+
+        data = ""
+        messagebox.showinfo(
+            "Load a Show", "Please load a .djvj file to start the show!")
         filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
                                               filetypes=(("djvj files", "*.djvj"),
                                                          ("all files", "*.*")))
-        data = pickle.load(open("%s" % filename, "rb"))
-        rule_list = data.split("\n")
-        error = False   # not a invalid path
-        rule_list.pop(0)
-        curr_mom = list()   # a list of the rules in the current moment
-        for rule in rule_list:
-            single_mom = list()  # create a list of rules for this moment
-            if "Moment" in rule:   # switch to a new moment
-                if curr_mom:
-                    moments.append(curr_mom)
-                    curr_mom = list()   # clear the list
-            else:
-                attribute = rule.split("\t")
-
-                single_mom.append(attribute[1])
-                single_mom.append(attribute[2])
-                single_mom.append(attribute[3])
-                if os.path.exists(attribute[5]):
-                    single_mom.append(attribute[5])
+        try:
+            data = pickle.load(open("%s" % filename, "rb"))
+        except pickle.UnpicklingError:
+            messagebox.showerror("ERROR", "Error: Corrupt .djvj file. Please select a valid file.")
+        except FileNotFoundError:
+            messagebox.showerror("ERROR", "No .djvj file selected")
+        if data != "":
+            messagebox.showinfo(
+                "Load a Show", "Loading the DJ-VJ show contents....")
+            rule_list = data.split("\n")
+            error = False   # not a invalid path
+            rule_list.pop(0)
+            curr_mom = list()   # a list of the rules in the current moment
+            for rule in rule_list:
+                single_mom = list()  # create a list of rules for this moment
+                print(rule)
+                if "Moment" in rule:   # switch to a new moment
+                    if curr_mom:
+                        moments.append(curr_mom)
+                        curr_mom = list()   # clear the list
                 else:
-                    messagebox.showerror("ERROR", "Error: File path %s does not exist.\n"
-                                                  "Please choose a file with "
-                                                  "valid file paths." % attribute[5])
-                    error = True
-                    break
+                    attribute = rule.split("\t")
 
-                curr_mom.append(single_mom)
+                    single_mom.append(attribute[1])
+                    single_mom.append(attribute[2])
+                    single_mom.append(attribute[3])
+                    if os.path.exists(attribute[5]):
+                        single_mom.append(attribute[5])
+                    else:
+                        messagebox.showerror("ERROR", "Error: File path %s does not exist.\n"
+                                                      "Please choose a file with "
+                                                      "valid file paths." % attribute[5])
+                        error = True
+                        break
 
-        if error:
-            self.load()
-        else:
-            # right now, just for error checking
-            messagebox.showinfo("Load Show", data)
-            self.destroy()
+                    curr_mom.append(single_mom)
+
+            if error:
+                self.load()
+            else:
+                # right now, just for error checking
+                messagebox.showinfo("Load Show", "The rules for this video are:\n" + data)
+                messagebox.showinfo("Video Controls", "To pause the video, press \"p\""
+                                                      "\nTo resume the paused video, press \"r\""
+                                                      "\nTo end the program, press \"k\"")
+                self.destroy()
+
 
     def create(self):
         """ pulls up create screen """
         CreateScreen(self)
 
     def edit(self):
-        # TODO fix this
-        """
-        loads the user's chosen file, reads data,
-        parses the data into audio_attr, rules, values, and videos
-        and appends these lists to the show list that is used by main.py
-        """
+        """ allows user to select file they want to edit and sends editor current moments"""
+
+        data = ""
         filename = filedialog.askopenfilename(initialdir="/home/Documents", title="Select Show",
                                               filetypes=(("djvj files", "*.djvj"),
                                                          ("all files", "*.*")))
-        data = pickle.load(open("%s" % filename, "rb"))
-        rule_list = data.split("\n")
-        rule_list.pop(0)
-        curr_mom = list()  # a list of the rules in the current moment
-        load_moments = list()
-        print(rule_list)
-
-        for rule in rule_list:
-            if str(rule) ==" Moment" or str(rule) == '':
-                ind = rule_list.index(rule)
-                rule_list.pop(ind)
-        for rule in rule_list:
-            single_mom = list()  # create a list of rules for this moment
-            if "Moment" in rule:  # switch to a new moment
-                if curr_mom:
-                    load_moments.append(curr_mom)
-                    curr_mom = list()  # clear the list
-            else:
+        try:
+            data = pickle.load(open("%s" % filename, "rb"))
+        except pickle.UnpicklingError:
+            messagebox.showerror("ERROR", "Error: Corrupt .djvj file. Please select a valid file.")
+        except FileNotFoundError:
+            messagebox.showerror("ERROR", "No .djvj file selected")
+        if data != "":
+            messagebox.showinfo(
+                "Edit a Show", "Loading the DJ-VJ show contents....")
+            rule_list = data.split("\n")
+            error = False   # not a invalid path
+            rule_list.pop(0)
+            curr_mom = list()   # a list of the rules in the current moment
+            for rule in rule_list:
+                single_mom = list()  # create a list of rules for this moment
                 print(rule)
-                attribute = rule.split("\t")
-                print("attr: " + str(attribute[1]))
-                print("sign: " + str(attribute[2]))
-                print("val: " + str(attribute[3]))
-                print("vid: " + str(attribute[5]))
+                if "Moment" in rule:   # switch to a new moment
+                    if curr_mom:
+                        moments.append(curr_mom)
+                        curr_mom = list()   # clear the list
+                else:
+                    attribute = rule.split("\t")
 
-                single_mom.append(attribute[1])
-                single_mom.append(attribute[2])
-                single_mom.append(attribute[3])
-                single_mom.append(attribute[5])
-                curr_mom.append(single_mom)
-        if curr_mom not in load_moments:
-            load_moments.append(curr_mom)
+                    single_mom.append(attribute[1])
+                    single_mom.append(attribute[2])
+                    single_mom.append(attribute[3])
+                    if os.path.exists(attribute[5]):
+                        single_mom.append(attribute[5])
+                    else:
+                        messagebox.showerror("ERROR", "Error: File path %s does not exist.\n"
+                                                      "Please choose a file with "
+                                                      "valid file paths." % attribute[5])
+                        error = True
+                        break
 
-        def generate_moment_list():
-            mom_list = list()
-            dct = {}
-
-            for moment_num in range(len(load_moments)):
-                if (moment_num+1) not in mom_list:
-                    mom_list.append(moment_num+1)
-
-            for mom in mom_list:
-                for y in range(len(load_moments)):
-                    if y+1 == mom:
-                        dct['Moment %s' % mom] = load_moments[y]
-            return dct
-
-        rule_dictionary_list = generate_moment_list()
-        print (rule_dictionary_list)
-
-        #TODO maybe change this, could be causing problems
-        self.openEditor = tk.Toplevel(self.master)
-        self.editor = e_screen.EditShow(self.openEditor, rule_dictionary=rule_dictionary_list)
-        self.wait_window(self.openEditor)
-        print("File Saved")
+                    curr_mom.append(single_mom)
+            moments_copy = moments.copy()
+            moments.clear()
+            if error:
+                print("error")
+            else:
+                print(moments)
+                e = editor.EditShow(self, moments_copy)
 
     def exit(self):
         """ exits screen """
         self.destroy()
+        sys.exit()
 
 
 class CreateScreen(tk.Toplevel):
@@ -249,13 +259,13 @@ class CreateScreen(tk.Toplevel):
         self.sign = StringVar(self)
         self.sign.set(" ")  # default value
         self.set_sign = OptionMenu(self, self.sign, ">", "<", "=")
-        self.set_sign.place(relx=.5, rely=.3, anchor="center")
+        self.set_sign.place(relx=.48, rely=.3, anchor="center")
         # the target value
         self.target_value = Entry(self)
         self.target_value.place(relx=.6, rely=.3, anchor="center")
 
         Label(self, text=":", bg="#212121", fg="#05F72D", font=("Courier", 36)) \
-            .place(relx=.65, rely=.3, anchor="center")
+            .place(relx=.68, rely=.3, anchor="center")
 
         # buttons
         Button(self, text='Add Rule', fg="#000000", command=self.addition) \
@@ -273,7 +283,7 @@ class CreateScreen(tk.Toplevel):
                                   height=1, width=5, command=self.exit)
         self.exit_button.place(relx=.9, rely=.1, anchor="center")
 
-        self.w = Canvas(self, width=self.winfo_width(), height=1000)
+        self.w = Canvas(self, width=self.winfo_width(), height=1000, scrollregion=(0,0,300,1000))
         self.w.place(relx=.25, rely=.5)
 
         # shows running rules
@@ -285,11 +295,31 @@ class CreateScreen(tk.Toplevel):
 
     def add_moment(self):
         """ Separates groups of rules """
-        global RULES
-        messagebox.showinfo("Add a Moment", "Please choose a video to associate with this moment.")
-        self.choose_video()
-        RULES = RULES + "\n Moment -- Video: " + VIDEO_PATH
-        self.rule_added()
+        global RULES, DISPLAY
+        messagebox.showinfo(
+            "Add a Moment", "Please choose a video to associate with this moment.")
+
+        global VIDEO_PATH, moment_path, rules_in_mom
+
+        smideo_path = filedialog.askopenfilename(initialdir="/home/Documents",
+                                                title="Select video for current moment",
+                                                filetypes=(("mov files", "*.MOV"),
+                                                           ("mp4 files", "*.mp4"),
+                                                           ("all files", "*.*")))
+
+        if smideo_path == "":
+            if RULES == "":
+                messagebox.showerror("Error", "No video selected for first moment.")
+                self.destroy()
+            else:
+                messagebox.showerror("Error", "No video selected. Staying in current moment.")
+        else:
+            rules_in_mom = 0
+            VIDEO_PATH = smideo_path
+            RULES = RULES + "\n Moment -- Video: " + VIDEO_PATH
+            DISPLAY = DISPLAY + "\n Moment -- Video: " + VIDEO_PATH
+            moment_path = "\n Moment -- Video: " + VIDEO_PATH
+            self.rule_added()
 
     def addition(self):
         """ lets users add rules """
@@ -310,8 +340,19 @@ class CreateScreen(tk.Toplevel):
             + "\t" + self.sign.get() + "\t" + self.target_value.get() \
             + "\t play\t"
 
+        new_display = "If\t" + self.attr.get() \
+            + "\t" + self.sign.get() + "\t" + self.target_value.get()
+
+        print("Adding: " + new_rule + VIDEO_PATH)
+
+        global rules_in_mom
+        rules_in_mom = rules_in_mom + 1
+
         global RULES
         RULES = RULES + "\n" + new_rule + VIDEO_PATH
+
+        global DISPLAY
+        DISPLAY = DISPLAY + "\n" + new_display
 
         self.rule_added()
         # clears all the fields
@@ -325,41 +366,41 @@ class CreateScreen(tk.Toplevel):
         RULES = RULES + "\nMoment"
         # lets user choose name/save location
         filename = filedialog.asksaveasfilename(initialdir="/home/Documents",
-                                                title="Save file location",
-                                                filetypes=(("djvj files", "*.djvj"),
-                                                           ("all files", "*.*")))
+                                                title="Save file location")
         if filename != "":
             # adds to file
             pickle.dump(RULES, open("%s.djvj" % filename, "wb"))
             time.sleep(2)
             self.destroy()
-        print (RULES)
 
     def rule_added(self):
         """ shows running total of rules to be added """
-        global RULES
-        self.display.configure(text="%s" % RULES)
+        global DISPLAY
+        self.display.configure(text="%s" % DISPLAY)
 
     def remove(self):
         """ removes last rule added """
-        global RULES
+        global RULES, VIDEO_PATH, DISPLAY, rules_in_mom, moment_path
         # basic error checking
         if RULES == "":
             messagebox.showinfo("Error", "Rules are empty!")
-        idx = RULES.rfind("\n")
-        # take everything up until the second to last \n, which removes the last rule
-        if idx >= 0:
-            RULES = RULES[:idx]
-        self.rule_added()
 
-    def choose_video(self):
-        """ allows user to choose a video to play for a given rule """
-        global VIDEO_PATH
-        VIDEO_PATH = filedialog.askopenfilename(initialdir="/home/Documents",
-                                                title="Select video for current moment",
-                                                filetypes=(("mov files", "*.MOV"),
-                                                           ("mp4 files", "*.mp4"),
-                                                           ("all files", "*.*")))
+        rules_idx = RULES.rfind("\n")
+        disp_idx = DISPLAY.rfind("\n")
+
+        # take everything up until the second to last \n, which removes the last rule
+        if rules_idx >= 0:
+            RULES = RULES[:rules_idx]
+            DISPLAY = DISPLAY[:disp_idx]
+            rules_in_mom = rules_in_mom - 1
+            if rules_in_mom < 0:
+                print("Deleting a moment!")
+                RULES = RULES.replace(moment_path, "")
+                del_vidpath = RULES[RULES.rfind("play"):].replace("play\t", "")
+                print(del_vidpath)
+                VIDEO_PATH = del_vidpath
+
+        self.rule_added()
 
     def exit(self):
         """ Warns user about exiting without saving. """
@@ -370,7 +411,24 @@ class CreateScreen(tk.Toplevel):
                                       "Select \"Yes\" to exit without saving.\n "
                                       "Select \"No\" to return to the show screen to save.")
         if unsaved:
+            global RULES, DISPLAY
+            RULES = DISPLAY = ""
             self.destroy()
+
+
+def resource_path(relative_path):
+    """
+    Get absolute path to resource, works for dev and for PyInstaller
+    src: https://stackoverflow.com/questions/31836104/pyinstaller-and-onefile-how-to-include-an-image-in-the-exe-file
+    """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath("./djvj")
+
+    return os.path.join(base_path, relative_path)
+
 
 def init():
     """ allows this code to be run from main.py """
